@@ -1,0 +1,57 @@
+#!/usr/bin/env node
+
+/**
+
+	encode_gifs --dir=/path/to/videos/
+	encode_gifs -i /path/to/video.mp4
+
+	TODO: 
+		- configure output dir
+		- option to pass glob string
+
+	There's not really much reason for this to be a node file now, but eventually it will make it 
+	easier to support multiple OSs
+
+*/
+
+var glob = require('glob');
+var path = require('path');
+var argv = require('yargs').argv;
+var exec = require('child_process').exec;
+
+var run = function(){
+
+	if(argv.dir){
+
+		var fileGlob = path.join(argv.dir, '/?(*.mp4|*.mov|*.webm|*.ogg)');
+		glob(fileGlob, {}, (er, files) => {
+			// files is an array of filenames.
+			if(er) console.log(er);
+			files.forEach(file => {
+				createGif(file);
+			});
+		});
+	}
+
+	if(argv.i){
+		createGif(argv.i);
+	}
+};
+
+
+var createGif = function(filepath){
+	// console.log(file);
+	var p = path.parse(filepath);
+	p.base = p.base.replace(p.ext, '.gif');
+	p.ext = '.gif';
+	var gifName = path.format(p);
+
+	var cmd = __dirname + '/gifenc ' + filepath + ' ' + gifName;
+	console.log(cmd);
+	exec(cmd, (error, stdout, stderr) => {
+		if(error) console.log(error);
+	});
+
+};
+
+run();
