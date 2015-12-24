@@ -20,8 +20,13 @@ var vidPath = path.join(__dirname, './videos/mov_bbb_mp4.mp4');
 var command = ffmpeg()
 	.input(vidPath)
 	.on('progress', progress => {
-		console.log('progress', progress);
+		console.log('progress', progress.percent);
 	})
-	.output( path.join(__dirname, './videos/asdf.gif') )
-	.run();
+	.on('error', function(err, stdout, stderr) {
+		console.log('Cannot process video: ' + err.message);
+	})
+	.on('end', function() {
+		console.log('Transcoding succeeded !');
+	})
+	.save( path.join(__dirname, './videos/asdf.gif') );
 

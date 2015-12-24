@@ -2,7 +2,7 @@
 
 An app for making gifs that don't suck.
 
-Uses ffmpeg palettegen and paletteuse filters, so it might bork if you are running an older version of ffmpeg. Tested using v2.8.3.
+Uses ffmpeg palettegen and paletteuse filters to create higher quality gifs.
 
 Currently only works on mac.
 
@@ -10,7 +10,38 @@ Currently only works on mac.
 
 ## install dependencies
 
-`npm install`
+`npm run install`
+
+
+
+## TODOs
+
+- use node-ffmpeg https://www.npmjs.com/package/ffmpeg
+- point node-ffmpeg to ffmpeg binaries
+- configurable output dir
+- show encoding progress
+- drag/drop gui using node-webkit
+
+- install polymer
+
+- npm scripts
+	- install nw binaries?
+
+- build process for various platforms (macOS, linux, windows)
+	- script for downloading nw binaries?
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -30,9 +61,7 @@ By default, the gifs will be created in the same directory. Output directory can
 
 
 
-## TODOs
 
-- use node-ffmpeg https://www.npmjs.com/package/ffmpeg
-- configure output dir
-- show progress
-- drag/drop gui using node-webkit
+
+
+
