@@ -1,6 +1,7 @@
 <link rel='import' href='./gp-menu-bar.html'>
 <link rel='import' href='./gp-droptarget.html'>
 <link rel='import' href='./gp-item.html'>
+<link rel='import' href='./gp-output-dir.html'>
 
 <!-- 
 
@@ -15,12 +16,17 @@
 			width: 100%; height: 100%;
 			top: 0; left: 0;
 		}
+		#queue {
+			margin-top: 40px;
+		}
 	</style>
 	
 	<template>
 
 		<gp-menu-bar></gp-menu-bar>
 		<gp-droptarget id='dropTarget' on-files-changed='_onFilesChanged'></gp-droptarget>
+		<div id="queue"></div>
+		<gp-output-dir></gp-output-dir>
 
 	</template>
 
@@ -30,18 +36,18 @@
 			is: "gp-app",
 
 			ready: function(){
-				this.$.dropTarget.addEventListener('files-changed', function(){
-					console.log('files-changed');
-				});
+				// this.$.dropTarget.addEventListener('files-changed', function(){
+					// console.log('files-changed');
+				// });
 			},
 
 			_onFilesChanged: function(e){
-				console.log(this.localName, '_onFilesChanged', e);
+				// console.log(this.localName, '_onFilesChanged', e);
 				var files = Array.prototype.slice.apply(e.detail.value);
 				files.forEach(function(file){
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
-					this.appendChild(itemEl);
+					this.$.queue.appendChild(itemEl);
 				}.bind(this));
 			}
 

@@ -50,7 +50,7 @@
 			_onDrop: function(e){
 				e.preventDefault();
 				e.stopPropagation();
-				console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
+				// console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
 				// this.files = e.dataTransfer.files;
 				// this.set('files', e.dataTransfer.files);
 				this._setFiles(e.dataTransfer.files);
@@ -64,7 +64,7 @@
 			},
 
 			_onDragLeave: function(){
-				console.log(this.localName + '._onDragLeave');
+				// console.log(this.localName + '._onDragLeave');
 				this.style.display = 'none';
 			},
 

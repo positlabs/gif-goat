@@ -1,0 +1,66 @@
+
+<!-- 
+
+
+	component boilerplate. 
+
+
+-->
+
+<dom-module id='gp-output-dir'>
+
+	<style>
+		
+		:host {
+			/*TODO*/
+		}
+
+		input#output-dir-btn {
+			position: absolute;
+			top: 0; left: 0;
+			width: 100%; height: 100%;
+			opacity: 0;
+		}
+
+	</style>
+	
+	<template>
+		<div>[[path]]</div>
+		<div id='outputBtn'>
+			<input id='output-dir-btn' type='file' webkitdirectory directory title='[[path]]'>
+		</div>
+	</template>
+
+	<script>(function(){
+
+		var path = require('path');
+
+		Polymer({
+			is: 'gp-output-dir',
+			
+			properties: {
+				path: {
+					type: String,
+					value: '',	
+				}
+			},
+
+			ready: function(){
+				
+				this.path = localStorage.getItem('output-dir') || path.join(nw.App.dataPath, 'output');
+
+				// FIXME: set this value. 
+				// this.$['output-dir-btn'].value = path.join(nw.App.dataPath, 'output');
+				this.$['output-dir-btn'].addEventListener('change', this._onInputChanged.bind(this));
+			},
+
+			_onInputChanged: function(e){
+				console.log(this.localName, '_onInputChanged', e);
+				this.path = e.target.value;
+				localStorage.setItem('output-dir', this.path);
+			},
+		});
+
+	})();</script>
+
+</dom-module>
