@@ -1,0 +1,75 @@
+
+<!-- 
+
+	
+
+-->
+
+<dom-module id="gp-droptarget">
+
+	<style>
+
+		:host {
+			position: fixed;
+			width: 100%; height: 100%;
+			top: 0; left: 0;
+			background-color: lightgreen;
+			opacity: .5;
+			display: none;
+		}
+
+	</style>
+	
+	<template>
+	</template>
+
+	<script>
+		
+		Polymer({
+
+			is: "gp-droptarget",
+
+			properties: {
+				files: {
+					type: Array,
+					value: [],
+					notify: true,
+					readOnly: true
+				}
+			},
+
+			attached: function() {
+				// console.log(this.localName + '#' + this.id + ' was created');
+
+				var target = document;
+				target.addEventListener('dragover', this._onDragOver.bind(this));
+				this.addEventListener('dragleave', this._onDragLeave.bind(this));
+				this.addEventListener('drop', this._onDrop.bind(this));
+			},
+
+			_onDrop: function(e){
+				e.preventDefault();
+				e.stopPropagation();
+				console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
+				// this.files = e.dataTransfer.files;
+				// this.set('files', e.dataTransfer.files);
+				this._setFiles(e.dataTransfer.files);
+				this.style.display = 'none';
+			},
+
+			_onDragOver: function(e){
+				// console.log(this.localName + '._onDragOver', e);
+				this.style.display = 'block';
+				e.preventDefault();
+			},
+
+			_onDragLeave: function(){
+				console.log(this.localName + '._onDragLeave');
+				this.style.display = 'none';
+			},
+
+		});
+
+	</script>
+
+</dom-module>

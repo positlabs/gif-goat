@@ -13,19 +13,21 @@ Currently only works on mac.
 `npm run install`
 
 
+## run dev
+
+`npm run app`
+
+
 
 ## TODOs
 
-- use node-ffmpeg https://www.npmjs.com/package/ffmpeg
 - point node-ffmpeg to ffmpeg binaries
+
 - configurable output dir
+- default output dir should be a folder.
+
 - show encoding progress
 - drag/drop gui using node-webkit
-
-- install polymer
-
-- npm scripts
-	- install nw binaries?
 
 - build process for various platforms (macOS, linux, windows)
 	- script for downloading nw binaries?

@@ -1,0 +1,73 @@
+<!-- 
+
+
+	component boilerplate. 
+
+
+-->
+
+<dom-module id="m-button">
+
+	<style>
+		/* CSS rules for your element */
+	</style>
+	
+	<template>
+		<!-- local DOM for your element -->
+
+		<div>{{action}}</div>
+	</template>
+
+	<script>
+		
+		// element registration
+		
+		Polymer({
+			is: "m-button",
+
+			// add properties and methods on the element's prototype
+
+			properties: {
+				// declare properties for the element's public API
+				action: {
+					type: String,
+					value: ""
+				}
+			},
+
+			attributeChanged: function(name, type) {
+				console.log(this.localName + '#' + this.id + ' attribute ' + name + ' was changed to ' + this.getAttribute(name));
+			},
+
+			/*
+				lifecycle hooks
+
+				The element’s basic initialization order is:
+
+					- created callback
+					- local DOM initialized
+					- ready callback
+					- attached callback
+			*/
+
+			created: function() {
+				console.log(this.localName + '#' + this.id + ' was created');
+			},
+
+			attached: function() {
+				console.log(this.localName + '#' + this.id + ' was attached');
+			},
+
+			detached: function() {
+				console.log(this.localName + '#' + this.id + ' was detached');
+			},
+
+			ready: function(){
+				console.log(this.localName + '#' + this.id + ' was detached');
+			},
+
+		});
+
+	</script>
+
+</dom-module>

@@ -1,0 +1,52 @@
+<link rel='import' href='./gp-menu-bar.html'>
+<link rel='import' href='./gp-droptarget.html'>
+<link rel='import' href='./gp-item.html'>
+
+<!-- 
+
+
+-->
+
+<dom-module id="gp-app">
+
+	<style>
+		:host {
+			position: absolute;
+			width: 100%; height: 100%;
+			top: 0; left: 0;
+		}
+	</style>
+	
+	<template>
+
+		<gp-menu-bar></gp-menu-bar>
+		<gp-droptarget id='dropTarget' on-files-changed='_onFilesChanged'></gp-droptarget>
+
+	</template>
+
+	<script>
+		
+		Polymer({
+			is: "gp-app",
+
+			ready: function(){
+				this.$.dropTarget.addEventListener('files-changed', function(){
+					console.log('files-changed');
+				});
+			},
+
+			_onFilesChanged: function(e){
+				console.log(this.localName, '_onFilesChanged', e);
+				var files = Array.prototype.slice.apply(e.detail.value);
+				files.forEach(function(file){
+					var itemEl = document.createElement('gp-item');
+					itemEl.file = file;
+					this.appendChild(itemEl);
+				}.bind(this));
+			}
+
+		});
+
+	</script>
+
+</dom-module>

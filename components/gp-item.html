@@ -1,0 +1,86 @@
+<!-- 
+
+
+-->
+
+
+<dom-module id="gp-item">
+
+	<style>
+
+		:host {
+			width: 100%;
+			padding: 5px;
+		}
+
+
+
+	</style>
+	
+	<template>
+
+		<div id='state'>[[state]]</div>
+		<div id='progress'>[[progress]]%</div>
+		<div id='filename' title='[[file.path]]'>[[file.path]]</div>
+
+	</template>
+
+	<script>
+		
+		Polymer({
+			is: "gp-item",
+
+			properties: {
+				file: {
+					type: Object,
+					observer: '_onFileChanged'
+				},
+				state: {
+					type: Boolean,
+					readOnly: true,
+					notify: true
+				},
+				progress: {
+					type: Number,
+					value: 0,
+					readOnly: true
+				}
+			},
+
+			_onFileChanged: function(){
+				console.log(this.localName, '_onFileChanged');
+				var path = require('path');
+				this.$.filename.innerHTML = path.basename(this.file.path);
+			},
+
+			ready: function(){
+				// this._onFileChanged();
+			},
+
+			run: function(){
+
+				// var ffmpeg = require('fluent-ffmpeg');
+				// var fs = require('fs');
+				// var path = require('path');
+				// console.log(e.dataTransfer.files[0].path);
+
+				// var command = ffmpeg()
+				// 	.input(e.dataTransfer.files[0].path)
+				// 	.on('progress', function(progress){
+				// 		console.log('progress', progress.percent);
+				// 	})
+				// 	.on('error', function(err, stdout, stderr) {
+				// 		console.log('Cannot process video: ' + err.message);
+				// 	})
+				// 	.on('end', function() {
+				// 		console.log('Transcoding succeeded !');
+				// 	})
+				// 	.save( path.join(nw.App.dataPath, 'asdf.gif') );
+
+			}
+
+		});
+
+	</script>
+
+</dom-module>
