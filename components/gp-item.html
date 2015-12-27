@@ -27,9 +27,14 @@
 
 	<script>(function(){
 
-		var ffmpeg = require('fluent-ffmpeg');
 		var fs = require('fs');
 		var path = require('path');
+		var ffmpeg = require('fluent-ffmpeg');
+		var ffmpegPath = require('./lib/ffmpeg-static').ffmpeg;
+		var ffprobePath = require('./lib/ffmpeg-static').ffprobe;
+		ffmpeg.setFfmpegPath(ffmpegPath);
+		ffmpeg.setFfprobePath(ffprobePath);
+		console.log(ffmpegPath);
 		
 		Polymer({
 			is: "gp-item",
@@ -42,7 +47,7 @@
 				state: {
 					type: String,
 					readOnly: true,
-					value: 'ready',
+					value: 'ready', // ready, done
 					notify: true
 				},
 				progress: {
@@ -67,20 +72,18 @@
 
 			_generatePalette: function(){
 				return new Promise(function(resolve, reject){
-
+					//TODO
+					resolve();
 				});
 			},
 
-			run: function(){
-
+			_encodeGIF: function(){
 				var _this = this;
 
-				this.completionPromise = new Promise(function(resolve, reject){
-
-					//TODO: palette generation
+				return new Promise(function(resolve, reject){
 
 					_this.ffmpegCommand = ffmpeg()
-						.input(this.file.path)
+						.input(_this.file.path)
 						.on('progress', function(progress){
 							console.log('progress', progress.percent);
 							// _this.progress = progress.percent
@@ -96,11 +99,23 @@
 							console.log('Transcoding succeeded !');
 							_this._setProgress(100);
 							_this.$.progress.innerHTML = '100%';
+							_this._setState('done');
 							resolve();
 						})
-						.save( path.join(this.outputDir, path.basename(this.file.path) + '.gif') );
+						.save( path.join(_this.outputDir, path.basename(_this.file.path) + '.gif') );
 				});
+			},
 
+			run: function(){
+				var _this = this;
+
+				var p = this._generatePalette()
+					.then(function(){
+						_this._encodeGIF();
+					});
+
+				console.log('p', p);
+				return p;
 			},
 
 			_remove: function(){

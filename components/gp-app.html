@@ -34,16 +34,25 @@
 
 	</template>
 
-	<script>
+	<script>(function(){
 		
 		Polymer({
 			is: "gp-app",
 
+			properties: {
+				state: {
+					type: String,
+					value: 'stopped',
+					readOnly: true,
+					observer: '_onStateChanged'
+				}
+			},
+
 			ready: function(){
+			},
 
-				// TODO: states
-				// running, not-running
-
+			_onStateChanged: function(){
+				// TODO: 				
 			},
 
 			_onFilesChanged: function(e){
@@ -68,18 +77,22 @@
 
 			_start: function(){
 				// console.log('gp-app._start');
+				
+				this._setState('running');
+
+				// collect promises so we can set state
 				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
 				var promises = items.map(function(item){
 					return item.run();
-					//TODO: collect promises so we can detect state change?
 				});
 				Promise.all(promises).then(function(){
-
-				});
+					console.log('encoding promises resolved!');
+					this._setState('stopped');
+				}.bind(this));
 			},
 
 		});
 
-	</script>
+	})();</script>
 
 </dom-module>
