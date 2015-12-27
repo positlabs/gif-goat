@@ -1,0 +1,22 @@
+{
+  "name": "gif-pal",
+  "description": "",
+  "main": "index.html",
+  "authors": [
+    "positlabs"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/positlabs/gif-pal",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "iron-icons": "PolymerElements/iron-icons#~1.0.6"
+  }
+}

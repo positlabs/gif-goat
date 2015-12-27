@@ -2,8 +2,6 @@
 <!-- 
 
 
-	component boilerplate. 
-
 
 -->
 
@@ -12,7 +10,8 @@
 	<style>
 		
 		:host {
-			/*TODO*/
+			position: relative;
+			-webkit-user-select: none;
 		}
 
 		input#output-dir-btn {
@@ -22,13 +21,18 @@
 			opacity: 0;
 		}
 
+		.path {
+			font-size: .8em;
+		}
+
 	</style>
 	
 	<template>
-		<div>[[path]]</div>
 		<div id='outputBtn'>
+			<span>Output folder</span>
 			<input id='output-dir-btn' type='file' webkitdirectory directory title='[[path]]'>
 		</div>
+		<div class='path'>[[path]]</div>
 	</template>
 
 	<script>(function(){
@@ -49,8 +53,10 @@
 				
 				this.path = localStorage.getItem('output-dir') || path.join(nw.App.dataPath, 'output');
 
-				// FIXME: set this value. 
+				// FIXME: set this value. Not a huge deal, but it will open a file browser in the default location
+				// as opposed to the one that is actually selected 
 				// this.$['output-dir-btn'].value = path.join(nw.App.dataPath, 'output');
+
 				this.$['output-dir-btn'].addEventListener('change', this._onInputChanged.bind(this));
 			},
 

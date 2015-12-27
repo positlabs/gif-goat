@@ -5,11 +5,16 @@
 		:host {
 			position: absolute;
 			top: 0; left: 0;
-			/*border-bottom: 1px solid rgba(127, 127, 127, .4);*/
+			border-bottom: 1px solid rgba(127, 127, 127, 0);
 			width: 100%; height: 40px;
 			-webkit-app-region: drag;
-			/*background-color: black;*/
 			cursor: move;
+			transition: all .2s;
+		}
+
+		:host:hover {
+			border-bottom: 1px solid rgba(127, 127, 127, .4);
+			background-color: black;
 		}
 	
 		.buttons {
@@ -59,9 +64,9 @@
 	<template>
 		
 		<div class='buttons'>
-			<a href='#' id='max-btn' on-click='_onClickMax'>+</a>
-			<a href='#' id='min-btn' on-click='_onClickMin'>-</a>
-			<a href='#' id='close-btn' on-click='_onClickClose'>x</a>
+			<a href='#' id='max-btn' on-click='_onClickMax' title='maximize'>+</a>
+			<a href='#' id='min-btn' on-click='_onClickMin' title='minimize'>-</a>
+			<a href='#' id='close-btn' on-click='_onClickClose' title='quit'>x</a>
 		</div>
 
 	</template>
@@ -74,9 +79,6 @@
 		Polymer({
 
 			is: 'gp-menu-bar',
-
-			properties: {
-			},
 
 			ready: function() {
 

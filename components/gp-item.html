@@ -9,23 +9,27 @@
 	<style>
 
 		:host {
+			position: relative;
 			width: 100%;
 			padding: 5px;
 		}
-
-
 
 	</style>
 	
 	<template>
 
 		<div id='state'>[[state]]</div>
-		<div id='progress'>[[progress]]%</div>
+		<div id='progress'></div>
 		<div id='filename' title='[[file.path]]'>[[file.path]]</div>
+		<div id='remove-btn' class='btn' on-click='_remove'>x</div>
 
 	</template>
 
-	<script>
+	<script>(function(){
+
+		var ffmpeg = require('fluent-ffmpeg');
+		var fs = require('fs');
+		var path = require('path');
 		
 		Polymer({
 			is: "gp-item",
@@ -36,20 +40,24 @@
 					observer: '_onFileChanged'
 				},
 				state: {
-					type: Boolean,
+					type: String,
 					readOnly: true,
+					value: 'ready',
 					notify: true
 				},
 				progress: {
 					type: Number,
 					value: 0,
 					readOnly: true
+				},
+				outputDir: {
+					type: String,
+					value: '',
 				}
 			},
 
 			_onFileChanged: function(){
 				console.log(this.localName, '_onFileChanged');
-				var path = require('path');
 				this.$.filename.innerHTML = path.basename(this.file.path);
 			},
 
@@ -57,30 +65,51 @@
 
 			},
 
+			_generatePalette: function(){
+				return new Promise(function(resolve, reject){
+
+				});
+			},
+
 			run: function(){
 
-				// var ffmpeg = require('fluent-ffmpeg');
-				// var fs = require('fs');
-				// var path = require('path');
-				// console.log(e.dataTransfer.files[0].path);
+				var _this = this;
 
-				// var command = ffmpeg()
-				// 	.input(e.dataTransfer.files[0].path)
-				// 	.on('progress', function(progress){
-				// 		console.log('progress', progress.percent);
-				// 	})
-				// 	.on('error', function(err, stdout, stderr) {
-				// 		console.log('Cannot process video: ' + err.message);
-				// 	})
-				// 	.on('end', function() {
-				// 		console.log('Transcoding succeeded !');
-				// 	})
-				// 	.save( path.join(nw.App.dataPath, 'asdf.gif') );
+				this.completionPromise = new Promise(function(resolve, reject){
 
+					//TODO: palette generation
+
+					_this.ffmpegCommand = ffmpeg()
+						.input(this.file.path)
+						.on('progress', function(progress){
+							console.log('progress', progress.percent);
+							// _this.progress = progress.percent
+							_this._setProgress(progress.percent);
+							_this.$.progress.innerHTML = Math.round(progress.percent) + '%';
+						})
+						.on('error', function(err, stdout, stderr) {
+							console.log('Cannot process video: ' + err.message);
+							//TODO: display error message
+							reject();
+						})
+						.on('end', function() {
+							console.log('Transcoding succeeded !');
+							_this._setProgress(100);
+							_this.$.progress.innerHTML = '100%';
+							resolve();
+						})
+						.save( path.join(this.outputDir, path.basename(this.file.path) + '.gif') );
+				});
+
+			},
+
+			_remove: function(){
+				//TODO animate
+				this.remove();
 			}
 
 		});
 
-	</script>
+	})();</script>
 
 </dom-module>

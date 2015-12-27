@@ -1,3 +1,6 @@
+<link rel='import' href='../bower_components/Polymer/polymer.html'>
+<!-- <link rel='import' href='../bower_components/iron-icons/iron-icons.html'> -->
+
 <link rel='import' href='./gp-menu-bar.html'>
 <link rel='import' href='./gp-droptarget.html'>
 <link rel='import' href='./gp-item.html'>
@@ -17,7 +20,7 @@
 			top: 0; left: 0;
 		}
 		#queue {
-			margin-top: 40px;
+			margin-top: 60px;
 		}
 	</style>
 	
@@ -26,7 +29,8 @@
 		<gp-menu-bar></gp-menu-bar>
 		<gp-droptarget id='dropTarget' on-files-changed='_onFilesChanged'></gp-droptarget>
 		<div id="queue"></div>
-		<gp-output-dir></gp-output-dir>
+		<gp-output-dir id='outputDir'></gp-output-dir>
+		<div class='btn' on-click='_start'>start encoding</div>
 
 	</template>
 
@@ -36,20 +40,43 @@
 			is: "gp-app",
 
 			ready: function(){
-				// this.$.dropTarget.addEventListener('files-changed', function(){
-					// console.log('files-changed');
-				// });
+
+				// TODO: states
+				// running, not-running
+
 			},
 
 			_onFilesChanged: function(e){
-				// console.log(this.localName, '_onFilesChanged', e);
+				console.log(this.localName, '_onFilesChanged', e);
+				var currentFilePaths = this._getFilePathsInQueue();
 				var files = Array.prototype.slice.apply(e.detail.value);
 				files.forEach(function(file){
+					// don't add files that are already in the queue
+					if(currentFilePaths.indexOf(file.path) !== -1) return;
+					//TODO: if queue is running, run the gp-item...?
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
+					itemEl.outputDir = this.$.outputDir.path;
 					this.$.queue.appendChild(itemEl);
 				}.bind(this));
-			}
+			},
+
+			_getFilePathsInQueue: function(){
+				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				return items.map(function(item){ return item.file.path; });
+			},
+
+			_start: function(){
+				// console.log('gp-app._start');
+				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				var promises = items.map(function(item){
+					return item.run();
+					//TODO: collect promises so we can detect state change?
+				});
+				Promise.all(promises).then(function(){
+
+				});
+			},
 
 		});
 

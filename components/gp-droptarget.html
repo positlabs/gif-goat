@@ -16,6 +16,7 @@
 			background-color: lightgreen;
 			opacity: .5;
 			display: none;
+			z-index: 10000000;
 		}
 
 	</style>
@@ -38,13 +39,18 @@
 				}
 			},
 
+			listeners: {
+				drop: '_onDrop',
+				dragleave: '_onDragLeave'
+			},
+
 			attached: function() {
 				// console.log(this.localName + '#' + this.id + ' was created');
 
 				var target = document;
 				target.addEventListener('dragover', this._onDragOver.bind(this));
-				this.addEventListener('dragleave', this._onDragLeave.bind(this));
-				this.addEventListener('drop', this._onDrop.bind(this));
+				// this.addEventListener('dragleave', this._onDragLeave.bind(this));
+				// this.addEventListener('drop', this._onDrop.bind(this));
 			},
 
 			_onDrop: function(e){
