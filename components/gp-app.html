@@ -4,10 +4,14 @@
 <link rel='import' href='./gp-menu-bar.html'>
 <link rel='import' href='./gp-droptarget.html'>
 <link rel='import' href='./gp-item.html'>
-<link rel='import' href='./gp-output-dir.html'>
+<link rel='import' href='./gp-settings.html'>
+
+<link rel='stylesheet' href='global.css'>
 
 <!-- 
 
+	TODO
+		copy/paste file support
 
 -->
 
@@ -22,14 +26,23 @@
 		#queue {
 			margin-top: 60px;
 		}
+		.btn {
+			cursor: pointer;
+		}
 	</style>
 	
 	<template>
 
 		<gp-menu-bar></gp-menu-bar>
-		<gp-droptarget id='dropTarget' on-files-changed='_onFilesChanged'></gp-droptarget>
+		
 		<div id="queue"></div>
-		<gp-output-dir id='outputDir'></gp-output-dir>
+
+		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
+		<div class='btn' on-click='_onClickSelectVideos'>Select videos</div>
+		<input id='fileSelector' type='file' multiple hidden>
+		
+		<gp-settings id='settings'></gp-settings>
+		
 		<div class='btn' on-click='_start'>start encoding</div>
 
 	</template>
@@ -49,23 +62,43 @@
 			},
 
 			ready: function(){
+				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
 			},
 
 			_onStateChanged: function(){
-				// TODO: 				
+				// TODO:
+				switch(this.state){
+					case 'stopped': 
+						break;
+					case 'running': 
+						break;
+				}
 			},
 
-			_onFilesChanged: function(e){
-				console.log(this.localName, '_onFilesChanged', e);
-				var currentFilePaths = this._getFilePathsInQueue();
+			_onClickSelectVideos: function(e){
+				this.$.fileSelector.click();
+			},
+
+			_onFileSelectorChanged: function(e){
+				console.log(e);
+				var files = Array.prototype.slice.apply(e.target.files);
+				this._handleNewFiles(files);
+			},
+
+			_onFilesDropped: function(e){
+				console.log(this.localName, '_onFilesDropped', e);
 				var files = Array.prototype.slice.apply(e.detail.value);
+				this._handleNewFiles(files);
+			},
+
+			_handleNewFiles: function(files){
+				var currentFilePaths = this._getFilePathsInQueue();
 				files.forEach(function(file){
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 					//TODO: if queue is running, run the gp-item...?
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
-					itemEl.outputDir = this.$.outputDir.path;
 					this.$.queue.appendChild(itemEl);
 				}.bind(this));
 			},
@@ -82,8 +115,9 @@
 
 				// collect promises so we can set state
 				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				var settings = this.$.settings.get();
 				var promises = items.map(function(item){
-					return item.run();
+					return item.run(settings);
 				});
 				Promise.all(promises).then(function(){
 					console.log('encoding promises resolved!');

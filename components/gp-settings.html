@@ -1,0 +1,49 @@
+<link rel='import' href='./gp-output-dir.html'>
+
+<dom-module id='gp-settings'>
+
+	<style>
+		:host {
+			
+		}
+	</style>
+	
+	<template>
+		<input id='fpsInput' type='number' value='24' min='1' max='300'>
+		<gp-output-dir id='outputDir'></gp-output-dir>
+	</template>
+
+	<script>
+		
+		Polymer({
+			is: 'gp-settings',
+
+			properties: {
+
+			},
+
+			ready: function(){
+				
+				this.$.fpsInput.addEventListener('change', this._validateFPSValue.bind(this));
+
+			},
+
+			_validateFPSValue: function(){
+				var input = this.$.fpsInput;
+				if(input.value > 300) input.value = 300;
+				if(input.value <= 0) input.value = 1;
+			},
+
+			get: function(){
+
+				return {
+					fps: this.$.fpsInput.value,
+					output: this.$.outputDir.path
+				};
+			}
+
+		});
+
+	</script>
+
+</dom-module>

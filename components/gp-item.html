@@ -1,5 +1,15 @@
 <!-- 
 
+	TODO 
+
+	- output options
+		- fps
+		- max-height, max-width
+
+	- no transparency pixel on gifs
+	- paletteuse adds ~3x file size. why?
+
+	- get preview frame
 
 -->
 
@@ -47,17 +57,13 @@
 				state: {
 					type: String,
 					readOnly: true,
-					value: 'ready', // ready, done
+					value: 'ready', // ready, processing, done
 					notify: true
 				},
 				progress: {
 					type: Number,
 					value: 0,
 					readOnly: true
-				},
-				outputDir: {
-					type: String,
-					value: '',
 				}
 			},
 
@@ -67,55 +73,94 @@
 			},
 
 			ready: function(){
-
+				//TODO: clear tmp directory
 			},
 
-			_generatePalette: function(){
+			_generatePalette: function(settings){
+				var _this = this;
+				
+				//TODO: check if it already exists
+				// try{
+					// fs.mkdir(path.join(settings.output, 'tmp'));
+				// }catch(e){}
+
 				return new Promise(function(resolve, reject){
-					//TODO
-					resolve();
-				});
+					_this.paletteCommand = ffmpeg(_this.file.path)
+						.on('start', function(commandLine) {
+							// console.log('Spawned Ffmpeg with command: ' + commandLine);
+						})
+						.fps(settings.fps)
+						.videoFilters([
+							'palettegen'
+						])
+						.on('error', function(e){
+							console.log(e);
+							reject(e);
+						})
+						.on('end', function(){
+							resolve();
+						})
+						.save( _this._getPalettePath(settings.output, _this.file.path) );
+
+					// console.log(_this.paletteCommand);
+
+				}).catch(function(err){ console.log(err); });
 			},
 
-			_encodeGIF: function(){
+			_getPalettePath: function(dir, name){
+				return path.join(dir, 'tmp', path.basename(name) + '.png');
+			},
+
+			_encodeGIF: function(settings){
 				var _this = this;
 
 				return new Promise(function(resolve, reject){
 
 					_this.ffmpegCommand = ffmpeg()
 						.input(_this.file.path)
+						.input(_this._getPalettePath(settings.output, _this.file.path))
+						.fps(settings.fps)
+						.outputOptions([
+							'-lavfi paletteuse'
+						])
+						.on('start', function(commandLine) {
+							// console.log('Spawned Ffmpeg with command: ' + commandLine);
+						})
 						.on('progress', function(progress){
 							console.log('progress', progress.percent);
-							// _this.progress = progress.percent
 							_this._setProgress(progress.percent);
 							_this.$.progress.innerHTML = Math.round(progress.percent) + '%';
 						})
 						.on('error', function(err, stdout, stderr) {
 							console.log('Cannot process video: ' + err.message);
-							//TODO: display error message
-							reject();
+							//TODO: display error message in parent
+							reject(err.message);
 						})
 						.on('end', function() {
-							console.log('Transcoding succeeded !');
+							console.log('Transcoding succeeded!');
 							_this._setProgress(100);
 							_this.$.progress.innerHTML = '100%';
 							_this._setState('done');
 							resolve();
 						})
-						.save( path.join(_this.outputDir, path.basename(_this.file.path) + '.gif') );
+						.save( path.join(settings.output, path.basename(_this.file.path) + '.gif') );
 				});
 			},
 
-			run: function(){
-				var _this = this;
+			run: function(settings){
 
-				var p = this._generatePalette()
+				// only run the encoding process once
+				if(this.runPromise !== undefined) return this.runPromise;
+				
+				this._setState('processing');
+
+				var _this = this;
+				this.runPromise = this._generatePalette(settings)
 					.then(function(){
-						_this._encodeGIF();
+						_this._encodeGIF(settings);
 					});
 
-				console.log('p', p);
-				return p;
+				return this.runPromise;
 			},
 
 			_remove: function(){
