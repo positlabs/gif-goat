@@ -20,12 +20,16 @@
 	</style>
 	
 	<template>
-		<div>Output folder</div>
-		<div id='outputBtn' class='btn' on-click='_onClickOutputBtn'>choose</div>
+		<div id='outputBtn' class='btn' on-click='_onClickOutputBtn'>
+			<span>Output folder</span>
+			<span class='fa fa-folder'></span>
+		</div>
 		<input id='output-dir-btn' type='file' webkitdirectory directory hidden>
 
-		<div id='openOutputDirBtn' class='btn' on-click='_onClickOpenOutputBtn'>open</div>
-		<div class='path'>[[path]]</div>
+		<div class='path btn' on-click='_onClickOpenOutputBtn'>
+			<span>[[path]]</span>
+			<span class='fa fa-folder-open'></span>
+		</div>
 	</template>
 
 	<script>(function(){

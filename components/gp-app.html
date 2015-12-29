@@ -1,5 +1,4 @@
 <link rel='import' href='../bower_components/Polymer/polymer.html'>
-<!-- <link rel='import' href='../bower_components/iron-icons/iron-icons.html'> -->
 
 <link rel='import' href='./gp-menu-bar.html'>
 <link rel='import' href='./gp-droptarget.html'>
@@ -29,6 +28,12 @@
 		.btn {
 			cursor: pointer;
 		}
+		.fa-play {
+			background-color: limegreen;
+			border-radius: 50%;
+			width: 100px;
+			height: 100px;
+		}
 	</style>
 	
 	<template>
@@ -43,7 +48,10 @@
 		
 		<gp-settings id='settings'></gp-settings>
 		
-		<div class='btn' on-click='_start'>start encoding</div>
+		<div class='btn' on-click='_start'>
+			<span>start encoding</span>
+			<span class='fa fa-chevron-right'></span>
+		</div>
 
 	</template>
 

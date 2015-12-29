@@ -38,6 +38,7 @@
 			margin-top: 10px;
 			transition: all .1s;
 			background-color: rgba(255, 255, 255, .1);
+			cursor: pointer;
 		}
 
 		a:hover {
@@ -51,8 +52,8 @@
 			color: orange;
 		}
 		a#max-btn {
-			border-color: green;
-			color: green;
+			border-color: limegreen;
+			color: limegreen;
 		}
 		a#close-btn {
 			border-color: red;
@@ -64,9 +65,9 @@
 	<template>
 		
 		<div class='buttons'>
-			<a href='#' id='max-btn' on-click='_onClickMax' title='maximize'>+</a>
-			<a href='#' id='min-btn' on-click='_onClickMin' title='minimize'>-</a>
-			<a href='#' id='close-btn' on-click='_onClickClose' title='quit'>x</a>
+			<a href='#' id='max-btn' on-click='_onClickMax' title='maximize' class='fa fa-plus'></a>
+			<a href='#' id='min-btn' on-click='_onClickMin' title='minimize' class='fa fa-minus'></a>
+			<a href='#' id='close-btn' on-click='_onClickClose' title='quit' class='fa fa-close'></a>
 		</div>
 
 	</template>
