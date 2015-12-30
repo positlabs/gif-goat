@@ -20,6 +20,7 @@
   },
   "repository": "https://github.com/positlabs/gif-pal",
   "devDependencies": {
-    "electron-prebuilt": "^0.36.2"
+    "electron-prebuilt": "^0.36.2",
+    "node-inspector": "^0.12.5"
   }
 }

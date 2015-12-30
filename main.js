@@ -3,6 +3,8 @@ const electron = require('electron');
 const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const ipc = electron.ipcMain;
+const dialog = require('electron').dialog;
+
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -39,6 +41,21 @@ app.on('ready', function() {
 		mainWindow = null;
 	});
 });
+
+ipc.on('request-output-dir', function(event, defaultPath){
+
+	var options = {
+		title: 'Select output folder',
+		properties: ['openDirectory', 'createDirectory'],
+	};
+	if(defaultPath) options.defaultPath = defaultPath;
+
+	dialog.showOpenDialog(mainWindow, options, (folders)=>{
+		console.log('request-output-dir', folders);
+		event.sender.send('request-output-dir', folders[0]);
+	});
+});
+
 
 var appPaths;
 ipc.on('getPaths', function(event, arg){

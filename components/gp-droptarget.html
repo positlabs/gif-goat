@@ -57,8 +57,6 @@
 				e.preventDefault();
 				e.stopPropagation();
 				// console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
-				// this.files = e.dataTransfer.files;
-				// this.set('files', e.dataTransfer.files);
 				this._setFiles(e.dataTransfer.files);
 				this.style.display = 'none';
 			},

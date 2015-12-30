@@ -24,10 +24,9 @@
 			<span>Output folder</span>
 			<span class='fa fa-folder'></span>
 		</div>
-		<input id='output-dir-btn' type='file' webkitdirectory directory hidden>
 
 		<div class='path btn' on-click='_onClickOpenOutputBtn'>
-			<span>[[path]]</span>
+			<span>{{path}}</span>
 			<span class='fa fa-folder-open'></span>
 		</div>
 	</template>
@@ -44,18 +43,13 @@
 			properties: {
 				path: {
 					type: String,
-					value: '',	
+					value: '',
 				}
 			},
 
 			ready: function(){
 				this.path = localStorage.getItem('output-dir') || paths.desktop;
-
-				// FIXME: set this value. Not a huge deal, but it will open a file browser in the default location
-				// as opposed to the one that is actually selected 
-				// this.$['output-dir-btn'].value = path.join(nw.App.dataPath, 'output');
-
-				this.$['output-dir-btn'].addEventListener('change', this._onInputChanged.bind(this));
+				ipc.on('request-output-dir', this._gotOutputDir.bind(this));
 			},
 
 			_onClickOpenOutputBtn: function(){
@@ -64,14 +58,16 @@
 			},
 
 			_onClickOutputBtn: function(){
-				this.$['output-dir-btn'].click();
+				ipc.send('request-output-dir');
 			},
 
-			_onInputChanged: function(e){
-				console.log(this.localName, '_onInputChanged', e);
-				this.path = e.target.value;
+			_gotOutputDir: function(event, outputDir){
+				// console.log('_gotOutputDir', outputDir);
+
+				this.path = outputDir;
 				localStorage.setItem('output-dir', this.path);
 			},
+
 		});
 
 	})();</script>

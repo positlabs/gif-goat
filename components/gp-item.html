@@ -39,6 +39,7 @@
 
 		var fs = require('fs');
 		var path = require('path');
+		var paths = require('./modules/paths');
 		var ffmpeg = require('fluent-ffmpeg');
 		var ffmpegPath = require('./modules/ffmpeg-static').ffmpeg;
 		var ffprobePath = require('./modules/ffmpeg-static').ffprobe;
@@ -73,7 +74,6 @@
 			},
 
 			ready: function(){
-				//TODO: clear tmp directory
 			},
 
 			_generatePalette: function(settings){
@@ -100,15 +100,15 @@
 						.on('end', function(){
 							resolve();
 						})
-						.save( _this._getPalettePath(settings.output, _this.file.path) );
+						.save( _this._getPalettePath(_this.file.path) );
 
 					// console.log(_this.paletteCommand);
 
 				}).catch(function(err){ console.log(err); });
 			},
 
-			_getPalettePath: function(dir, name){
-				return path.join(dir, 'tmp', path.basename(name) + '.png');
+			_getPalettePath: function(name){
+				return path.join(paths.temp, path.basename(name) + '.png');
 			},
 
 			_encodeGIF: function(settings){
@@ -118,7 +118,7 @@
 
 					_this.ffmpegCommand = ffmpeg()
 						.input(_this.file.path)
-						.input(_this._getPalettePath(settings.output, _this.file.path))
+						.input(_this._getPalettePath(_this.file.path))
 						.fps(settings.fps)
 						.outputOptions([
 							'-lavfi paletteuse'
