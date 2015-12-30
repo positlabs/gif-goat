@@ -5,12 +5,14 @@
 			
 			// globals
 			window._ = require('underscore');
-			window.nw = require('nw.gui');
-			window.win = nw.Window.get();
+			window.app = require('electron').app;
+			window.ipc = require('electron').ipcRenderer;
 
-			if(nw.App.argv.indexOf('--dev') !== -1){
-				win.showDevTools();
-			}
+			// window.nw = require('nw.gui');
+			// window.win = nw.Window.get();
+			// if(nw.App.argv.indexOf('--dev') !== -1){
+			// 	win.showDevTools();
+			// }
 
 		</script>
 

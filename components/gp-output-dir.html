@@ -35,6 +35,8 @@
 	<script>(function(){
 
 		var path = require('path');
+		var shell = require('electron').shell;
+		var paths = require('./modules/paths');
 
 		Polymer({
 			is: 'gp-output-dir',
@@ -47,8 +49,7 @@
 			},
 
 			ready: function(){
-				
-				this.path = localStorage.getItem('output-dir') || path.join(nw.App.dataPath, 'output');
+				this.path = localStorage.getItem('output-dir') || paths.desktop;
 
 				// FIXME: set this value. Not a huge deal, but it will open a file browser in the default location
 				// as opposed to the one that is actually selected 
@@ -58,7 +59,8 @@
 			},
 
 			_onClickOpenOutputBtn: function(){
-				nw.Shell.openItem(this.path);
+				//FIXME: open in the damn foreground!
+				shell.openItem(this.path);
 			},
 
 			_onClickOutputBtn: function(){

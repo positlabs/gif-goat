@@ -40,8 +40,8 @@
 		var fs = require('fs');
 		var path = require('path');
 		var ffmpeg = require('fluent-ffmpeg');
-		var ffmpegPath = require('./lib/ffmpeg-static').ffmpeg;
-		var ffprobePath = require('./lib/ffmpeg-static').ffprobe;
+		var ffmpegPath = require('./modules/ffmpeg-static').ffmpeg;
+		var ffprobePath = require('./modules/ffmpeg-static').ffprobe;
 		ffmpeg.setFfmpegPath(ffmpegPath);
 		ffmpeg.setFfprobePath(ffprobePath);
 		console.log(ffmpegPath);
