@@ -3,7 +3,6 @@
 	TODO 
 
 	- output options
-		- fps
 		- max-height, max-width
 
 	- no transparency pixel on gifs
@@ -13,8 +12,9 @@
 
 -->
 
+<link rel='import' href='./gp-thumbnail.html'>
 
-<dom-module id="gp-item">
+<dom-module id='gp-item'>
 
 	<style>
 
@@ -28,21 +28,27 @@
 	
 	<template>
 
+		<gp-thumbnail id='thumb'></gp-thumbnail>
 		<div id='state'>[[state]]</div>
 		<div id='progress'></div>
 		<div id='filename' title='[[file.path]]'>[[file.path]]</div>
-		<div id='remove-btn' class='btn' on-click='_remove'>x</div>
+		<div class='btns'>	
+			<div id='open-btn' class='btn fa fa-external-link-square' on-click='_open'></div>
+			<div id='remove-btn' class='btn fa fa-close' on-click='_remove'></div>
+		</div>
+
 
 	</template>
 
 	<script>(function(){
 
-		var fs = require('fs');
-		var path = require('path');
-		var paths = require('./modules/paths');
-		var ffmpeg = require('fluent-ffmpeg');
-		var ffmpegPath = require('./modules/ffmpeg-static').ffmpeg;
-		var ffprobePath = require('./modules/ffmpeg-static').ffprobe;
+		const fs = require('fs');
+		const path = require('path');
+		const paths = require('./modules/paths');
+		const shell = require('electron').shell;
+		const ffmpeg = require('fluent-ffmpeg');
+		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg;
+		const ffprobePath = require('./modules/ffmpeg-static').ffprobe;
 		ffmpeg.setFfmpegPath(ffmpegPath);
 		ffmpeg.setFfprobePath(ffprobePath);
 		console.log(ffmpegPath);
@@ -68,102 +74,115 @@
 				}
 			},
 
-			_onFileChanged: function(){
+			_onFileChanged(){
 				console.log(this.localName, '_onFileChanged');
 				this.$.filename.innerHTML = path.basename(this.file.path);
+				this.$.thumb.video = this.file.path;
 			},
 
-			ready: function(){
-			},
-
-			_generatePalette: function(settings){
-				var _this = this;
+			_generatePalette(){
+				var settings = this._settings;
 				
-				//TODO: check if it already exists
-				// try{
-					// fs.mkdir(path.join(settings.output, 'tmp'));
-				// }catch(e){}
-
-				return new Promise(function(resolve, reject){
-					_this.paletteCommand = ffmpeg(_this.file.path)
-						.on('start', function(commandLine) {
+				return new Promise( (resolve, reject) => {
+					this.paletteCommand = ffmpeg(this.file.path)
+						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
 						.fps(settings.fps)
 						.videoFilters([
 							'palettegen'
 						])
-						.on('error', function(e){
+						.on('error', e => {
 							console.log(e);
 							reject(e);
 						})
-						.on('end', function(){
+						.on('end', () => {
 							resolve();
 						})
-						.save( _this._getPalettePath(_this.file.path) );
+						.save( this._getPalettePath(this.file.path) );
 
-					// console.log(_this.paletteCommand);
+					// console.log(this.paletteCommand);
 
-				}).catch(function(err){ console.log(err); });
+				}).catch( err => { console.log(err); } );
 			},
 
-			_getPalettePath: function(name){
+			_getPalettePath(name){
 				return path.join(paths.temp, path.basename(name) + '.png');
 			},
+			_getGIFPath(name){
+				// console.log('_getGIFPath', this, name);
+				return path.join(this._settings.output, path.basename(name) + '.gif')
+			},
 
-			_encodeGIF: function(settings){
-				var _this = this;
+			_encodeGIF(){
+				var settings = this._settings;
 
-				return new Promise(function(resolve, reject){
+				return new Promise( (resolve, reject) => {
 
-					_this.ffmpegCommand = ffmpeg()
-						.input(_this.file.path)
-						.input(_this._getPalettePath(_this.file.path))
+					this.ffmpegCommand = ffmpeg()
+						.input(this.file.path)
+						.input(this._getPalettePath(this.file.path))
 						.fps(settings.fps)
 						.outputOptions([
 							'-lavfi paletteuse'
 						])
-						.on('start', function(commandLine) {
+						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
-						.on('progress', function(progress){
+						.on('progress', progress => {
 							console.log('progress', progress.percent);
-							_this._setProgress(progress.percent);
-							_this.$.progress.innerHTML = Math.round(progress.percent) + '%';
+							this._setProgress(progress.percent);
+							this.$.progress.innerHTML = Math.round(progress.percent) + '%';
 						})
-						.on('error', function(err, stdout, stderr) {
+						.on('error', (err, stdout, stderr) => {
 							console.log('Cannot process video: ' + err.message);
 							//TODO: display error message in parent
 							reject(err.message);
 						})
-						.on('end', function() {
+						.on('end', () => {
 							console.log('Transcoding succeeded!');
-							_this._setProgress(100);
-							_this.$.progress.innerHTML = '100%';
-							_this._setState('done');
+							this._setProgress(100);
+							this.$.progress.innerHTML = '100%';
+							this._setState('done');
 							resolve();
 						})
-						.save( path.join(settings.output, path.basename(_this.file.path) + '.gif') );
+						.save( this._getGIFPath(this.file.path) );
 				});
 			},
 
-			run: function(settings){
+			run(settings){
 
 				// only run the encoding process once
 				if(this.runPromise !== undefined) return this.runPromise;
 				
+				this._settings = settings;
+				
 				this._setState('processing');
 
-				var _this = this;
-				this.runPromise = this._generatePalette(settings)
-					.then(function(){
-						_this._encodeGIF(settings);
+				this.runPromise = 
+					this._generatePalette()
+					.then(() => {
+						this._encodeGIF();
 					});
 
 				return this.runPromise;
 			},
 
-			_remove: function(){
+			_open(){
+				console.log('_open', this);
+
+				//FIXME: open in a browser. preview doesn't do gifs on mac
+				shell.openItem( this._getGIFPath(this.file.path) );
+
+				// convert to dataurl, then open as url...??
+
+				// or just open an overlay with the gif in it
+				
+				// var gifpath = 'file://' + this._getGIFPath(this.file.path);
+				// shell.openExternal( gifpath );
+			},
+
+			_remove(){
 				//TODO animate
 				this.remove();
 			}

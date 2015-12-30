@@ -27,7 +27,7 @@
 
 		<div class='path btn' on-click='_onClickOpenOutputBtn'>
 			<span>{{path}}</span>
-			<span class='fa fa-folder-open'></span>
+			<span class='fa fa-external-link-square'></span>
 		</div>
 	</template>
 
@@ -47,23 +47,23 @@
 				}
 			},
 
-			ready: function(){
+			ready(){
 				this.path = localStorage.getItem('output-dir') || paths.desktop;
 				ipc.on('request-output-dir', this._gotOutputDir.bind(this));
 			},
 
-			_onClickOpenOutputBtn: function(){
-				//FIXME: open in the damn foreground!
-				shell.openItem(this.path);
+			_onClickOpenOutputBtn(){
+				// shell.openItem(this.path);
+				// open in the damn foreground!
+				shell.openExternal('file://'+this.path);
 			},
 
-			_onClickOutputBtn: function(){
+			_onClickOutputBtn(){
 				ipc.send('request-output-dir');
 			},
 
-			_gotOutputDir: function(event, outputDir){
+			_gotOutputDir(event, outputDir){
 				// console.log('_gotOutputDir', outputDir);
-
 				this.path = outputDir;
 				localStorage.setItem('output-dir', this.path);
 			},

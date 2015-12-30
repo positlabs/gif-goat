@@ -14,6 +14,7 @@
     "fluent-ffmpeg": "^2.0.1",
     "font-awesome": "^4.5.0",
     "glob": "^6.0.1",
+    "gsap": "^1.18.2",
     "gulp": "^3.9.0",
     "underscore": "^1.8.3",
     "yargs": "^3.31.0"

@@ -16,34 +16,59 @@
 <dom-module id="gp-app">
 
 	<style>
+		
 		:host {
 			position: absolute;
 			width: 100%; height: 100%;
 			top: 0; left: 0;
+			text-align: center;
+			
 		}
+
 		#queue {
-			margin-top: 60px;
+			padding-top: 20px;
+			margin-bottom: 40px;
+			height: -webkit-calc(100% - 300px);
+			overflow-y: scroll;
+			overflow-x: hidden;
 		}
+		
 		.btn {
 			cursor: pointer;
 		}
-		.fa-play {
-			background-color: limegreen;
-			border-radius: 50%;
-			width: 100px;
-			height: 100px;
+
+		a {
+			color: white;
 		}
+
+		.vr:after {
+			content: '|';
+			padding: 0 5px;
+			color: white;
+		}
+
 	</style>
 	
 	<template>
-
-		<!-- <gp-menu-bar></gp-menu-bar> -->
 		
-		<div id="queue"></div>
+		<h2>Select videos</h2>
+		<span class='btn' on-click='_onClickSelectVideos'>
+			<a href="#">browse</a>
+			<span class='fa fa-folder-open'></span>
+			<input id='fileSelector' type='file' multiple hidden>
+		</span>
+		<span class='vr'></span>
+		<span>
+			<span>drag &amp; drop</span>
+			<span class='fa fa-plus-circle'></span>
+		</span>
+		<span class='vr'></span>
+		<span>
+			<span>copy &amp; paste</span>
+			<span class='fa fa-clipboard'></span>
+		</span>
 
-		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
-		<div class='btn' on-click='_onClickSelectVideos'>Select videos</div>
-		<input id='fileSelector' type='file' multiple hidden>
+		<div id="queue"></div>
 		
 		<gp-settings id='settings'></gp-settings>
 		
@@ -51,6 +76,8 @@
 			<span>start encoding</span>
 			<span class='fa fa-chevron-right'></span>
 		</div>
+
+		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
 
 	</template>
 
@@ -68,11 +95,11 @@
 				}
 			},
 
-			ready: function(){
+			ready(){
 				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
 			},
 
-			_onStateChanged: function(){
+			_onStateChanged(){
 				// TODO:
 				switch(this.state){
 					case 'stopped': 
@@ -82,40 +109,40 @@
 				}
 			},
 
-			_onClickSelectVideos: function(e){
+			_onClickSelectVideos(e){
 				this.$.fileSelector.click();
 			},
 
-			_onFileSelectorChanged: function(e){
-				console.log(e);
+			_onFileSelectorChanged(e){
+				// console.log(e);
 				var files = Array.prototype.slice.apply(e.target.files);
 				this._handleNewFiles(files);
 			},
 
-			_onFilesDropped: function(e){
-				console.log(this.localName, '_onFilesDropped', e);
+			_onFilesDropped(e){
+				// console.log(this.localName, '_onFilesDropped', e);
 				var files = Array.prototype.slice.apply(e.detail.value);
 				this._handleNewFiles(files);
 			},
 
-			_handleNewFiles: function(files){
+			_handleNewFiles(files){
 				var currentFilePaths = this._getFilePathsInQueue();
-				files.forEach(function(file){
+				files.forEach(file => {
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 					//TODO: if queue is running, run the gp-item...?
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
 					this.$.queue.appendChild(itemEl);
-				}.bind(this));
+				});
 			},
 
-			_getFilePathsInQueue: function(){
+			_getFilePathsInQueue(){
 				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
-				return items.map(function(item){ return item.file.path; });
+				return items.map(item => { return item.file.path; });
 			},
 
-			_start: function(){
+			_start(){
 				// console.log('gp-app._start');
 				
 				this._setState('running');
@@ -123,13 +150,13 @@
 				// collect promises so we can set state
 				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
 				var settings = this.$.settings.get();
-				var promises = items.map(function(item){
+				var promises = items.map(item => {
 					return item.run(settings);
 				});
-				Promise.all(promises).then(function(){
-					console.log('encoding promises resolved!');
+				Promise.all(promises).then(() => {
+					// console.log('encoding promises resolved!');
 					this._setState('stopped');
-				}.bind(this));
+				});
 			},
 
 		});

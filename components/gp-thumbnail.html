@@ -1,0 +1,79 @@
+<!-- 
+
+
+-->
+
+<dom-module id='gp-thumbnail'>
+
+	<style>
+
+		:host {
+			position: relative;
+			display: inline-block;
+			width: 50px; height: 50px;
+		}
+
+		#thumbnail {
+			width: 100%; height: 100%;
+			background-position: center;
+			background-size: cover;
+			border-radius: 50%;
+			opacity: 0;
+		}
+
+	</style>
+	
+	<template>
+		<div id='thumbnail'></div>
+	</template>
+
+	<script>(function(){
+
+		var path = require('path');
+		var paths = require('./modules/paths');
+		var ffmpeg = require('fluent-ffmpeg');
+
+		Polymer({
+			is: 'gp-thumbnail',
+
+			properties: {
+				// path to the video
+				video: {
+					type: String,
+					observer: '_onVideoChanged'
+				}
+			},
+
+			_onVideoChanged(){
+				// console.log('_onVideoChanged');
+
+				ffmpeg(this.video)
+					.noVideo()
+					.on('end', () => {
+						this._gotThumb();
+					})
+					.thumbnail({
+						filename: '%b',
+						folder: paths.temp,
+						timestamps: ['0'],
+						// timestamps: ['5%'] // borks on webm
+						size: 150 + 'x?'
+					});
+			},
+
+			_gotThumb(){
+
+				var thumbPath = path.join(paths.temp, path.basename(this.video).split('.')[0] + '.png');
+				this.$.thumbnail.style.backgroundImage = 'url("' + thumbPath + '")';
+				TweenMax.fromTo(this.$.thumbnail, 1, 
+					{opacity: 0, scale: .7}, 
+					{opacity: 1, scale: 1, ease: Power3.easeOut
+				});
+			}
+
+
+		});
+
+	})();</script>
+
+</dom-module>
