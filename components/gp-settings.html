@@ -4,13 +4,50 @@
 
 	<style>
 		:host {
-			
+		}
+
+		.content {
+			display: inline-block;
+			padding: 30px;
+		}
+
+		.content .item {
+			position: relative;
+			display: block;
+			float: left;
+			clear: both;
+			margin-bottom: 20px;
+		}
+
+
+		input {
+			border: none;
+			border-radius: 2px;
+			padding: 5px 10px;
+			outline: none;
+			border: 1px solid transparent;
+		}
+		input:focus {
+			border: 1px solid var(--light-green);
+		}
+		input::-webkit-outer-spin-button,
+		input::-webkit-inner-spin-button {
+			/* display: none; <- Crashes Chrome on hover */
+			-webkit-appearance: none;
+			margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 		}
 	</style>
 	
 	<template>
-		<input id='fpsInput' type='number' value='24' min='1' max='300'>
-		<gp-output-dir id='outputDir'></gp-output-dir>
+		<div class='content'>
+			<gp-output-dir id='outputDir' class='item'></gp-output-dir>
+			<div id='size' class='item'>
+				<input id='widthInput' type='number' placeholder='width' min='-1'>
+				<span class='fa fa-close'></span>
+				<input id='heightInput' type='number' placeholder='height' min='-1'>
+			</div>
+			<input id='fpsInput' class='item' type='number' placeholder='fps' min='1' max='300'>
+		</div>
 	</template>
 
 	<script>

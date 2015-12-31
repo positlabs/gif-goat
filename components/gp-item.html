@@ -88,7 +88,7 @@
 						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
-						.fps(settings.fps)
+						// .fps(settings.fps)
 						.videoFilters([
 							'palettegen'
 						])
@@ -98,8 +98,13 @@
 						})
 						.on('end', () => {
 							resolve();
-						})
-						.save( this._getPalettePath(this.file.path) );
+						});
+
+
+						if(settings.fps){
+							this.paletteCommand.fps(settings.fps);
+						}
+						this.paletteCommand.save( this._getPalettePath(this.file.path) );
 
 					// console.log(this.paletteCommand);
 
@@ -107,7 +112,7 @@
 			},
 
 			_getPalettePath(name){
-				return path.join(paths.temp, path.basename(name) + '.png');
+				return path.join(paths.temp, 'palette_' + path.basename(name) + '.png');
 			},
 			_getGIFPath(name){
 				// console.log('_getGIFPath', this, name);
@@ -122,7 +127,7 @@
 					this.ffmpegCommand = ffmpeg()
 						.input(this.file.path)
 						.input(this._getPalettePath(this.file.path))
-						.fps(settings.fps)
+						// .fps(settings.fps)
 						.outputOptions([
 							'-lavfi paletteuse'
 						])
@@ -146,7 +151,12 @@
 							this._setState('done');
 							resolve();
 						})
-						.save( this._getGIFPath(this.file.path) );
+
+						if(settings.fps){
+							this.ffmpegCommand.fps(settings.fps)
+						}
+
+						this.ffmpegCommand.save( this._getGIFPath(this.file.path) );
 				});
 			},
 
@@ -172,7 +182,8 @@
 				console.log('_open', this);
 
 				//FIXME: open in a browser. preview doesn't do gifs on mac
-				shell.openItem( this._getGIFPath(this.file.path) );
+				shell.showItemInFolder( this._getGIFPath(this.file.path) );
+				// shell.openItem( this._getGIFPath(this.file.path) );
 
 				// convert to dataurl, then open as url...??
 

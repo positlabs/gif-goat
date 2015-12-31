@@ -21,16 +21,43 @@
 			width: 100%; height: 100%;
 			top: 0; left: 0;
 			text-align: center;
-			
+			--light-green: #c9f47d;
+			--dark-purple: #1e0d44;
+			background-color: #ddd;
+			color: var(--dark-purple);
+			font-family: 'ubuntu', sans-serif;
+			font-weight: 300;
+		}
+
+		#logo {
+			position: absolute;
+			top: 0; left: 0;
+			width: 100%; height: 150px;
+		}
+
+		#file-selection {
+			position: absolute;
+			top: 0; left: 0;
+			width: 100%; height: 150px;
+		}
+		#file-selection .center {
+			width: 100%;
 		}
 
 		#queue {
-			position: relative;
-			padding-top: 20px;
-			margin-bottom: 40px;
-			height: -webkit-calc(100% - 300px);
+			position: absolute;
+			top: 150px;
+			width: 100%;
+			height: -webkit-calc(100% - 400px);
 			overflow-y: scroll;
 			overflow-x: hidden;
+			background: white;
+		}
+
+		#controls {
+			position: absolute;
+			width: 100%; height: 250px;
+			bottom: 0; left: 0;
 		}
 		
 		.btn {
@@ -54,8 +81,8 @@
 		}
 		.drag-drop {
 			display: inline-block;
-			padding: 5px 8px;
-			border: 1px dashed rgba(255, 255, 255, .2);
+			padding: 8px 12px;
+			border: 1px dashed rgba(0,0,0, .2);
 			border-radius: 2px;
 		}
 		.or {
@@ -63,28 +90,50 @@
 			font-size: .8em;
 		}
 
+		#make-gifs {
+			position: absolute;
+			bottom: 0; right: 0;
+			width: 100%;
+			padding: 20px 0;
+			opacity: 0; visibility: hidden;
+		}
+
 	</style>
 	
 	<template>
 
-		<h1>pick videos</h1>
-		<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
-			<span>browse</span>
-			<span class='fa fa-folder-open'></span>
-			<input id='fileSelector' type='file' multiple hidden>
+		<div id='logo'>
+			
+
+
 		</div>
-		<span class='or'> or </span>
-		<div class='selection-option drag-drop'>
-			<span>drag <span class='fa fa-plus-circle'></span> drop</span>
+
+		<div id='file-selection'>
+
+			<div class='center'>
+				<h1>pick videos</h1>
+				<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
+					<span>browse</span>
+					<span class='fa fa-folder-open'></span>
+					<input id='fileSelector' type='file' multiple hidden>
+				</div>
+				<span class='or'> or </span>
+				<div class='selection-option drag-drop'>
+					<span>drag <span class='fa fa-plus-circle'></span> drop</span>
+				</div>
+			</div>			
+
 		</div>
 
 		<div id="queue"></div>
 		
-		<gp-settings id='settings'></gp-settings>
-		
-		<div class='btn bubble bubble-bright' on-click='_start'>
-			<span>make gifs</span>
-			<span class='fa fa-chevron-right'></span>
+		<div id='controls'>
+			<gp-settings id='settings'></gp-settings>
+			
+			<div id='make-gifs' class='btn bubble bubble-bright' on-click='_start'>
+				<span>make gifs</span>
+				<span class='fa fa-chevron-right'></span>
+			</div>
 		</div>
 
 		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
@@ -95,6 +144,13 @@
 
 		// https://github.com/noraesae/perfect-scrollbar
 		var PS = require('perfect-scrollbar');
+
+		var states = {
+			noFiles: 'noFiles',
+			ready: 'ready',
+			processing: 'processing',
+			done: 'done',
+		}
 		
 		Polymer({
 			is: "gp-app",
@@ -102,7 +158,7 @@
 			properties: {
 				state: {
 					type: String,
-					value: 'stopped',
+					value: states.noFiles,
 					readOnly: true,
 					observer: '_onStateChanged'
 				}
@@ -117,9 +173,23 @@
 			_onStateChanged(){
 				// TODO:
 				switch(this.state){
-					case 'stopped': 
+					case states.noFiles:
+						// show logo
+						// hide queue
+						// hide make gif button
+						// move file selector
 						break;
-					case 'running': 
+					case states.ready:
+						// show queue
+						// show make gif button 
+						break;
+					case states.processing:
+						// show logo
+						// show spinner
+						break;
+					case states.done:
+						// hide spinner
+						// show restart button
 						break;
 				}
 			},
@@ -145,7 +215,6 @@
 				files.forEach(file => {
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
-					//TODO: if queue is running, run the gp-item...?
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
 					this.$.queue.appendChild(itemEl);

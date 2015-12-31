@@ -20,11 +20,13 @@ app.on('window-all-closed', function() {
 app.on('ready', function() {
 	// Create the browser window.
 	mainWindow = new BrowserWindow({
-		width: 800, 
+		width: 400, 
 		height: 600,
-		title: 'GIF Pal',
-		//minWidth, minHeight
-		darkTheme: true
+		title: 'GIFFLY',
+		minWidth: 400, 
+		minHeight: 520,
+		darkTheme: true,
+		useContentSize: true //The width and height would be used as web page's size, which means the actual window's size will include window frame's size and be slightly larger.
 	});
 
 	// and load the index.html of the app.

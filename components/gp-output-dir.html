@@ -15,20 +15,21 @@
 
 		.path {
 			font-size: .8em;
+			margin-left: 10px;
 		}
 
 	</style>
 	
 	<template>
-		<div id='outputBtn' class='btn bubble' on-click='_onClickOutputBtn'>
+		<span id='outputBtn' class='btn bubble' on-click='_onClickOutputBtn'>
 			<span>save to</span>
 			<span class='fa fa-folder-open'></span>
-		</div>
+		</span>
 
-		<div class='path btn' on-click='_onClickOpenOutputBtn'>
-			<span>{{path}}</span>
+		<span class='path btn' on-click='_onClickOpenOutputBtn' title='[[path]]'>
+			<span id='path-display'></span>
 			<span class='fa fa-external-link-square'></span>
-		</div>
+		</span>
 	</template>
 
 	<script>(function(){
@@ -44,12 +45,23 @@
 				path: {
 					type: String,
 					value: '',
+					observer: '_onPathChanged'
 				}
 			},
 
 			ready(){
 				this.path = localStorage.getItem('output-dir') || paths.desktop;
 				ipc.on('request-output-dir', this._gotOutputDir.bind(this));
+			},
+
+			_onPathChanged(){
+				var maxChars = 30;
+				var chars = this.path;
+				if(chars.length > maxChars){
+					chars = chars.slice(chars.length - maxChars, chars.length);
+					chars = '...' + chars;
+				}
+				this.$['path-display'].innerHTML = chars;
 			},
 
 			_onClickOpenOutputBtn(){
