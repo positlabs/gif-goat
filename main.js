@@ -52,7 +52,8 @@ ipc.on('request-output-dir', function(event, defaultPath){
 
 	dialog.showOpenDialog(mainWindow, options, (folders)=>{
 		console.log('request-output-dir', folders);
-		event.sender.send('request-output-dir', folders[0]);
+		if(folders)
+			event.sender.send('request-output-dir', folders[0]);
 	});
 });
 

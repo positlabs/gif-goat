@@ -8,9 +8,6 @@
 
 <!-- 
 
-	TODO
-		copy/paste file support
-
 -->
 
 <dom-module id="gp-app">
@@ -37,43 +34,53 @@
 			cursor: pointer;
 		}
 
-		a {
+		.vr:after {
+			content: '';
+			padding: 0 10px;
 			color: white;
 		}
 
-		.vr:after {
-			content: '|';
-			padding: 0 5px;
-			color: white;
+		h1, span {
+			cursor: default;
+		}
+
+		.selection-option {
+			display: inline;
+			margin-bottom: 12px;
+			width: 110px;
+		}
+		.drag-drop {
+			display: inline-block;
+			padding: 5px 8px;
+			border: 1px dashed rgba(255, 255, 255, .2);
+			border-radius: 2px;
+		}
+		.or {
+			margin: 0 10px;
+			font-size: .8em;
 		}
 
 	</style>
 	
 	<template>
 		
-		<h2>Select videos</h2>
-		<span class='btn' on-click='_onClickSelectVideos'>
-			<a href="#">browse</a>
+		<h1>pick videos</h1>
+		<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
+			<span>browse</span>
 			<span class='fa fa-folder-open'></span>
 			<input id='fileSelector' type='file' multiple hidden>
-		</span>
-		<span class='vr'></span>
-		<span>
-			<span>drag &amp; drop</span>
-			<span class='fa fa-plus-circle'></span>
-		</span>
-		<span class='vr'></span>
-		<span>
-			<span>copy &amp; paste</span>
-			<span class='fa fa-clipboard'></span>
-		</span>
+		</div>
+		<span class='or'> or </span>
+		<div class='selection-option drag-drop'>
+			<span>drag <span class='fa fa-plus-circle'></span> drop</span>
+		</div>
 
 		<div id="queue"></div>
 		
 		<gp-settings id='settings'></gp-settings>
 		
-		<div class='btn' on-click='_start'>
-			<span>start encoding</span>
+		<div class='btn bubble bubble-bright' on-click='_start'>
+			<span>make gifs</span>
 			<span class='fa fa-chevron-right'></span>
 		</div>
 
