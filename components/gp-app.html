@@ -166,27 +166,30 @@
 
 			ready(){
 				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
-
 				PS.initialize(this.$.queue);
 			},
 
 			_onStateChanged(){
 				// TODO:
 				switch(this.state){
+					
 					case states.noFiles:
 						// show logo
 						// hide queue
 						// hide make gif button
 						// move file selector
 						break;
+
 					case states.ready:
 						// show queue
 						// show make gif button 
 						break;
+					
 					case states.processing:
 						// show logo
 						// show spinner
 						break;
+					
 					case states.done:
 						// hide spinner
 						// show restart button
@@ -217,8 +220,13 @@
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
+					itemEl.addEventListener('removed', this._onItemRemoved);
 					this.$.queue.appendChild(itemEl);
 				});
+			},
+
+			_onItemRemoved(){
+				console.log(this.localName, '_onItemRemoved');
 			},
 
 			_getFilePathsInQueue(){
@@ -229,7 +237,7 @@
 			_start(){
 				// console.log('gp-app._start');
 				
-				this._setState('running');
+				this._setState(states.processing);
 
 				// collect promises so we can set state
 				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
@@ -239,7 +247,7 @@
 				});
 				Promise.all(promises).then(() => {
 					// console.log('encoding promises resolved!');
-					this._setState('stopped');
+					this._setState(states.done);
 				});
 			},
 
