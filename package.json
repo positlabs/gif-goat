@@ -16,6 +16,7 @@
     "glob": "^6.0.1",
     "gsap": "^1.18.2",
     "gulp": "^3.9.0",
+    "perfect-scrollbar": "^0.6.8",
     "underscore": "^1.8.3",
     "yargs": "^3.31.0"
   },

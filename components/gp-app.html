@@ -5,6 +5,8 @@
 <link rel='import' href='./gp-settings.html'>
 
 <link rel='stylesheet' href='global.css'>
+<link rel='stylesheet' href='../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css' />
+
 
 <!-- 
 
@@ -23,6 +25,7 @@
 		}
 
 		#queue {
+			position: relative;
 			padding-top: 20px;
 			margin-bottom: 40px;
 			height: -webkit-calc(100% - 300px);
@@ -63,7 +66,7 @@
 	</style>
 	
 	<template>
-		
+
 		<h1>pick videos</h1>
 		<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
 			<span>browse</span>
@@ -89,6 +92,9 @@
 	</template>
 
 	<script>(function(){
+
+		// https://github.com/noraesae/perfect-scrollbar
+		var PS = require('perfect-scrollbar');
 		
 		Polymer({
 			is: "gp-app",
@@ -104,6 +110,8 @@
 
 			ready(){
 				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
+
+				PS.initialize(this.$.queue);
 			},
 
 			_onStateChanged(){
