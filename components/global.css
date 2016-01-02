@@ -31,7 +31,7 @@ h1, h2 {
 	display: inline-block;
 	padding: 8px 10px;
 	background-color: rgba(255, 255, 255, 1);
-	transition: all .1s;
+	transition: background .1s, border .1s;
 	border-radius: 2px;
 	border: 1px solid #1e0d44;
 }

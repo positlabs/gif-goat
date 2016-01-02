@@ -170,6 +170,7 @@
 			},
 
 			_onStateChanged(){
+				console.log(this.localName, '_onStateChanged', this.state);
 				// TODO:
 				switch(this.state){
 					
@@ -178,14 +179,23 @@
 						// hide queue
 						// hide make gif button
 						// move file selector
+						// enable d&d
+						this.$.dropTarget.disabled = false;
 						break;
 
 					case states.ready:
 						// show queue
 						// show make gif button 
+						TweenLite.set(this.$['make-gifs'], {autoAlpha: 1})
+						TweenLite.fromTo(this.$['make-gifs'], 1, 
+							{y:'100%'},
+							{y: '0%', ease: Power4.easeOut}
+						);
 						break;
 					
 					case states.processing:
+						// disable d&d
+						this.$.dropTarget.disabled = true;
 						// show logo
 						// show spinner
 						break;
@@ -220,9 +230,14 @@
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
-					itemEl.addEventListener('removed', this._onItemRemoved);
+					itemEl.addEventListener('detached', this._onItemRemoved);
 					this.$.queue.appendChild(itemEl);
 				});
+
+				// ready for processing!
+				if(files.length > 0){
+					this._setState(states.ready);
+				}
 			},
 
 			_onItemRemoved(){

@@ -19,7 +19,6 @@
 			margin-bottom: 20px;
 		}
 
-
 		input {
 			border: none;
 			border-radius: 2px;
@@ -75,7 +74,9 @@
 
 				return {
 					fps: this.$.fpsInput.value,
-					output: this.$.outputDir.path
+					output: this.$.outputDir.path,
+					width: this.$.widthInput.value,
+					height: this.$.heightInput.value,
 				};
 			}
 

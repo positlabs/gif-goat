@@ -36,6 +36,10 @@
 					value: [],
 					notify: true,
 					readOnly: true
+				},
+				disabled: {
+					type: Boolean,
+					value: false,
 				}
 			},
 
@@ -54,17 +58,19 @@
 			},
 
 			_onDrop: function(e){
+				console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
 				e.preventDefault();
 				e.stopPropagation();
-				// console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
+				if(this.disabled) return;
 				this._setFiles(e.dataTransfer.files);
 				this.style.display = 'none';
 			},
 
 			_onDragOver: function(e){
-				// console.log(this.localName + '._onDragOver', e);
-				this.style.display = 'block';
+				console.log(this.localName + '._onDragOver', e);
 				e.preventDefault();
+				if(this.disabled) return;
+				this.style.display = 'block';
 			},
 
 			_onDragLeave: function(){

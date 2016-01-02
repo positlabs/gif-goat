@@ -8,20 +8,50 @@
 	- no transparency pixel on gifs
 	- paletteuse adds ~3x file size. why?
 
-	- get preview frame
+	- preview gif button
 
 -->
 
 <link rel='import' href='./gp-thumbnail.html'>
+<link rel='import' href='./gp-progress-bar.html'>
 
 <dom-module id='gp-item'>
 
 	<style>
 
 		:host {
+			display: block;
 			position: relative;
 			width: 100%;
-			padding: 5px;
+			margin: 10px 0;
+			cursor: default;
+			overflow: hidden;
+		}
+
+		#thumb, #progress, #filename {
+			float: left;
+		}
+
+		#thumb {
+			margin-left: 20px;
+		}
+
+		#filename {
+			margin-left: 20px;
+			line-height: 50px;
+			font-size: .8em;
+		}
+
+		.btns {
+			position: absolute;
+			right: 20px; top: 50%;
+			transform: translateY(-50%);
+		}
+		.btns .btn {
+		}
+
+		#open-btn {
+			display: none;
 		}
 
 	</style>
@@ -29,10 +59,11 @@
 	<template>
 
 		<gp-thumbnail id='thumb'></gp-thumbnail>
-		<div id='state'>[[state]]</div>
-		<div id='progress'></div>
+		<!-- <div id='state'>[[state]]</div> -->
 		<div id='filename' title='[[file.path]]'>[[file.path]]</div>
-		<div class='btns'>	
+		<div id='progress'></div>
+
+		<div class='btns'>
 			<div id='open-btn' class='btn fa fa-external-link-square' on-click='_open'></div>
 			<div id='remove-btn' class='btn fa fa-close' on-click='_remove'></div>
 		</div>
@@ -52,6 +83,12 @@
 		ffmpeg.setFfmpegPath(ffmpegPath);
 		ffmpeg.setFfprobePath(ffprobePath);
 		console.log(ffmpegPath);
+
+		var states = {
+			ready: 'ready',
+			processing: 'processing',
+			done: 'done',
+		};
 		
 		Polymer({
 			is: "gp-item",
@@ -64,13 +101,40 @@
 				state: {
 					type: String,
 					readOnly: true,
-					value: 'ready', // ready, processing, done
-					notify: true
+					value: states.ready,
+					notify: true,
+					observer: '_onStateChanged'
 				},
 				progress: {
 					type: Number,
 					value: 0,
 					readOnly: true
+				}
+			},
+
+			_onStateChanged(){
+				switch(this.state){
+
+					case states.ready:
+
+						break;
+
+					case states.processing:
+						// show progress bar
+
+						break;
+
+					case states.done:
+						//TODO: use visibility
+						// hide close butn
+						this.$['remove-btn'].style.display = 'none';
+						// show folder button
+						this.$['open-btn'].style.display = 'block';
+
+						// show preview button
+
+						break;
+
 				}
 			},
 
@@ -88,7 +152,6 @@
 						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
-						// .fps(settings.fps)
 						.videoFilters([
 							'palettegen'
 						])
@@ -100,10 +163,10 @@
 							resolve();
 						});
 
-
 						if(settings.fps){
 							this.paletteCommand.fps(settings.fps);
 						}
+
 						this.paletteCommand.save( this._getPalettePath(this.file.path) );
 
 					// console.log(this.paletteCommand);
@@ -153,8 +216,11 @@
 						})
 
 						if(settings.fps){
-							this.ffmpegCommand.fps(settings.fps)
+							this.ffmpegCommand.fps(settings.fps);
 						}
+
+						// TODO
+						// this.ffmpegCommand.size('720x?')
 
 						this.ffmpegCommand.save( this._getGIFPath(this.file.path) );
 				});
@@ -179,23 +245,18 @@
 			},
 
 			_open(){
-				console.log('_open', this);
-
-				//FIXME: open in a browser. preview doesn't do gifs on mac
+				// console.log('_open', this);
 				shell.showItemInFolder( this._getGIFPath(this.file.path) );
-				// shell.openItem( this._getGIFPath(this.file.path) );
-
-				// convert to dataurl, then open as url...??
-
-				// or just open an overlay with the gif in it
-				
-				// var gifpath = 'file://' + this._getGIFPath(this.file.path);
-				// shell.openExternal( gifpath );
 			},
 
 			_remove(){
 				//TODO animate
 				this.remove();
+			},
+
+			detached(){
+				this.fire('detached');
+				//TODO: cancel any ffmpeg processes
 			}
 
 		});
