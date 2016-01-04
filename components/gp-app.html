@@ -23,8 +23,9 @@
 			text-align: center;
 			--light-green: #c9f47d;
 			--dark-purple: #1e0d44;
-			background-color: #ddd;
-			color: var(--dark-purple);
+			background-color: #333;
+			color: white;
+			/*color: var(--dark-purple);*/
 			font-family: 'ubuntu', sans-serif;
 			font-weight: 300;
 		}
@@ -77,12 +78,12 @@
 		.selection-option {
 			display: inline;
 			margin-bottom: 12px;
-			width: 110px;
+			width: 115px;
 		}
 		.drag-drop {
 			display: inline-block;
 			padding: 8px 12px;
-			border: 1px dashed rgba(0,0,0, .2);
+			border: 1.5px dashed rgba(255,255,255, .3);
 			border-radius: 2px;
 		}
 		.or {
@@ -96,6 +97,10 @@
 			width: 100%;
 			padding: 20px 0;
 			opacity: 0; visibility: hidden;
+			background-color: var(--light-green);
+			color: var(--dark-purple);
+			font-weight: bold;
+			text-transform: uppercase;
 		}
 
 	</style>
@@ -130,7 +135,7 @@
 		<div id='controls'>
 			<gp-settings id='settings'></gp-settings>
 			
-			<div id='make-gifs' class='btn bubble bubble-bright' on-click='_start'>
+			<div id='make-gifs' class='btn' on-click='_start'>
 				<span>make gifs</span>
 				<span class='fa fa-chevron-right'></span>
 			</div>

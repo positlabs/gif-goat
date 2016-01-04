@@ -10,6 +10,7 @@ html, body {
 
 * {
 	-webkit-user-select: none;
+	box-sizing: border-box;
 }
 
 h1, h2 {
@@ -30,18 +31,17 @@ h1, h2 {
 .btn.bubble {
 	display: inline-block;
 	padding: 8px 10px;
-	background-color: rgba(255, 255, 255, 1);
-	transition: background .1s, border .1s;
-	border-radius: 2px;
-	border: 1px solid #1e0d44;
+	transition: background .1s, border .1s, color .1s;
+	border-radius: 4px;
+	background-color: #1e0d44;
+	border: 3px solid white;
+	color: white;
+	/*background-color: rgba(255, 255, 255, 1);*/
+	/*border: 3px solid #1e0d44;*/
+	/*color: #1e0d44;*/
 }
 .btn.bubble:hover {
-	background-color: #c9f47d;
+	/*background-color: #c9f47d;*/
+	color: #c9f47d;
+	border: 3px solid #c9f47d;
 }
-
-.btn.bubble-bright {
-	background-color: #c9f47d;
-	color: black;
-	font-weight: bold;
-}
-
