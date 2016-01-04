@@ -22,7 +22,7 @@ app.on('ready', function() {
 	mainWindow = new BrowserWindow({
 		width: 400, 
 		height: 600,
-		title: 'GIFFLY',
+		// title: 'GIFFLY',
 		minWidth: 400, 
 		minHeight: 520,
 		darkTheme: true,
@@ -46,7 +46,7 @@ app.on('ready', function() {
 
 ipc.on('request-output-dir', function(event, defaultPath){
 
-	var options = {
+	let options = {
 		title: 'Select output folder',
 		properties: ['openDirectory', 'createDirectory'],
 	};
