@@ -6,13 +6,36 @@
 <dom-module id='gp-progress-bar'>
 
 	<style>
-	
+
+		:host {
+			position: relative;
+			display: block;
+			width: 100%;
+			height: 5px;
+		}
+		
+		#progress-bar {
+			width: 100%; height: 100%;
+			border-bottom: 1px solid white;
+			transform-origin: right;
+		}
+
+		#progress {
+			position: absolute;
+			width: 100%; height: 100%;
+			transform: scaleX(0);
+			transform-origin: left;
+			background-color: var(--light-green);
+			transition: transform .5s linear;
+		}
 
 	</style>
 	
 	<template>
 
-
+		<div id="progress-bar">
+			<div id="progress"></div>
+		</div>
 
 	</template>
 
@@ -30,7 +53,15 @@
 			},
 
 			_onProgressChanged(){
+				this.$.progress.style.transform = 'scaleX(' + this.progress/100 + ')';
+			},
 
+			show(){
+				TweenMax.fromTo(this.$['progress-bar'], .8, {scaleX: 0}, {scaleX: 1, ease: Power4.easeOut});
+			},
+
+			hide(){
+				TweenMax.to(this, .5, {autoAlpha: 0, delay: .5});
 			}
 
 		});

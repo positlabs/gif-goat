@@ -4,7 +4,6 @@
 
 palette="/tmp/palette.png"
 
-# TODO: set scale option automatically
 filters="fps=24,scale=681:-1:flags=lanczos"
 
 ffmpeg -v warning -i $1 -vf "$filters,palettegen" -y $palette
