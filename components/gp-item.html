@@ -319,19 +319,22 @@
 				var img = document.createElement('img');
 				img.addEventListener('load', e => {
 
-					var preview = new remote.BrowserWindow({
+					ipc.send('open-preview', {
 						width: img.width, 
 						height: img.height,
-						darkTheme: true,
-						resizable: false,
-						useContentSize: true
+						gif: this._getGIFPath(this.file.path)
 					});
 
-					preview.loadURL('file://' + __dirname + '/view-gif.html');
+					// var preview = new remote.BrowserWindow({
+					// 	width: img.width, 
+					// 	height: img.height,
+					// 	darkTheme: true,
+					// 	resizable: false,
+					// 	useContentSize: true
+					// });
 
-					// if(argv.debug){ // only do this if we're in dev mode
-					// 	preview.webContents.openDevTools();
-					// }
+					// preview.loadURL('file://' + __dirname + '/view-gif.html');
+
 					// remote.getCurrentWindow().on('closed', e => {
 					// 	preview.close();
 					// 	preview = null;
@@ -340,13 +343,13 @@
 					// 	preview = null;
 					// });
 
-					var data = JSON.stringify({
-						gif: this._getGIFPath(this.file.path)
-					});
+					// var data = JSON.stringify({
+					// 	gif: this._getGIFPath(this.file.path)
+					// });
 
-					preview.webContents.executeJavaScript(`
-						window.render(${data});
-					`);
+					// preview.webContents.executeJavaScript(`
+					// 	window.render(${data});
+					// `);
 				});
 
 				img.src = 'file://' + this._getGIFPath(this.file.path);

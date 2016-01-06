@@ -11,6 +11,8 @@ const argv = require('yargs').argv;
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
 
+let previews = [];
+
 // Quit when all windows are closed.
 app.on('window-all-closed', function() {
 	
@@ -44,6 +46,11 @@ app.on('ready', function() {
 		// in an array if your app supports multi windows, this is the time
 		// when you should delete the corresponding element.
 		mainWindow = null;
+		previews.forEach(preview => {
+			// complains if a window is already closed
+			try{preview.close();}catch(e){}
+			preview = null;
+		})
 	});
 });
 
@@ -83,4 +90,31 @@ ipc.on('getPaths', function(event, arg){
 		});
 	}
 	event.returnValue = appPaths;
+});
+
+
+ipc.on('open-preview', (e, options) => {
+	// console.log(options);
+
+	var preview = new BrowserWindow({
+		width: options.width, 
+		height: options.height,
+		darkTheme: true,
+		resizable: false,
+		useContentSize: true
+	});
+
+	preview.loadURL('file://' + __dirname + '/view-gif.html');
+
+	// doesn't seem to do anything...
+	// preview.setRepresentedFilename(options.gif);
+
+	var data = JSON.stringify({
+		gif: options.gif
+	});
+	preview.webContents.executeJavaScript(`
+		window.render(${data});
+	`);
+
+	previews.push(preview);
 });
