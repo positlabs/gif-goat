@@ -4,6 +4,7 @@ const app = electron.app;  // Module to control application life.
 const BrowserWindow = electron.BrowserWindow;  // Module to create native browser window.
 const ipc = electron.ipcMain;
 const dialog = require('electron').dialog;
+const argv = require('yargs').argv;
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -33,7 +34,9 @@ app.on('ready', function() {
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	if(argv.debug){ // only do this if we're in dev mode
+		mainWindow.webContents.openDevTools();
+	}
 
 	// Emitted when the window is closed.
 	mainWindow.on('closed', function() {

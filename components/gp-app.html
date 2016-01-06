@@ -10,6 +10,10 @@
 
 <!-- 
 
+TODO
+	set window progress bar 
+	http://electron.atom.io/docs/v0.36.0/api/browser-window/#win-setprogressbar-progress
+
 -->
 
 <dom-module id="gp-app">
@@ -91,7 +95,10 @@
 			width: 100%;			
 			overflow-y: scroll;
 			overflow-x: hidden;
-			background: #111;
+			background: #161616;
+			box-shadow: inset 0 0 15px black;
+			border-top: 1px solid #000;
+			border-bottom: 1px solid #444;
 
 			transition: all .5s .3s var(--easeOutQuart);
 			padding: 10px 0;
@@ -158,6 +165,7 @@
 			color: var(--dark-purple);
 			font-weight: bold;
 			text-transform: uppercase;
+			box-shadow: 0 0 10px black;
 			
 			opacity: 0;
 			transition: all .3s .7s var(--easeOutQuart);
@@ -175,7 +183,7 @@
 
 		<div id='file-selection'>
 			<div class='center'>
-				<h1>pick videos</h1>
+				<h1>add videos</h1>
 				<div class='hr'></div>
 				<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
 					<span>browse</span>

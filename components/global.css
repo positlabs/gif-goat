@@ -26,12 +26,12 @@ h1, h2 {
 .btn.bubble {
 	display: inline-block;
 	padding: 8px 10px;
-	transition: background .1s, border .1s, color .1s, box-shadow .5s;
+	transition: background .1s, border .3s, color .1s, box-shadow .5s;
 	border-radius: 4px;
 	background-color: #1e0d44;
-	border: 3px solid white;
+	border: 3px solid black;
 	color: white;
-	box-shadow: 0 0 0 transparent;
+	box-shadow: 0 0 5px rgba(0,0,0,.5);
 
 	/*background-color: rgba(255, 255, 255, 1);*/
 	/*border: 3px solid #1e0d44;*/

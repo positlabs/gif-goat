@@ -37,10 +37,20 @@
 			margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 		}
 
-/*		.or {
-			font-weight: bold;
-			padding: 0 10px;
-		}*/
+		.fa-close {
+			padding: 0 2px;
+		}
+
+		.fa-question-circle {
+			margin-left: 5px;
+			transition: text-shadow 2s;
+		}
+		.fa-question-circle:hover {
+			color: var(--light-green);
+			/*text-shadow: 0 0 8px white;*/
+			text-shadow: 0 0 8px var(--light-green);
+		}
+
 
 	</style>
 	
@@ -53,8 +63,12 @@
 				<input id='widthInput' type='number' placeholder='width' min='0' title='width'>
 				<span class='fa fa-close'></span>
 				<input id='heightInput' type='number' placeholder='height' min='0' title='height'>
+				<span class='fa fa-question-circle' title='[[tooltip_size]]'></span>
 			</div>
-			<input id='fpsInput' class='item' type='number' placeholder='fps' min='1' max='300'>
+			<div class='item'>
+				<input id='fpsInput' type='number' placeholder='fps' min='1' max='300'>
+				<span class='fa fa-question-circle' title='[[tooltip_fps]]'></span>	
+			</div>
 		</div>
 	</template>
 
@@ -64,7 +78,16 @@
 			is: 'gp-settings',
 
 			properties: {
-
+				tooltip_size: {
+					type: String,
+					readyOnly: true,
+					value: 'Size of output gif. Optional. Defaults to size of the input video. Define one or both dimensions to resize the output gif. Defining only one dimension will automatically determine the other, based on aspect ratio.'
+				},
+				tooltip_fps: {
+					type: String,
+					readyOnly: true,
+					value: 'Frames per second of output gif. Optional. Defaults to fps of the input video. Lowering this value will dramatically decrease file size.'
+				},
 			},
 
 			ready: function(){
