@@ -30,38 +30,93 @@
 			font-weight: 300;
 		}
 
+
 		#logo {
 			position: absolute;
-			top: 0; left: 0;
-			width: 100%; height: 150px;
+			top: 30px; left: 0;
+			width: 100%; height: 90px;
+			background-size: contain;
+			background-position: center;
+			background-repeat: no-repeat;
+			background-image: url('../assets/imgs/logo-type.png');
+
+			transition: opacity .3s;
+			opacity: 1;
 		}
+		:host[state='ready'] #logo {
+			opacity: 0;
+		}
+
 
 		#file-selection {
 			position: absolute;
 			top: 0; left: 0;
 			width: 100%; height: 150px;
+			transition: all .5s var(--easeOutQuart);
 		}
 		#file-selection .center {
 			width: 100%;
 		}
+		:host[state='noFiles'] #file-selection {
+			top: 50%;
+			margin-top: -60px;
+			/*transform: translateY(-50%);*/
+		}
+		:host[state='processing'] #file-selection,
+		:host[state='done'] #file-selection {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		#file-selection .hr {
+			position: relative;
+			width: 160px;
+			height: 1px;
+			background: white;
+			margin: 0 auto;
+			margin-bottom: 20px;
+		}
+
+		#file-selection .center {
+			position: absolute;
+			top: 50%;
+			margin-top: -60px;
+		}
+
+
 
 		#queue {
 			position: absolute;
 			top: 150px;
-			padding-top: 10px;
-			padding-bottom: 10px;
-			width: 100%;
-			height: -webkit-calc(100% - 400px);
+			width: 100%;			
 			overflow-y: scroll;
 			overflow-x: hidden;
 			background: #111;
+
+			transition: all .5s .3s var(--easeOutQuart);
+			padding: 10px 0;
+			height: -webkit-calc(100% - 400px);
 		}
+		:host[state='noFiles'] #queue {
+			height: 0;
+			padding: 0;
+		}
+
+
 
 		#controls {
 			position: absolute;
 			width: 100%; height: 250px;
 			bottom: 0; left: 0;
+			opacity: 0;
+			visibility: hidden;
+			transition: opacity .5s;
 		}
+		:host[state='ready'] #controls {
+			opacity: 1;
+			visibility: visible;
+		}
+
 		
 		.btn {
 			cursor: pointer;
@@ -98,27 +153,30 @@
 			bottom: 0; right: 0;
 			width: 100%;
 			padding: 20px 0;
-			opacity: 0; visibility: hidden;
+			pointer-events: none;
 			background-color: var(--light-green);
 			color: var(--dark-purple);
 			font-weight: bold;
 			text-transform: uppercase;
+			
+			opacity: 0;
+			transition: all .3s .7s var(--easeOutQuart);
+		}
+		:host[state='ready'] #make-gifs {
+			opacity: 1;
+			pointer-events: all;
 		}
 
 	</style>
 	
 	<template>
 
-		<div id='logo'>
-			
-
-
-		</div>
+		<div id='logo' class='btn' on-click='_onClickLogo'></div>
 
 		<div id='file-selection'>
-
 			<div class='center'>
 				<h1>pick videos</h1>
+				<div class='hr'></div>
 				<div class='selection-option btn bubble' on-click='_onClickSelectVideos'>
 					<span>browse</span>
 					<span class='fa fa-folder-open'></span>
@@ -128,9 +186,10 @@
 				<div class='selection-option drag-drop'>
 					<span>drag <span class='fa fa-plus-circle'></span> drop</span>
 				</div>
-			</div>			
-
+			</div>
 		</div>
+		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
+
 
 		<div id="queue"></div>
 		
@@ -143,14 +202,13 @@
 			</div>
 		</div>
 
-		<gp-droptarget id='dropTarget' on-files-changed='_onFilesDropped'></gp-droptarget>
-
 	</template>
 
 	<script>(function(){
 
 		// https://github.com/noraesae/perfect-scrollbar
 		var PS = require('perfect-scrollbar');
+		var shell = require('electron').shell;
 
 		var states = {
 			noFiles: 'noFiles',
@@ -167,8 +225,13 @@
 					type: String,
 					value: states.noFiles,
 					readOnly: true,
+					reflectToAttribute: true,
 					observer: '_onStateChanged'
 				}
+			},
+
+			created(){
+
 			},
 
 			ready(){
@@ -186,6 +249,13 @@
 						// hide queue
 						// hide make gif button
 						// move file selector
+						
+						/*
+							TODO: actually... D&d should always be enabled. 
+							App state should react. 
+							done > drop > ready
+							processing > drop > run items
+						*/
 						// enable d&d
 						this.$.dropTarget.disabled = false;
 						break;
@@ -193,11 +263,11 @@
 					case states.ready:
 						// show queue
 						// show make gif button 
-						TweenLite.set(this.$['make-gifs'], {autoAlpha: 1})
-						TweenLite.fromTo(this.$['make-gifs'], 1, 
-							{y:'100%'},
-							{y: '0%', ease: Power4.easeOut}
-						);
+						// TweenLite.set(this.$['make-gifs'], {autoAlpha: 1})
+						// TweenLite.fromTo(this.$['make-gifs'], 1, 
+						// 	{y:'100%'},
+						// 	{y: '0%', ease: Power4.easeOut}
+						// );
 						break;
 					
 					case states.processing:
@@ -237,7 +307,7 @@
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
-					itemEl.addEventListener('detached', this._onItemRemoved);
+					itemEl.addEventListener('detached', this._onItemRemoved.bind(this));
 					this.$.queue.appendChild(itemEl);
 				});
 
@@ -248,7 +318,9 @@
 			},
 
 			_onItemRemoved(){
-				console.log(this.localName, '_onItemRemoved');
+				// console.log(this.localName, '_onItemRemoved');
+				var currentFilePaths = this._getFilePathsInQueue();
+				if(currentFilePaths.length === 0) this._setState(states.noFiles);	
 			},
 
 			_getFilePathsInQueue(){
@@ -268,10 +340,14 @@
 					return item.run(settings);
 				});
 				Promise.all(promises).then(() => {
-					// console.log('encoding promises resolved!');
+					console.log('encoding promises resolved!');
 					this._setState(states.done);
 				});
 			},
+
+			_onClickLogo(){
+				shell.openExternal('http://google.com');
+			}
 
 		});
 

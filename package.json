@@ -11,6 +11,7 @@
   "author": "positlabs",
   "license": "ISC",
   "dependencies": {
+    "css-easing": "^1.0.1",
     "fluent-ffmpeg": "^2.0.1",
     "font-awesome": "^4.5.0",
     "glob": "^6.0.1",
