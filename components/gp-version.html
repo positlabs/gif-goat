@@ -1,0 +1,35 @@
+<!-- 
+
+
+-->
+
+<dom-module id='gp-version'>
+
+	<style>
+		:host {
+			font-size: .8em;
+		}
+	</style>
+	
+	<template>
+		<div id='version'>GIFFLY v[[version]]</div>
+	</template>
+
+	<script>
+		
+		Polymer({
+			is: 'gp-version',
+
+			properties: {
+				version: {
+					type: String,
+					readOnly: true,
+					value: require('./package.json').version
+				}
+			},
+
+		});
+
+	</script>
+
+</dom-module>

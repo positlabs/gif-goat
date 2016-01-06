@@ -3,6 +3,7 @@
 <link rel='import' href='./gp-droptarget.html'>
 <link rel='import' href='./gp-item.html'>
 <link rel='import' href='./gp-settings.html'>
+<link rel='import' href='./gp-version.html'>
 
 <link rel='stylesheet' href='global.css'>
 <link rel='stylesheet' href='../node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css' />
@@ -175,6 +176,17 @@ TODO
 			pointer-events: all;
 		}
 
+		gp-version {
+			position: absolute;
+			bottom: 10px; right: 10px;
+			display: none;
+			pointer-events: none;
+		}
+
+		:host[state='noFiles'] gp-version {
+			display: block;
+		}
+
 	</style>
 	
 	<template>
@@ -209,6 +221,8 @@ TODO
 				<span class='fa fa-chevron-right'></span>
 			</div>
 		</div>
+
+		<gp-version></gp-version>
 
 	</template>
 

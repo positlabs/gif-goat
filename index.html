@@ -7,8 +7,9 @@
 			
 			// globals
 			const _ = require('underscore');
-			const app = require('electron').app;
-			const ipc = require('electron').ipcRenderer;
+			const electron = require('electron');
+			const app = electron.app; window.app = app;
+			const ipc = electron.ipcRenderer;
 			require('gsap'); // TweenMax, TweenLite
 
 		</script>
