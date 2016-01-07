@@ -71,7 +71,9 @@ ipc.on('open-preview', (e, options) => {
 	// preview.setRepresentedFilename(options.gif);
 
 	var data = JSON.stringify({
-		gif: options.gif
+		gif: options.gif,
+		width: options.width,
+		height: options.height
 	});
 	preview.webContents.executeJavaScript(`
 		window.render(${data});

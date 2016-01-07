@@ -1,0 +1,91 @@
+<!-- 
+
+	scrubbable gif
+
+-->
+
+<dom-module id='gp-scrub-gif'>
+
+	<style>
+
+		:host[state='scrubbable'] {
+			cursor: ew-resize;			
+		}
+
+		#drawingLabel {
+			position: absolute;
+			bottom: 0; left: 5px;
+			color: black;
+			font-size: .5em;
+			font-weight: bold;
+			text-transform: uppercase;
+
+			display: none;
+		}
+		:host[state='drawing'] #drawingLabel {
+			display: block;
+		}
+
+
+	</style>
+	
+	<template>
+
+		<div id='drawingLabel'>drawing...</div>
+		
+	</template>
+
+	<script>(function(){
+
+		var RubbableGif = require('./modules/RubbableGif');
+
+		var states = {
+			drawing: 'drawing',
+			scrubbable: 'scrubbable'
+		};
+
+		Polymer({
+			is: 'gp-scrub-gif',
+
+			properties: {
+				src: {
+					type: String,
+					observer: '_onChangedSrc'
+				},
+				state: {
+					type: String,
+					readOnly: true,
+					reflectToAttribute: true
+				},
+			},
+
+			ready(){
+
+			},
+
+			_onChangedSrc(){
+				if(this.src.length === 0) return;
+
+				//TODO: destroy old gif
+
+				this._setState(states.drawing);
+
+				var img = document.createElement('img');
+				img.src = 'file://' + this.src;
+				img.title = this.src;
+				this.appendChild(img);
+
+				this._gif = new RubbableGif({
+					gif: img,
+					rubbable: true
+				});
+				this._gif.load(() => {
+					this._setState(states.scrubbable);
+				});
+			}
+
+		});
+
+	})();</script>
+
+</dom-module>

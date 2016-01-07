@@ -2,48 +2,20 @@
 	<head>
 		<title>GIFFLY | preview</title>
 
-		<link rel='stylesheet' href='node_modules/font-awesome/css/font-awesome.css'>
-		<style>
-			
-			html, body {
-				background-color: #111;
-				margin: 0; padding: 0;
-			}
+		<!-- just in case... -->
+		<script src='bower_components/webcomponentsjs/webcomponents.js'></script>
+		<link rel='import' href='./components/gp-gif-preview.html'>
 
-			#showInFolder{
-				cursor: pointer;
-				padding: 2px;
-				position: absolute;
-				top: 5px;
-				right: 5px;
-				background-color: rgba(255, 255, 255, .3);
-			}
-
-		</style>
 		<script>
-
-			const electron = require('electron');
-			const shell = electron.shell;
-
 			window.render = function(data){
 				console.log('render', data);
-				
-				var div = document.createElement('div');
-				div.innerHTML = `
-					<img src="file://${data.gif}" title="${data.gif}">
-					<div id="showInFolder" class="fa fa-external-link-square"></div>
-				`;
-				document.body.appendChild(div);
-
-				var showInFolderBtn = document.getElementById('showInFolder');
-				showInFolder.addEventListener('click', e => {
-					shell.showItemInFolder(data.gif);
-				});
+				document.getElementById('gifPreview').data = data;
 			};
 
 		</script>
 	</head>
+
 	<body>
-		
+		<gp-gif-preview id='gifPreview'></gp-gif-preview>
 	</body>
 </html>

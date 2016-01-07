@@ -1,0 +1,68 @@
+<!-- 
+
+
+-->
+<link rel='import' href='../bower_components/Polymer/polymer.html'>
+<link rel='import' href='./gp-scrub-gif.html'>
+
+<link rel='stylesheet' href='./global.css'>
+
+<dom-module id='gp-gif-preview'>
+
+	<style>
+
+		:host {
+			
+			--light-green: #c9f47d;
+			--dark-purple: #1e0d44;
+		}
+
+		#showInFolder {
+			cursor: pointer;
+			padding: 2px;
+			position: absolute;
+			top: 5px;
+			right: 5px;
+			background-color: rgba(0,0,0, .3);
+			border-radius: 3px;
+		}
+
+		#showInFolder:hover {
+			color: var(--light-green);
+		}
+
+
+	</style>
+	
+	<template>
+		<gp-scrub-gif src=[[data.gif]]></gp-scrub-gif>
+		<div id='showInFolder' class='fa fa-external-link-square' on-click='_onClickShowInFolder'></div>
+	</template>
+
+	<script>(function(){
+
+		const electron = require('electron');
+		const shell = electron.shell;
+
+		Polymer({
+			is: 'gp-gif-preview',
+
+			properties: {
+				data: {
+					type: Object,
+				}
+			},
+
+			ready(){
+
+			},
+
+			_onClickShowInFolder(){
+				shell.showItemInFolder(this.data.gif);
+			}
+
+		});
+
+	})();</script>
+
+</dom-module>
