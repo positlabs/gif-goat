@@ -324,6 +324,8 @@ TODO
 				// console.log(e);
 				var files = Array.prototype.slice.apply(e.target.files);
 				this._handleNewFiles(files);
+				// clear the input in case user wants to select the same file/s next time
+				this.$.fileSelector.value = '';
 			},
 
 			_onFilesDropped(e){
