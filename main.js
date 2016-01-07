@@ -54,45 +54,6 @@ app.on('ready', function() {
 	});
 });
 
-ipc.on('request-output-dir', function(event, defaultPath){
-
-	let options = {
-		title: 'Select output folder',
-		properties: ['openDirectory', 'createDirectory'],
-	};
-	if(defaultPath) options.defaultPath = defaultPath;
-
-	dialog.showOpenDialog(mainWindow, options, (folders)=>{
-		console.log('request-output-dir', folders);
-		if(folders)
-			event.sender.send('request-output-dir', folders[0]);
-	});
-});
-
-
-var appPaths;
-ipc.on('getPaths', function(event, arg){
-	// console.log('getPath', arg);
-	if(appPaths === undefined){
-		appPaths = {};
-		[
-			'home',
-			'appData',
-			'userData',
-			'temp',
-			'exe',
-			'desktop',
-			'documents',
-			'downloads',
-			'videos'
-		].forEach(name => {
-			appPaths[name] = app.getPath(name);
-		});
-	}
-	event.returnValue = appPaths;
-});
-
-
 ipc.on('open-preview', (e, options) => {
 	// console.log(options);
 

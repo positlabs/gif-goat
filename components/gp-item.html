@@ -2,13 +2,8 @@
 
 	TODO 
 
-	- output options
-		- max-height, max-width
-
 	- no transparency pixel on gifs
 	- paletteuse adds ~3x file size. why?
-
-	- preview gif button
 
 -->
 
@@ -313,9 +308,6 @@
 
 			_preview(){
 
-				// TODO: if main window is closed, close preview windows.
-				// probably need to use ipc to do this so we can track all windows
-
 				var img = document.createElement('img');
 				img.addEventListener('load', e => {
 
@@ -324,36 +316,9 @@
 						height: img.height,
 						gif: this._getGIFPath(this.file.path)
 					});
-
-					// var preview = new remote.BrowserWindow({
-					// 	width: img.width, 
-					// 	height: img.height,
-					// 	darkTheme: true,
-					// 	resizable: false,
-					// 	useContentSize: true
-					// });
-
-					// preview.loadURL('file://' + __dirname + '/view-gif.html');
-
-					// remote.getCurrentWindow().on('closed', e => {
-					// 	preview.close();
-					// 	preview = null;
-					// });
-					// preview.on('closed', function() {
-					// 	preview = null;
-					// });
-
-					// var data = JSON.stringify({
-					// 	gif: this._getGIFPath(this.file.path)
-					// });
-
-					// preview.webContents.executeJavaScript(`
-					// 	window.render(${data});
-					// `);
 				});
 
 				img.src = 'file://' + this._getGIFPath(this.file.path);
-
 			},
 
 			detached(){

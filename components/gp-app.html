@@ -30,7 +30,6 @@ TODO
 			--dark-purple: #1e0d44;
 			background-color: #333;
 			color: white;
-			/*color: var(--dark-purple);*/
 			font-family: 'ubuntu', sans-serif;
 			font-weight: 300;
 		}
@@ -46,7 +45,11 @@ TODO
 			background-image: url('../assets/imgs/logo-type.png');
 
 			transition: opacity .3s;
+		
 			opacity: 1;
+		}
+		:host[state='noFiles'] #logo {
+			transition-delay: 1s;
 		}
 		:host[state='ready'] #logo {
 			opacity: 0;
@@ -57,7 +60,7 @@ TODO
 			position: absolute;
 			top: 0; left: 0;
 			width: 100%; height: 150px;
-			transition: all .5s var(--easeOutQuart);
+			transition: all .65s var(--easeOutCubic);
 		}
 		#file-selection .center {
 			width: 100%;
@@ -65,12 +68,13 @@ TODO
 		:host[state='noFiles'] #file-selection {
 			top: 50%;
 			margin-top: -60px;
-			/*transform: translateY(-50%);*/
+			transition-delay: .5s;
 		}
 		:host[state='processing'] #file-selection,
 		:host[state='done'] #file-selection {
 			opacity: 0;
 			pointer-events: none;
+			top: 30%;
 		}
 
 		#file-selection .hr {
@@ -187,6 +191,27 @@ TODO
 			display: block;
 		}
 
+		#restart {
+			position: absolute;
+			bottom: 125px; left: 50%;
+			transform: translate(-50%, 50%);
+			font-size: 3em;
+			width: 100px; height: 100px;
+			line-height: 82px;
+			border-radius: 50%;
+
+			transition: all .5s;
+			visibility: hidden;
+			opacity: 0;
+			pointer-events: none;
+		}
+
+		:host[state='done'] #restart {
+			visibility: visible;
+			opacity: 1;
+			pointer-events: all;
+		}
+
 	</style>
 	
 	<template>
@@ -221,6 +246,8 @@ TODO
 				<span class='fa fa-chevron-right'></span>
 			</div>
 		</div>
+
+		<div id='restart' class='fa fa-repeat btn bubble' on-click='_onClickRestart' title='make more gifs'></div>
 
 		<gp-version></gp-version>
 
@@ -263,15 +290,9 @@ TODO
 
 			_onStateChanged(){
 				console.log(this.localName, '_onStateChanged', this.state);
-				// TODO:
 				switch(this.state){
 					
 					case states.noFiles:
-						// show logo
-						// hide queue
-						// hide make gif button
-						// move file selector
-						
 						/*
 							TODO: actually... D&d should always be enabled. 
 							App state should react. 
@@ -283,25 +304,14 @@ TODO
 						break;
 
 					case states.ready:
-						// show queue
-						// show make gif button 
-						// TweenLite.set(this.$['make-gifs'], {autoAlpha: 1})
-						// TweenLite.fromTo(this.$['make-gifs'], 1, 
-						// 	{y:'100%'},
-						// 	{y: '0%', ease: Power4.easeOut}
-						// );
 						break;
 					
 					case states.processing:
 						// disable d&d
 						this.$.dropTarget.disabled = true;
-						// show logo
-						// show spinner
 						break;
 					
 					case states.done:
-						// hide spinner
-						// show restart button
 						break;
 				}
 			},
@@ -369,6 +379,13 @@ TODO
 
 			_onClickLogo(){
 				shell.openExternal('http://google.com');
+			},
+
+			_onClickRestart(){
+				// var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				// items.forEach(item=>{ item.remove(); });
+				this.$.queue.innerHTML = '';
+				this._setState(states.noFiles);
 			}
 
 		});
