@@ -87,6 +87,7 @@
 		const fs = require('fs');
 		const path = require('path');
 		const paths = require('./modules/paths');
+		const glob = require('glob');
 		const shell = require('electron').shell;
 		const remote = require('electron').remote;
 		const argv = require('yargs').argv;
@@ -136,6 +137,8 @@
 					case states.processing:
 						// show progress bar
 						this.$.thumb.processing();
+
+						//TODO: move to app level
 						document.title = 'GIFFLY | processing...';
 
 						break;
@@ -154,8 +157,11 @@
 						// show preview button
 
 						// show gif name
-						this.$.filename.innerHTML = path.parse(this.file.path).name + '.gif';
+						this._getGIFPath(this.file.path).then(gifPath => {
+							this.$.filename.innerHTML = path.parse(gifPath).name + '.gif';
+						});
 						
+						//TODO: move to app level
 						document.title = 'GIFFLY | done!';
 
 						break;
@@ -213,10 +219,31 @@
 			_getPalettePath(filepath){
 				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png');
 			},
-			_getGIFPath(filepath){
+			_getGIFPath: _.memoize(function(filepath){
 				// console.log('_getGIFPath', this, filepath);
-				return path.join(this._settings.output, path.parse(filepath).name + '.gif');
-			},
+				return new Promise((resolve, reject) => {
+					// if(this._gifPath) resolve(this._gifPath);
+
+					var gifName = path.parse(filepath).name;
+					// check if file exists or not
+					glob(path.join(this._settings.output, '*.gif'), {}, (er, files) => {
+
+						var filepaths = files.map(file => { return path.parse(file).name; });
+						console.log('globbed gifs', filepaths);
+
+						var modifier = '';
+						var checkName = gifName;
+						while(filepaths.indexOf(checkName) !== -1){
+							if(modifier === '') modifier = 1;
+							else modifier += 1;
+							checkName = gifName + '(' + modifier + ')';
+						}
+						this._gifPath = path.join(this._settings.output, checkName + '.gif');
+						resolve(this._gifPath);
+					});
+
+				});
+			}),
 
 			_encodeGIF(){
 				var settings = this._settings;
@@ -261,8 +288,10 @@
 						if(settings.fps){
 							this.ffmpegCommand.fps(settings.fps);
 						}
-
-						this.ffmpegCommand.save( this._getGIFPath(this.file.path) );
+						this._getGIFPath(this.file.path).then(gifPath => {
+							this.ffmpegCommand.save(gifPath);
+						});
+						// this.ffmpegCommand.save( this._getGIFPath(this.file.path) );
 				});
 			},
 
@@ -289,7 +318,8 @@
 
 			_open(){
 				// console.log('_open', this);
-				shell.showItemInFolder( this._getGIFPath(this.file.path) );
+				this._getGIFPath(this.file.path)
+					.then(shell.showItemInFolder);
 			},
 
 			_remove(){
@@ -309,16 +339,21 @@
 			_preview(){
 
 				var img = document.createElement('img');
-				img.addEventListener('load', e => {
 
+				var gifPath;
+				this._getGIFPath(this.file.path).then(_gifPath => {
+					gifPath = _gifPath;
+					img.src = 'file://' + _gifPath;
+				});
+
+				img.addEventListener('load', e => {
+					console.log('opening preview', gifPath);
 					ipc.send('open-preview', {
 						width: img.width, 
 						height: img.height,
-						gif: this._getGIFPath(this.file.path)
+						gif: gifPath
 					});
 				});
-
-				img.src = 'file://' + this._getGIFPath(this.file.path);
 			},
 
 			detached(){
