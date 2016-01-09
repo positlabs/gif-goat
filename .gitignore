@@ -1,6 +1,6 @@
 bin/ffmpeg/**/*
-bin/nw/**/*
 
 bower_components/
 node_modules/
 test/videos/*.gif
+dist/

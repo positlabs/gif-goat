@@ -2,11 +2,9 @@
   "name": "gif-pal",
   "version": "0.0.1",
   "description": "",
-  "main": "index.html",
+  "main": "main.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "./node_modules/.bin/electron main.js --debug",
-    "install": "./build/install.sh"
+    "start": "./node_modules/.bin/electron main.js --debug"
   },
   "author": "positlabs",
   "license": "ISC",
@@ -23,6 +21,7 @@
   },
   "repository": "https://github.com/positlabs/gif-pal",
   "devDependencies": {
+    "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.36.2",
     "node-inspector": "^0.12.5"
   }
