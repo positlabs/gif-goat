@@ -293,25 +293,19 @@ TODO
 				switch(this.state){
 					
 					case states.noFiles:
-						/*
-							TODO: actually... D&d should always be enabled. 
-							App state should react. 
-							done > drop > ready
-							processing > drop > run items
-						*/
-						// enable d&d
-						this.$.dropTarget.disabled = false;
+						document.title = 'GIFFLY | add videos';
 						break;
 
 					case states.ready:
+						document.title = 'GIFFLY | add videos';
 						break;
 					
 					case states.processing:
-						// disable d&d
-						this.$.dropTarget.disabled = true;
+						document.title = 'GIFFLY | processing...';
 						break;
 					
 					case states.done:
+						document.title = 'GIFFLY | done!';
 						break;
 				}
 			},
@@ -329,7 +323,14 @@ TODO
 			},
 
 			_onFilesDropped(e){
-				// console.log(this.localName, '_onFilesDropped', e);
+				console.log(this.localName, '_onFilesDropped', this.state);
+				
+				// go to ready state
+				if(this.state === states.done){
+					this._onClickRestart();
+					this._setState(states.ready);
+				}
+
 				var files = Array.prototype.slice.apply(e.detail.value);
 				this._handleNewFiles(files);
 			},
@@ -342,19 +343,41 @@ TODO
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
 					itemEl.addEventListener('detached', this._onItemRemoved.bind(this));
+					itemEl.addEventListener('done', this._onItemDone.bind(this));
 					this.$.queue.appendChild(itemEl);
+
+					if(this.state === states.processing){
+						var settings = this.$.settings.get();
+						var promise = itemEl.run(settings);
+						// this._addedItemPromises.push(promise);
+					}
 				});
 
 				// ready for processing!
-				if(files.length > 0){
+				if(files.length > 0 && this.state !== states.processing){
 					this._setState(states.ready);
+				}
+			},
+
+			_onItemDone(){
+				console.log(this.localName, '_onItemDone');
+				
+				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				var isProcessing = _.some( items.map(item => {return item.state === 'processing'}) );
+				if(!isProcessing){
+					this._setState(states.done);
 				}
 			},
 
 			_onItemRemoved(){
 				// console.log(this.localName, '_onItemRemoved');
 				var currentFilePaths = this._getFilePathsInQueue();
-				if(currentFilePaths.length === 0) this._setState(states.noFiles);	
+				if(currentFilePaths.length === 0) {
+					this._setState(states.noFiles);
+				}else{
+					// check if all others are done
+					this._onItemDone();
+				}
 			},
 
 			_getFilePathsInQueue(){
@@ -373,10 +396,10 @@ TODO
 				var promises = items.map(item => {
 					return item.run(settings);
 				});
-				Promise.all(promises).then(() => {
-					console.log('encoding promises resolved!');
-					this._setState(states.done);
-				});
+				// Promise.all(promises).then(() => {
+				// 	console.log('encoding promises resolved!');
+				// 	this._setState(states.done);
+				// });
 			},
 
 			_onClickLogo(){

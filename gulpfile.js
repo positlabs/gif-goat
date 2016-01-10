@@ -38,6 +38,9 @@ gulp.task('build:mac', [], callback => {
 		version: require('./node_modules/electron-prebuilt/package.json').version,
 
 		'app-version': require('./package.json').version,
+		'build-version': require('./package.json').version,
+		
+		'app-category-type': 'public.app-category.utilities',
 
 		// asar won't load assets or something....
 		asar: true,
@@ -55,7 +58,6 @@ gulp.task('build:mac', [], callback => {
 
 		out: './dist/',
 		overwrite: true
-
 
 	};
 

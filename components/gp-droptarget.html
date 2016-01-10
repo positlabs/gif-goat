@@ -58,7 +58,7 @@
 			},
 
 			_onDrop: function(e){
-				console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
+				// console.log(this.localName + '._onDrop', e.dataTransfer.files.length);
 				e.preventDefault();
 				e.stopPropagation();
 				if(this.disabled) return;
@@ -67,7 +67,7 @@
 			},
 
 			_onDragOver: function(e){
-				console.log(this.localName + '._onDragOver', e);
+				// console.log(this.localName + '._onDragOver', e);
 				e.preventDefault();
 				if(this.disabled) return;
 				this.style.display = 'block';

@@ -142,9 +142,6 @@
 						// show progress bar
 						this.$.thumb.processing();
 
-						//TODO: move to app level
-						document.title = 'GIFFLY | processing...';
-
 						break;
 
 					case states.done:
@@ -164,9 +161,8 @@
 						this._getGIFPath(this.file.path).then(gifPath => {
 							this.$.filename.innerHTML = path.parse(gifPath).name + '.gif';
 						});
-						
-						//TODO: move to app level
-						document.title = 'GIFFLY | done!';
+
+						this.fire('done');
 
 						break;
 
@@ -273,7 +269,7 @@
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
 						.on('progress', progress => {
-							console.log('progress', progress.percent);
+							// console.log('progress', progress.percent);
 							this._setProgress(progress.percent);
 							this.$.progress.innerHTML = Math.round(progress.percent) + '%';
 							this.$.progressBar.progress = progress.percent;
@@ -284,7 +280,7 @@
 							reject(err.message);
 						})
 						.on('end', () => {
-							console.log('Transcoding succeeded!');
+							// console.log('Transcoding succeeded!');
 							this._setProgress(100);
 							this.$.progress.innerHTML = '100%';
 							this.$.progressBar.progress = 100;
