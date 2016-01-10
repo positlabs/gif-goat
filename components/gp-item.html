@@ -92,8 +92,8 @@
 		const remote = require('electron').remote;
 		const argv = require('yargs').argv;
 		const ffmpeg = require('fluent-ffmpeg');
-		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg;
-		const ffprobePath = require('./modules/ffmpeg-static').ffprobe;
+		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg.replace('app.asar', 'app.asar.unpacked');
+		const ffprobePath = require('./modules/ffmpeg-static').ffprobe.replace('app.asar', 'app.asar.unpacked');
 		ffmpeg.setFfmpegPath(ffmpegPath);
 		ffmpeg.setFfprobePath(ffprobePath);
 		console.log(ffmpegPath);
@@ -124,6 +124,10 @@
 					value: 0,
 					readOnly: true
 				}
+			},
+
+			created(){
+				this._getGIFPath = _.memoize(this._getGIFPath).bind(this);
 			},
 
 			_onStateChanged(){
@@ -219,10 +223,13 @@
 			_getPalettePath(filepath){
 				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png');
 			},
-			_getGIFPath: _.memoize(function(filepath){
-				// console.log('_getGIFPath', this, filepath);
+			_getGIFPath: function(filepath){
+				console.log('_getGIFPath', this, filepath);
 				return new Promise((resolve, reject) => {
-					// if(this._gifPath) resolve(this._gifPath);
+					// if(this._gifPath) {
+					// 	resolve(this._gifPath);
+					// 	return;
+					// }
 
 					var gifName = path.parse(filepath).name;
 					// check if file exists or not
@@ -243,7 +250,7 @@
 					});
 
 				});
-			}),
+			},
 
 			_encodeGIF(){
 				var settings = this._settings;

@@ -24,6 +24,8 @@ gulp.task('build:mac', [], callback => {
 
 		// The application name.
 		name: 'GIFFLY',
+		'app-bundle-id': 'GIFFLY-HELPER',
+		icon: './assets/icons/giffly-icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
 		platform: 'darwin',
@@ -38,7 +40,8 @@ gulp.task('build:mac', [], callback => {
 		'app-version': require('./package.json').version,
 
 		// asar won't load assets or something....
-		// asar: true,
+		asar: true,
+		'asar-unpack-dir': 'bin/',
 
 		prune: true,
 

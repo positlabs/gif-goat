@@ -30,7 +30,6 @@ app.on('ready', function() {
 
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
-	// TODO: use NODE_ENV
 	// Open the DevTools.
 	// if(argv.debug){ // only do this if we're in dev mode
 		mainWindow.webContents.openDevTools();
