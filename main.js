@@ -13,9 +13,9 @@ let mainWindow;
 let previews = [];
 
 // Quit when all windows are closed.
-// app.on('window-all-closed', function() {
-	
-// });
+app.on('window-all-closed', function() {
+    app.quit();
+});
 
 app.on('ready', function() {
 

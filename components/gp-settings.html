@@ -90,19 +90,19 @@
 				},
 			},
 
-			ready: function(){
+			ready(){
 				
 				this.$.fpsInput.addEventListener('change', this._validateFPSValue.bind(this));
 
 			},
 
-			_validateFPSValue: function(){
+			_validateFPSValue(){
 				var input = this.$.fpsInput;
 				if(input.value > 300) input.value = 300;
 				if(input.value <= 0) input.value = 1;
 			},
 
-			get: function(){
+			get(){
 
 				return {
 					fps: this.$.fpsInput.value,
@@ -111,6 +111,18 @@
 					width: this.$.widthInput.value,
 					height: this.$.heightInput.value,
 				};
+			},
+
+			getInfo(){
+				var info = this.get();
+				Object.keys(info).map(key => {
+					info[key] === '' ? info[key] = '*' : null;
+				});
+				if(info.output.length > 50){
+					info.output = info.output.slice(info.output.length-50, info.output.length);
+					info.output = '...' + info.output;
+				}
+				return `output: ${info.output} | size: ${info.width}x${info.height} | fps: ${info.fps}`;
 			}
 
 		});
