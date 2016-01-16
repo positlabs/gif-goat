@@ -23,9 +23,9 @@ gulp.task('build:mac', [], callback => {
 		dir: './',
 
 		// The application name.
-		name: 'GIFFLY',
-		'app-bundle-id': 'GIFFLY-HELPER',
-		icon: './assets/icons/giffly-icon.icns',
+		name: 'GIFGOAT',
+		'app-bundle-id': 'GIFGOAT-HELPER',
+		icon: './assets/icons/gifgoat-icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
 		platform: 'darwin',

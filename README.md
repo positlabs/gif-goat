@@ -23,3 +23,6 @@ Uses ffmpeg palettegen and paletteuse filters to create higher quality gifs.
 - build process for various platforms (macOS, linux, windows)
 	- script for downloading nw binaries?
 
+## Notes
+
+- use https://cloudconvert.com/png-to-icns to generate icns for mac
