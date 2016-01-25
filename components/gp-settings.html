@@ -37,6 +37,20 @@
 			margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
 		}
 
+		.colors {
+		}
+		.colors input { 
+			padding: 0;
+			width: 190px;
+		}
+		.colors label {
+			position: absolute;
+			right: -10px;
+			top: 50%;
+			transform: translate(100%, -50%);
+			font-size: .8em;
+		}
+
 		.fa-close {
 			padding: 0 2px;
 		}
@@ -58,8 +72,6 @@
 		<div class='content'>
 			<gp-output-dir id='outputDir' class='item'></gp-output-dir>
 			<div id='size' class='item'>
-				<!-- <input id='scaleInput' type='number' placeholder='scale' min='0' title='scale'>
-				<span class='or'>or</span> -->
 				<input id='widthInput' type='number' placeholder='width' min='0' title='width'>
 				<span class='fa fa-close'></span>
 				<input id='heightInput' type='number' placeholder='height' min='0' title='height'>
@@ -68,6 +80,13 @@
 			<div class='item'>
 				<input id='fpsInput' type='number' placeholder='fps' min='1' max='300'>
 				<span class='fa fa-question-circle' title='[[tooltip_fps]]'></span>	
+			</div>
+			<div class='item colors'>
+				<input type='range' min='2' max='256' id='colors' value={{colors::input}}>
+				<label for='colors'>
+					{{colors}} colors <span class='fa fa-question-circle' title='[[tooltip_colors]]'></span>
+				</label>
+				
 			</div>
 		</div>
 	</template>
@@ -88,12 +107,19 @@
 					readyOnly: true,
 					value: 'Frames per second of output gif. Optional. Defaults to fps of the input video. Lowering this value will dramatically decrease file size.'
 				},
+				tooltip_colors: {
+					type: String,
+					readyOnly: true,
+					value: 'Number of colors to use in the palette. Ranges 2-256.'
+				},
+				colors: {
+					type: Number,
+					value: 256
+				}
 			},
 
 			ready(){
-				
 				this.$.fpsInput.addEventListener('change', this._validateFPSValue.bind(this));
-
 			},
 
 			_validateFPSValue(){
@@ -107,9 +133,9 @@
 				return {
 					fps: this.$.fpsInput.value,
 					output: this.$.outputDir.path,
-					// scale: this.$.scaleInput.value,
 					width: this.$.widthInput.value,
 					height: this.$.heightInput.value,
+					colors: this.$.colors.value
 				};
 			},
 
