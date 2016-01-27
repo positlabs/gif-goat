@@ -299,6 +299,7 @@
 		// https://github.com/noraesae/perfect-scrollbar
 		var PS = require('perfect-scrollbar');
 		var shell = require('electron').shell;
+		var mkdirp = require('mkdirp');
 
 		var states = {
 			noFiles: 'noFiles',
@@ -433,15 +434,20 @@
 
 			_start(){
 				// console.log('gp-app._start');
-				
-				this._setState(states.processing);
 
-				// collect promises so we can set state
-				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+				//TODO: make sure output directory exists!!!
 				var settings = this.$.settings.get();
-				var promises = items.map(item => {
-					return item.run(settings);
+				mkdirp(settings.output, ()=>{
+
+					this._setState(states.processing);
+
+					// collect promises so we can set state
+					var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
+					var promises = items.map(item => {
+						return item.run(settings);
+					});
 				});
+
 				// Promise.all(promises).then(() => {
 				// 	console.log('encoding promises resolved!');
 				// 	this._setState(states.done);
