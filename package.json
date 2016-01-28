@@ -1,6 +1,6 @@
 {
-  "name": "gif-pal",
-  "version": "0.0.1",
+  "name": "GIFGOAT",
+  "version": "0.1.0",
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -12,7 +12,8 @@
     "css-easing": "^1.0.1",
     "fluent-ffmpeg": "^2.0.1",
     "font-awesome": "^4.5.0",
-    "glob": "^6.0.3",
+    "gifsicle": "^3.0.3",
+    "glob": "^6.0.4",
     "gsap": "^1.18.2",
     "gulp": "^3.9.0",
     "mkdirp": "^0.5.1",
@@ -21,7 +22,6 @@
     "underscore": "^1.8.3",
     "yargs": "^3.31.0"
   },
-  "repository": "https://github.com/positlabs/gif-pal",
   "devDependencies": {
     "electron-packager": "^5.2.0",
     "electron-prebuilt": "^0.36.2",

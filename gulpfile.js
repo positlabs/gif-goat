@@ -42,9 +42,8 @@ gulp.task('build:mac', [], callback => {
 		
 		'app-category-type': 'public.app-category.utilities',
 
-		// asar won't load assets or something....
-		asar: true,
-		'asar-unpack-dir': 'bin/',
+		// asar: true,
+		// 'asar-unpack-dir': 'bin/',
 
 		prune: true,
 

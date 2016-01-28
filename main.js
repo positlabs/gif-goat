@@ -1,6 +1,7 @@
 'use strict';
 const electron = require('electron');
 const app = electron.app;
+const autoUpdater = electron.autoUpdater;
 const BrowserWindow = electron.BrowserWindow;
 const ipc = electron.ipcMain;
 const dialog = require('electron').dialog;
@@ -31,9 +32,9 @@ app.on('ready', function() {
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	// if(argv.debug){ // only do this if we're in dev mode
-		mainWindow.webContents.openDevTools();
-	// }
+	if(argv.debug){ // only do this if we're in dev mode
+		// mainWindow.webContents.openDevTools();
+	}
 
 	mainWindow.on('closed', function() {
 		// Dereference the window object, usually you would store windows
@@ -75,3 +76,5 @@ ipc.on('open-preview', (e, options) => {
 
 	previews.push(preview);
 });
+
+
