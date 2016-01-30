@@ -292,6 +292,7 @@
 
 		<gp-version></gp-version>
 
+		<audio src='../assets/sounds/goat-bleat.mp3' id='bleat'></audio>
 	</template>
 
 	<script>(function(){
@@ -353,6 +354,7 @@
 					
 					case states.done:
 						document.title = 'GIFGOAT | done!';
+						this.$.bleat.play();
 						break;
 				}
 			},
