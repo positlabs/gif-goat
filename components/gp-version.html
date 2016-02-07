@@ -8,28 +8,66 @@
 	<style>
 		:host {
 			font-size: .8em;
+			text-align: right;
+			line-height: 1.5;
+		}
+		a {
+			color: var(--light-green);
+			pointer-events: all;
 		}
 	</style>
 	
 	<template>
-		<div id='version'>GIFGOAT v[[version]]</div>
+		<div id='version'>GIFGOAT [[type]] v[[localVersion]]</div>
+		<a id='upgrade' on-click="_onClickUpgrade" hidden>Upgrade available! v{{remoteVersion}}</a>
 	</template>
 
-	<script>
+	<script>(function(){
+
+		const semver = require('semver');
+		const request = require('request');
+		const localPackage = require('./package.json');
+		const shell = require('electron').shell;
 
 		Polymer({
 			is: 'gp-version',
 
 			properties: {
-				version: {
+				type: {
 					type: String,
 					readOnly: true,
-					value: require('./package.json').version
+					value: localPackage.pro === true ? 'pro' : 'free'
+				},
+				localVersion: {
+					type: String,
+					readOnly: true,
+					value: localPackage.version
+				},
+				remoteVersion: {
+					type: String,
+					readOnly: true,
 				}
 			},
 
+			ready(){
+				if(this.type === 'free'){					
+					request('http://gifgoat.positlabs.com/package.json', (error, response, body) => {
+						var remotePackage = JSON.parse(body);
+						this._setRemoteVersion(remotePackage.version);
+						// console.log(remotePackage.version, localPackage.version, semver.gt(remotePackage.version, localPackage.version))
+						if(semver.gt(remotePackage.version, localPackage.version)){
+							// show upgrade message
+							this.$.upgrade.removeAttribute('hidden');
+						}
+					});
+				}
+			},
+			
+			_onClickUpgrade(){
+				shell.openExternal('http://gifgoat.positlabs.com/download');
+			}
 		});
 
-	</script>
+	})();</script>
 
 </dom-module>

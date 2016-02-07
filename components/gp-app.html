@@ -298,11 +298,12 @@
 	<script>(function(){
 
 		// https://github.com/noraesae/perfect-scrollbar
-		var PS = require('perfect-scrollbar');
-		var shell = require('electron').shell;
-		var mkdirp = require('mkdirp');
+		const PS = require('perfect-scrollbar');
+		const shell = require('electron').shell;
+		const mkdirp = require('mkdirp');
+		const package = require('./package.json');
 
-		var states = {
+		const states = {
 			noFiles: 'noFiles',
 			ready: 'ready',
 			processing: 'processing',
@@ -385,7 +386,22 @@
 			},
 
 			_handleNewFiles(files){
+
 				var currentFilePaths = this._getFilePathsInQueue();
+
+				// TODO
+				// check if it's pro
+				// if(package.pro === false){
+
+				// 	// TODO also need to check if there are any in queue already
+				// 	if(files.length > 1){
+
+				// 	}
+				// 	files = []
+				// }
+				// if not, then only allow one file
+				// if multiple, show message to purchase pro
+
 				files.forEach(file => {
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
