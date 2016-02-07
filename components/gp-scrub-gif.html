@@ -12,6 +12,10 @@
 			cursor: ew-resize;			
 		}
 
+		:host[state='scrubbable'] #preview {
+			display: none;
+		}
+
 		#drawingLabel {
 			position: absolute;
 			bottom: 0; left: 5px;
@@ -19,6 +23,7 @@
 			font-size: .5em;
 			font-weight: bold;
 			text-transform: uppercase;
+			text-shadow: 0 0 3px white;
 
 			display: none;
 		}
@@ -26,11 +31,16 @@
 			display: block;
 		}
 
+		#preview {
+			pointer-events: none;
+		}
+
 
 	</style>
 	
 	<template>
 
+		<img id='preview' src="file://[[src]]">
 		<div id='drawingLabel'>drawing...</div>
 		
 	</template>

@@ -96,10 +96,17 @@ var RubbableGif = function( options ) {
         });
 
         canvas.addEventListener((cantouch) ? 'touchend' : 'mouseup', function (e) {
+            // console.log('mouseup');
             startTime = 0;
             startX = 0;
             if (sup.get_auto_play()) sup.play();
         });
+        canvas.addEventListener('mouseleave', e=>{
+            console.log('mouseleave')
+            startTime = 0;
+            startX = 0;
+            if (sup.get_auto_play()) sup.play();
+        })
 
         canvas.addEventListener((cantouch) ? 'touchmove' : 'mousemove', function (e) {
             e.preventDefault();
