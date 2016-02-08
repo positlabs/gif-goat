@@ -302,6 +302,8 @@
 		const shell = require('electron').shell;
 		const mkdirp = require('mkdirp');
 		const package = require('./package.json');
+		const swal = require('sweetalert');
+
 
 		const states = {
 			noFiles: 'noFiles',
@@ -389,18 +391,19 @@
 
 				var currentFilePaths = this._getFilePathsInQueue();
 
-				// TODO
 				// check if it's pro
-				// if(package.pro === false){
+				// if multiple files, show message to purchase pro
 
-				// 	// TODO also need to check if there are any in queue already
-				// 	if(files.length > 1){
+				if(package.pro === false){
 
-				// 	}
-				// 	files = []
-				// }
-				// if not, then only allow one file
-				// if multiple, show message to purchase pro
+					if(currentFilePaths.length >= 1){
+						this._showUpgradeMsg();
+						return;
+					}else if(files.length > 1){
+						files = [files[0]];
+						this._showUpgradeMsg();
+					}
+				}
 
 				files.forEach(file => {
 					// don't add files that are already in the queue
@@ -422,6 +425,22 @@
 				if(files.length > 0 && this.state !== states.processing){
 					this._setState(states.ready);
 				}
+			},
+
+			_showUpgradeMsg(){
+				swal({
+					title: 'Upgrade to GifGoat Pro!',
+					text: `Batch processing is only available in GifGoat Pro.`,
+					showConfirmButton: true,
+					showCancelButton: true,
+					confirmButtonText: 'upgrade!',
+					cancelButtonText: 'nah.'
+				}, isConfirmed => {
+					if(isConfirmed){
+						//TODO set url
+						shell.openExternal('http://gifgoat.positlabs.com');
+					}
+				});
 			},
 
 			_onItemDone(){
