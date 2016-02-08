@@ -209,6 +209,7 @@
 							reject(e);
 						})
 						.on('progress', progress => {
+							// faiils...
 							// console.log(`palette progress: ${progress.percent}`);
 							// this.__setProgress(progress.percent/2);
 						})
@@ -216,22 +217,11 @@
 							resolve();
 						});
 
-						if(settings.fps){
-							this.paletteCommand.fps(settings.fps);
-						}
+					if(settings.fps){
+						this.paletteCommand.fps(settings.fps);
+					}
 
-						// FIXME: downsize the input so we don't need to spend as much time generating the palette
-						// probably need to use -vf with size filters included
-
-						// var w = (settings.width.length && settings.width > 0) ? settings.width : '?',
-						// 	h = (settings.height.length && settings.height > 0) ? settings.height : '?';
-						// if(w+h !== '??'){
-						// 	this.paletteCommand.size([w, h].join('x'));
-						// }
-
-						this.paletteCommand.save( this._getPalettePath(this.file.path) );
-
-					// console.log(this.paletteCommand);
+					this.paletteCommand.save( this._getPalettePath(this.file.path) );
 
 				}).catch( err => { console.log(err); } );
 			},
@@ -240,7 +230,7 @@
 				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png');
 			},
 			_getGIFPath: function(filepath){
-				console.log('_getGIFPath', this, filepath);
+				console.log('_getGIFPath', filepath);
 				return new Promise((resolve, reject) => {
 					// if(this._gifPath) {
 					// 	resolve(this._gifPath);
@@ -297,10 +287,6 @@
 						.on('progress', progress => {
 							// console.log('progress', progress.percent);
 							this.__setProgress(progress.percent);
-							// this.__setProgress(progress.percent/2 + 50);
-							// this._setProgress(progress.percent);
-							// this.$.progress.innerHTML = Math.round(progress.percent) + '%';
-							// this.$.progressBar.progress = progress.percent;
 						})
 						.on('error', (err, stdout, stderr) => {
 							console.log('Cannot process video: ' + err.message);
@@ -333,7 +319,7 @@
 
 						execFile(gifsicle, [
 							'-o',
-							gifPath.replace('.gif', '-optimized.gif'),
+							gifPath,
 							gifPath,
 							'-O3' // slow optimization for lower file sizes.
 						], err => {
@@ -346,7 +332,6 @@
 							resolve();
 						});
 					});
-					// resolve();
 				});
 			},
 
