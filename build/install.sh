@@ -1,1 +1,0 @@
-./get_ffmpeg_bins.sh && npm install
