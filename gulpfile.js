@@ -9,9 +9,21 @@ const packager = require('electron-packager');
 // https://www.npmjs.com/package/gulp-node-inspector
 // ./node_modules/.bin/electron main.js --debug
 
+var copyPlists = function(callback){
+
+	gulp.src([
+			'./build/mac-extras/child.plist',
+			'./build/mac-extras/parent.plist',
+		])
+		.pipe(gulp.dest('dist/GifGoat-darwin-x64/GifGoat.app/Contents/Frameworks/'))
+		.on('end', ()=>{
+			callback();
+		});
+
+};
 
 // https://www.npmjs.com/package/electron-packager
-gulp.task('build:mac', [], callback => {
+gulp.task('build-mac', [], callback => {
 
 	/*
 
@@ -23,12 +35,13 @@ gulp.task('build:mac', [], callback => {
 		dir: './',
 
 		// The application name.
-		name: 'GIFGOAT',
+		name: 'GifGoat',
 		'app-bundle-id': 'GIFGOAT-HELPER',
 		icon: './assets/icons/gifgoat-icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
-		platform: 'darwin',
+		// platform: 'darwin',
+		platform: 'mas',
 
 		// Allowed values: ia32, x64, all
 		// Not required if all is used. The non-all values correspond to the architecture names used by Electron releases.
@@ -40,10 +53,11 @@ gulp.task('build:mac', [], callback => {
 		'app-version': require('./package.json').version,
 		'build-version': require('./package.json').version,
 		
+		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		// asar: true,
-		// 'asar-unpack-dir': 'bin/',
+		asar: true,
+		'asar-unpack-dir': 'bin/',
 
 		prune: true,
 
@@ -61,7 +75,7 @@ gulp.task('build:mac', [], callback => {
 	};
 
 	packager(opts, (err, appPath) => {
-		callback();
+		copyPlists(callback);
 	});
 
 });

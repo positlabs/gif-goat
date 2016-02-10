@@ -50,6 +50,7 @@
 			properties: {
 				path: {
 					type: String,
+					// value: paths.downloads,
 					value: localStorage.getItem('output-dir') || paths.desktop,
 					observer: '_onPathChanged'
 				}

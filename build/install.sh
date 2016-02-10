@@ -1,1 +1,1 @@
-./get_ffmpeg_bins.sh && npm install
+./get_ffmpeg_bins.sh && npm install && bower install
