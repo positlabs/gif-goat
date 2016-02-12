@@ -1,8 +1,5 @@
 <!-- 
 
-	TODO 
-
-	- paletteuse adds ~3x file size. why?
 
 -->
 
@@ -227,6 +224,7 @@
 			},
 
 			_getPalettePath(filepath){
+				// return path.join(paths.temp, 'default-palette.png');
 				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png');
 			},
 			_getGIFPath: function(filepath){
@@ -277,6 +275,7 @@
 
 					this.ffmpegCommand = ffmpeg()
 						.input(this.file.path)
+						// .input(path.join(paths.temp, 'default-palette.png'))
 						.input(this._getPalettePath(this.file.path))
 						.outputOptions([
 							'-lavfi ' + scaleFilter + 'paletteuse'

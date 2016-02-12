@@ -40,8 +40,8 @@ gulp.task('build-mac', [], callback => {
 		icon: './assets/icons/gifgoat-icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
-		// platform: 'darwin',
-		platform: 'mas',
+		platform: 'darwin',
+		// platform: 'mas',
 
 		// Allowed values: ia32, x64, all
 		// Not required if all is used. The non-all values correspond to the architecture names used by Electron releases.
@@ -75,6 +75,9 @@ gulp.task('build-mac', [], callback => {
 	};
 
 	packager(opts, (err, appPath) => {
+		if(err){
+			console.log(err.message)
+		}
 		copyPlists(callback);
 	});
 
