@@ -1,0 +1,92 @@
+
+@import url(https://fonts.googleapis.com/css?family=Ubuntu:300,400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:700);
+
+$dark-blue: #002537;
+$tomato: #d74802;
+
+html, body {
+	padding: 0; margin: 0;
+	min-width: 100%; min-height: 100%;	
+	background-color: #333;
+	font-family: 'ubuntu', 'Helvetica', sans-serif;
+	font-weight: 300;
+	color: white;
+	line-height: 1.5;
+	text-align: center;
+}
+body {
+	box-shadow: inset 0 0 15px black;
+}
+h1, h2, h3, h4, h5, h6 { 
+	font-family: 'Roboto', sans-serif; font-weight: 700; 
+	margin: 0;
+}
+a {
+	color: $tomato;
+	font-weight: bold;
+}
+
+* { box-sizing: border-box; }
+
+header {
+	text-align: center;
+	h1 {
+		font-size: 3em;
+		line-height: 1;
+	}
+	.logo {
+		width: 150px; height: 180px;
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: contain;
+		background-image: url('../assets/imgs/gifgoat-icon.png');
+		margin: 0 auto;
+		margin-bottom: 30px;
+	}
+}
+
+.get-gifgoat {
+	padding: 40px 0;
+	text-align: center;
+}
+
+.comparison {
+	margin-bottom: 50px;
+}
+
+.features {
+	.feature {
+		margin-bottom: 80px;
+		overflow: hidden;
+		.cards {
+			padding-top: 20px;
+			.card {
+				display: inline-block;
+				overflow: hidden;
+			}
+			img {
+				border-radius: 4px;
+				margin: 10px;
+				max-width: 100%;
+			}
+		}
+	}
+}
+
+.content {
+	width: 100%;
+	position: absolute;
+	top: 0; left: 0;
+	height: 100%;
+	overflow-x: hidden;
+	overflow-y: scroll;
+
+	.wrapper {
+		width: 500px;
+		max-width: 90%;
+		margin: 0 auto;
+		padding-top: 50px;
+		padding-bottom: 120px;
+	}
+}

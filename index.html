@@ -1,86 +1,101 @@
 <html>
 <head>
 	<title>GIFGOAT</title>
-
-	<style>
-		html, body {
-			padding: 0; margin: 0;
-			min-width: 100%;
-			min-height: 100%;
-		}
-		header {
-			text-align: center;
-		}
-		header .logo {
-			width: 150px; height: 288px;
-			background-repeat: no-repeat;
-			background-position: center;
-			background-image: url('assets/imgs/gifgoat-icon.png');
-		}
-	</style>
+	<link rel="stylesheet" href="styles/index.css">
 </head>
 <body>
 
 	<div class="content">
-		
-		<header>
-			<div class="logo"></div>
-			<h1>GifGoat</h1>
-			<h2 class="tagline">Convert videos into gifs that don't suck!</h2>
-		</header>
+		<div class="wrapper">
+				
+			<header>
+				<div class="logo"></div>
+				<h1>GIFGOAT</h1>
+				<p class="tagline">Convert videos into gifs that don't suck!</p>
+			</header>
 
-		<div class="get-gifgoat">
-			<button>download free version</button>
-			<button>get pro version (app store button)</button>
+			<div class="get-gifgoat">
+				<button>download free version</button>
+				<button>get pro version (app store button)</button>
+			</div>
+
+			<div class="comparison">
+				<img src="" alt="using other converters">
+				<img src="" alt="using gifgoat">
+			</div>
+
+			<div class="features">
+
+				<div class="feature">
+					<h2>Batch Processing</h2>
+					<p>Convert multiple videos simultaneously! (only available in Pro version)</p>
+					<div class="cards">
+						<img src="assets/imgs/batch-processing.png" alt="" width="400">
+					</div>
+				</div>
+
+				<div class="feature">
+					<h2>Generated Palettes</h2>
+					<p>GifGoat uses generated color palettes to create high quality gifs. It picks the best set of colors from your input video, instead of using generic colors.</p>
+					<div class="cards">
+						<!-- <img src="assets/imgs/uberviz_default.gif" alt=""> -->
+						<!-- <img src="assets/imgs/palette_default.png" alt=""> -->
+						<img src="assets/imgs/uberviz_gen.gif" alt="">
+						<img src="assets/imgs/palette_uberviz.png" alt="" height="146">
+					</div>
+					<p class="credit">
+						<a href="https://www.airtightinteractive.com/demos/js/uberviz/wordproblems/" target="_blank">&Uuml;berViz</a>
+					</p>
+				</div>
+
+				<div class="feature">
+					<h2>Optimization</h2>
+					<p>Small files are good. You want small files. GifGoat uses frame diffing to make your gif smaller.</p>
+					<div class="cards"></div>
+				</div>
+				
+				<div class="feature">
+					<h2>FPS</h2>
+					<p>Set frames per second of your gif. This can dramatically reduce the size of your gif. Try 12fps, why don't you?!</p>
+					<div class="cards">
+						<div class="card">
+							<img src="assets/imgs/warp_24.gif" alt="">
+							<div class="label">24fps, 3.3mb</div>
+						</div>
+						<div class="card">
+							<img src="assets/imgs/warp_12.gif" alt="">
+							<div class="label">12fps, 1.8mb</div>
+						</div>
+						<div class="card">
+							<img src="assets/imgs/warp_6.gif" alt="">
+							<div class="label">6fps, 962kb</div>
+						</div>
+					</div>
+					<p class="credit"><a href="https://positlabs.github.io/temporalis/" target="_blank">Temporalis</a></p>
+				</div>
+
+				<div class="feature">
+					<h2>Colors</h2>
+					<p>Control how many colors are used in your gif &mdash; yet another way reduce file size. Also doubles as a <a href='https://en.wikipedia.org/wiki/Posterization' target="_blank">posterization effect!</a></p>
+					<div class="cards"></div>
+				</div>
+
+				<div class="feature">
+					<h2>Quick Resize</h2>
+					<p>Set width OR height of the output, and the other dimension will be auto-calculated! Set both dimensions to stretch (but why!?).</p>
+					<div class="cards">
+						<img src="assets/imgs/width-input.png" alt="" width="228">
+						<img src="assets/imgs/height-input.png" alt="" width="228">
+						<img src="assets/imgs/trig_spheres.gif" alt="" >
+						<img src="assets/imgs/stretch.gif" alt="" >
+					</div>
+					<p class="credit"><a href="http://synergyseeker.com/javascript-random-spheres-trig/" target="_blank">Synergyseeker's Random Spheres</a></p>
+				</div>
+
+			</div>
+
+			<div class="support">Need help? Email <a href="mailto:josh@positlabs.com">josh@positlabs.com</a></div>
 		</div>
-
-		<div class="comparison">
-			<img src="" alt="using other converters">
-			<img src="" alt="using gifgoat">
-		</div>
-
-		<div class="features">
-
-			<div class="feature">
-				<h2>Batch Processing</h2>
-				<p>Convert multiple videos simultaneously! (only available in Pro version)</p>
-				<div class="card"></div>
-			</div>
-
-			<div class="feature">
-				<h2>Generated Palettes</h2>
-				<p>GifGoat uses generated color palettes to create high quality gifs. It picks the best set of 256 colors from your input video, instead of using generic colors.</p>
-				<div class="card"></div>
-			</div>
-
-			<div class="feature">
-				<h2>Optimization</h2>
-				<p>Small files are good. You want small files. GifGoat uses frame diffing to make your gif smaller.</p>
-				<div class="card"></div>
-			</div>
-			
-			<div class="feature">
-				<h2>FPS</h2>
-				<p>Set frames per second of your gif. This can dramatically reduce the size of your gif. Try 12fps, why don't you?!</p>
-				<div class="card"></div>
-			</div>
-
-			<div class="feature">
-				<h2>Colors</h2>
-				<p>Control how many colors are used in your gif – yet another way reduce file size. Also doubles as a <a href='https://en.wikipedia.org/wiki/Posterization' target="_blank">posterization effect</a>!</p>
-				<div class="card"></div>
-			</div>
-
-			<div class="feature">
-				<h2>Quick Resize</h2>
-				<p>Set width OR height of the output (and the other dimension will be auto-calculated!). Set both dimensions to stretch (but why!?).</p>
-				<div class="card"></div>
-			</div>
-
-		</div>
-
-		<div class="support">Need help? Email <a href="mailto:josh@positlabs.com">josh@positlabs.com</a></div>
-
 	</div>
 	
 </body>
