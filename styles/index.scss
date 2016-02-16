@@ -32,7 +32,7 @@ a {
 header {
 	text-align: center;
 	h1 {
-		font-size: 3em;
+		font-size: 4em;
 		line-height: 1;
 	}
 	.logo {
@@ -46,13 +46,38 @@ header {
 	}
 }
 
+.btn {
+	display: inline-block;
+	padding: 0 10px;
+	margin: 0 10px;
+	height: 40px;
+	background: black;
+	border: .5px solid white;
+	border-radius: 4px;
+	line-height: 40px;
+	color: white;
+	text-decoration: none;
+}
+
+h1.what {
+	display: block;
+	margin-bottom: 40px;
+	margin-top: 80px;
+	font-size: 3em;
+}
+
 .get-gifgoat {
 	padding: 40px 0;
 	text-align: center;
-}
-
-.comparison {
-	margin-bottom: 50px;
+	a { 
+		display: inline-block;
+		overflow: hidden; 
+		transition: all .2s;
+		border-radius: 4px;
+		&:hover {
+			box-shadow: 0 0 10px white;
+		}
+	}
 }
 
 .features {
@@ -70,6 +95,9 @@ header {
 				margin: 10px;
 				max-width: 100%;
 			}
+		}
+		.credit {
+			font-size: .8em;
 		}
 	}
 }

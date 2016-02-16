@@ -15,20 +15,19 @@
 			</header>
 
 			<div class="get-gifgoat">
-				<button>download free version</button>
-				<button>get pro version (app store button)</button>
+				<a id='download-btn' class='btn' href="https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1" target="_blank">&#8681; DOWNLOAD FREE VERSION</a>
+				<!-- http://gifgoat.positlabs.com/bin/GifGoat.app.zip -->
+				<!-- https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1 -->
+				<a id='app-store-btn' href='' target='_blank'><img src="assets/imgs/app-store.svg" alt="get pro version in mac app store"></a>
 			</div>
 
-			<div class="comparison">
-				<img src="" alt="using other converters">
-				<img src="" alt="using gifgoat">
-			</div>
+			<h1 class="what">What does it do!?</h1>
 
 			<div class="features">
 
 				<div class="feature">
 					<h2>Batch Processing</h2>
-					<p>Convert multiple videos simultaneously! (only available in Pro version)</p>
+					<p>Convert multiple videos simultaneously! (available in Pro version)</p>
 					<div class="cards">
 						<img src="assets/imgs/batch-processing.png" alt="" width="400">
 					</div>
@@ -43,7 +42,7 @@
 						<img src="assets/imgs/uberviz_gen.gif" alt="">
 						<img src="assets/imgs/palette_uberviz.png" alt="" height="146">
 					</div>
-					<p class="credit">
+					<p class="credit">Source: 
 						<a href="https://www.airtightinteractive.com/demos/js/uberviz/wordproblems/" target="_blank">&Uuml;berViz</a>
 					</p>
 				</div>
@@ -51,7 +50,13 @@
 				<div class="feature">
 					<h2>Optimization</h2>
 					<p>Small files are good. You want small files. GifGoat uses frame diffing to make your gif smaller.</p>
-					<div class="cards"></div>
+					<div class="cards">
+						<div class="card">
+							<img src="assets/imgs/framediff.gif" alt="">
+							<div class="label">Actual pixels vs. diffed pixels</div>
+						</div>
+						<div class="credit">Source: <a href="www.beeple-crap.com" target="_blank">Beeple-crap</a></div>
+					</div>
 				</div>
 				
 				<div class="feature">
@@ -71,13 +76,27 @@
 							<div class="label">6fps, 962kb</div>
 						</div>
 					</div>
-					<p class="credit"><a href="https://positlabs.github.io/temporalis/" target="_blank">Temporalis</a></p>
+					<p class="credit">Source: <a href="https://positlabs.github.io/temporalis/" target="_blank">Temporalis</a></p>
 				</div>
 
 				<div class="feature">
 					<h2>Colors</h2>
 					<p>Control how many colors are used in your gif &mdash; yet another way reduce file size. Also doubles as a <a href='https://en.wikipedia.org/wiki/Posterization' target="_blank">posterization effect!</a></p>
-					<div class="cards"></div>
+					<div class="cards">
+						<div class="card">
+							<img src="assets/imgs/bbb_256.gif" alt="">
+							<div class="label">256 colors</div>
+						</div>
+						<div class="card">
+							<img src="assets/imgs/bbb_64.gif" alt="">
+							<div class="label">64 colors</div>
+						</div>
+						<div class="card">
+							<img src="assets/imgs/bbb_12.gif" alt="">
+							<div class="label">12 colors</div>
+						</div>
+					</div>
+					<div class="credit">Source: <a href="http://www.bitbitblocks.com/" target="_blank">Bit Bit Blocks</a></div>
 				</div>
 
 				<div class="feature">
@@ -89,14 +108,36 @@
 						<img src="assets/imgs/trig_spheres.gif" alt="" >
 						<img src="assets/imgs/stretch.gif" alt="" >
 					</div>
-					<p class="credit"><a href="http://synergyseeker.com/javascript-random-spheres-trig/" target="_blank">Synergyseeker's Random Spheres</a></p>
+					<p class="credit">Source: <a href="http://synergyseeker.com/javascript-random-spheres-trig/" target="_blank">Synergyseeker's Random Spheres</a></p>
 				</div>
 
 			</div>
 
-			<div class="support">Need help? Email <a href="mailto:josh@positlabs.com">josh@positlabs.com</a></div>
+			<div id="support" class="support">Need help? Email <a href="mailto:josh@positlabs.com">josh@positlabs.com</a></div>
 		</div>
 	</div>
+	<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'UA-24253469-2', 'auto');
+	ga('send', 'pageview');
+	</script>
+
+	<script>
+		
+		document.getElementById('download-btn', function(){
+			ga('send', 'event', 'button', 'click', 'download-btn');
+		});
+		document.getElementById('app-store-btn', function(){
+			ga('send', 'event', 'button', 'click', 'app-store-btn');
+		});
+		document.getElementById('support', function(){
+			ga('send', 'event', 'button', 'click', 'support');
+		});
+
+	</script>
 	
 </body>
 </html>

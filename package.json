@@ -2,19 +2,11 @@
   "name": "gif-pal-website",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "watch-styles": "sass --watch styles/index.scss:styles/index.css",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/positlabs/gif-pal.git"
-  },
   "author": "Josh Beckwith <josh@positlabs.com> (https://github.com/positlabs)",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/positlabs/gif-pal/issues"
-  },
-  "homepage": "https://github.com/positlabs/gif-pal#readme"
+  "homepage": "http://gifgoat.positlabs.com"
 }
