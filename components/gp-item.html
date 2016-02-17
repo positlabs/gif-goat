@@ -271,15 +271,14 @@
 				return new Promise( (resolve, reject) => {
 
 					var scaleFilter = this._getScaleFilter();
-					console.log('-lavfi ' + scaleFilter + 'paletteuse');
+					var filterOptions = '-lavfi ' + scaleFilter + 'paletteuse=dither=floyd_steinberg'
+					console.log(filterOptions);
 
 					this.ffmpegCommand = ffmpeg()
 						.input(this.file.path)
 						// .input(path.join(paths.temp, 'default-palette.png'))
 						.input(this._getPalettePath(this.file.path))
-						.outputOptions([
-							'-lavfi ' + scaleFilter + 'paletteuse'
-						])
+						.outputOptions([ filterOptions ])
 						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
