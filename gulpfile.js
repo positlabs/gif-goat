@@ -1,8 +1,9 @@
 'use strict';
 
 const gulp = require('gulp');
+// TODO: use version in node_modules when they upversion to support MAS builds
 // const packager = require('electron-packager');
-const packager = require('../electron-packager/');
+const packager = require('../electron-packager/'); 
 
 
 // TODO task for running app in dev mode
@@ -22,6 +23,17 @@ var copyPlists = function(callback){
 		});
 
 };
+
+// var copyGifsicle = function(callback){
+// 	gulp.src([
+// 			// './node_modules/**/*',
+// 			// './bin/**/*.*',
+// 		], {base: './'})
+// 		.pipe(gulp.dest('dist/GifGoat-mas-x64/GifGoat.app/Contents/Resources/app.asar.unpacked/'))
+// 		.on('end', ()=>{
+// 			callback();
+// 		});
+// };
 
 // https://www.npmjs.com/package/electron-packager
 gulp.task('build-mac', [], callback => {
@@ -49,6 +61,7 @@ gulp.task('build-mac', [], callback => {
 		arch: 'x64',
 
 		// Electron version (without the 'v') - for example, 0.33.9. See Electron releases for valid versions.
+		// match dev runtime and build runtime
 		version: require('./node_modules/electron-prebuilt/package.json').version,
 
 		'app-version': require('./package.json').version,
@@ -57,8 +70,10 @@ gulp.task('build-mac', [], callback => {
 		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		// asar: true,
-		// 'asar-unpack-dir': 'bin/',
+		asar: true,
+		// 'asar-unpack-dir': 'node_modules/',
+		'asar-unpack-dir': 'bin/',
+		// 'asar-unpack': './node_modules/**/*',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
 		'sign-entitlements': './build/mac-extras/parent.plist',
@@ -67,6 +82,7 @@ gulp.task('build-mac', [], callback => {
 		prune: true,
 
 		ignore: [
+			// '/node_modules($|/)',
 			'/bin/ffmpeg/linux($|/)',
 			'/bin/ffmpeg/win32($|/)',
 			'/dist($|/)',
@@ -83,7 +99,9 @@ gulp.task('build-mac', [], callback => {
 		if(err){
 			console.log(err.message)
 		}
-		copyPlists(callback);
+		copyPlists(()=>{
+			callback();
+		});
 	});
 
 });
