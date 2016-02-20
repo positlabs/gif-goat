@@ -180,6 +180,7 @@
 			},
 
 			__setProgress(percent){
+				console.log('__setProgress', percent);
 				this._setProgress(percent);
 				this.$.progress.innerHTML = Math.round(percent) + '%';
 				this.$.progressBar.progress = percent;
@@ -289,7 +290,7 @@
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
 						.on('progress', progress => {
-							// console.log('progress', progress.percent);
+							console.log('progress', progress);
 							this.__setProgress(progress.percent);
 						})
 						.on('error', (err, stdout, stderr) => {
@@ -345,7 +346,7 @@
 				if(this.runPromise !== undefined) return this.runPromise;
 				
 				this._settings = settings;
-				
+
 				this._setState('processing');
 
 				this.runPromise = new Promise((resolve, reject) => {
@@ -355,6 +356,7 @@
 						.then(resolve)
 						.catch(msg => {
 							// display error message
+							if(msg.match('SIGKILL')) return;
 							swal({
 								title: 'Error! Baaaaa!', 
 								text: msg,
