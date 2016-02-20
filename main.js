@@ -32,9 +32,7 @@ app.on('ready', function() {
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	// if(argv.debug){ // only do this if we're in dev mode
-		// mainWindow.webContents.openDevTools();
-	// }
+	mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', function() {
 		// Dereference the window object, usually you would store windows

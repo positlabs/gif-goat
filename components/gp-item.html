@@ -47,6 +47,7 @@
 			right: 20px; top: 50%;
 			transform: translateY(-50%);
 			width: 100px;
+			font-size: 1.2em;
 		}
 		.btns .btn {
 			display: inline-block;
@@ -237,7 +238,12 @@
 
 					var gifName = path.parse(filepath).name;
 					// check if file exists or not
-					glob(path.join(this._settings.output, '*.gif'), {}, (er, files) => {
+					glob(path.join(this._settings.output, '*.gif'), {}, (err, files) => {
+						if(err){
+							console.log(err);
+							reject(err.message);
+							return;
+						}
 
 						var filepaths = files.map(file => { return path.parse(file).name; });
 						console.log('globbed gifs', filepaths);

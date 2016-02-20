@@ -1,7 +1,8 @@
 'use strict';
 
 const gulp = require('gulp');
-const packager = require('electron-packager');
+// const packager = require('electron-packager');
+const packager = require('../electron-packager/');
 
 
 // TODO task for running app in dev mode
@@ -15,7 +16,7 @@ var copyPlists = function(callback){
 			'./build/mac-extras/child.plist',
 			'./build/mac-extras/parent.plist',
 		])
-		.pipe(gulp.dest('dist/GifGoat-darwin-x64/GifGoat.app/Contents/Frameworks/'))
+		.pipe(gulp.dest('dist/GifGoat-mas-x64/GifGoat.app/Contents/Frameworks/'))
 		.on('end', ()=>{
 			callback();
 		});
@@ -40,8 +41,8 @@ gulp.task('build-mac', [], callback => {
 		icon: './assets/icons/gifgoat-icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
-		platform: 'darwin',
-		// platform: 'mas',
+		// platform: 'darwin',
+		platform: 'mas',
 
 		// Allowed values: ia32, x64, all
 		// Not required if all is used. The non-all values correspond to the architecture names used by Electron releases.
@@ -56,8 +57,12 @@ gulp.task('build-mac', [], callback => {
 		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		asar: true,
-		'asar-unpack-dir': 'bin/',
+		// asar: true,
+		// 'asar-unpack-dir': 'bin/',
+
+		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
+		'sign-entitlements': './build/mac-extras/parent.plist',
+		'entitlements-inherit': './build/mac-extras/child.plist',
 
 		prune: true,
 
