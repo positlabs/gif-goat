@@ -132,7 +132,8 @@
 			},
 
 			created(){
-				this._getGIFPath = _.memoize(this._getGIFPath).bind(this);
+				this._getGIFPath = this._getGIFPath.bind(this);
+				// this._getGIFPath = _.memoize(this._getGIFPath).bind(this);
 			},
 
 			_onStateChanged(){
@@ -178,6 +179,7 @@
 				console.log(this.localName, '_onFileChanged');
 				this.$.filename.innerHTML = path.basename(this.file.path);
 				this.$.thumb.video = this.file.path;
+				this._getVideoInfo();
 			},
 
 			__setProgress(percent){
@@ -198,9 +200,6 @@
 						.on('start', commandLine => {
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
-						// .videoFilters([
-						// 	`palettegen --max_colors=${settings.colors}`
-						// ])
 						.outputOptions([
 							videoFilter
 						])
@@ -210,7 +209,7 @@
 						})
 						.on('progress', progress => {
 							// faiils...
-							// console.log(`palette progress: ${progress.percent}`);
+							// console.log(`palette progress:`, progress);
 							// this.__setProgress(progress.percent/2);
 						})
 						.on('end', () => {
@@ -235,6 +234,7 @@
 				return new Promise((resolve, reject) => {
 					var s = this._settings;
 					var gifName = path.parse(filepath).name;
+					// NOTE: not sure if the first stream will always be video...
 					var videoStream = this._videoInfo.streams[0];
 					var outWidth = s.width;
 					var outHeight = s.height;
@@ -244,17 +244,23 @@
 						outWidth = videoStream.coded_width;
 						outHeight = videoStream.coded_height;
 					}else if(outWidth.length === 0 && outHeight.length > 0){
+						// determine scaled width
 						outWidth = outHeight / videoStream.coded_height * videoStream.coded_width;
 						outWidth = Math.floor(outWidth);
-						// determine scaled width
 					}else if(outHeight.length === 0 && outWidth.length > 0){
 						// determine scaled height
 						outHeight = outWidth / videoStream.coded_width * videoStream.coded_height;
 						outHeight = Math.floor(outHeight);
 					}
 
-					gifName += `_${outWidth}x${outHeight}_${s.fps}fps_${s.colors}colors.gif`;
+					var fps = s.fps;
+					if(s.fps.length === 0) { 
+						fps = eval(videoStream.avg_frame_rate).toFixed(0);
+					}
+
+					gifName += `_${outWidth}x${outHeight}_${fps}fps_${s.colors}colors.gif`;
 					gifName = path.join(s.output, gifName);
+					console.log(gifName);
 					resolve(gifName);
 				});
 			},
