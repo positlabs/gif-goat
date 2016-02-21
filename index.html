@@ -31,7 +31,7 @@
 
 			<div class="get-gifgoat">
 				<h2>Available for OS X</h2>
-				<a id='download-btn' class='btn' href="https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1" target="_blank">&#8681; FREE VERSION</a>
+				<a id='download-btn' class='btn' href="https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1" target="_blank" download>&#8681; FREE VERSION</a>
 				<!-- http://gifgoat.positlabs.com/bin/GifGoat.app.zip -->
 				<!-- https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1 -->
 				<a id='app-store-btn' href='' target='_blank'><img src="assets/imgs/app-store.svg" alt="get pro version in mac app store"></a>
@@ -142,16 +142,15 @@
 	</script>
 
 	<script>
+
+		function trackClickEventByID(e){
+			console.log(e.currentTarget.id);
+			ga('send', 'event', 'button', 'click', e.currentTarget.id);
+		}
 		
-		document.getElementById('download-btn', function(){
-			ga('send', 'event', 'button', 'click', 'download-btn');
-		});
-		document.getElementById('app-store-btn', function(){
-			ga('send', 'event', 'button', 'click', 'app-store-btn');
-		});
-		document.getElementById('support', function(){
-			ga('send', 'event', 'button', 'click', 'support');
-		});
+		document.getElementById('download-btn').addEventListener('click', trackClickEventByID);
+		document.getElementById('app-store-btn').addEventListener('click', trackClickEventByID)
+		document.getElementById('support').addEventListener('click', trackClickEventByID);
 
 	</script>
 	
