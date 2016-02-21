@@ -1,6 +1,3 @@
-bin/ffmpeg/**/*
-bin/gifsicle/**/*
-
 bower_components/
 node_modules/
 test/videos/*.gif
