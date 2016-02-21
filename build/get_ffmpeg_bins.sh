@@ -19,12 +19,13 @@ mkdir -p ffmpeg/linux/ia32 ffmpeg/linux/x64 ffmpeg/darwin/x64 ffmpeg/win32/ia32 
 
 # cd ../darwin
 cd ./ffmpeg/darwin
-curl "http://evermeet.cx/ffmpeg/ffmpeg-$VERSION.7z" -o ffmpeg.7z && 
-curl "http://evermeet.cx/ffmpeg/ffprobe-$VERSION.7z" -o ffprobe.7z &&
+http://evermeet.cx/pub/ffprobe/ffprobe-2.8.6.7z
+curl "http://evermeet.cx/pub/ffmpeg/ffmpeg-$VERSION.7z" -o ffmpeg.7z && 
+curl "http://evermeet.cx/pub/ffprobe/ffprobe-$VERSION.7z" -o ffprobe.7z &&
 7z e ffmpeg.7z && 
 7z e ffprobe.7z && 
 mv ffmpeg ffprobe x64
-# rm ffmpeg.7z ffprobe.7z
+rm ffmpeg.7z ffprobe.7z
 
 # cd ../win32
 # curl "http://ffmpeg.zeranoe.com/builds/win32/static/ffmpeg-$VERSION-win32-static.7z" -o ffmpeg.7z &&

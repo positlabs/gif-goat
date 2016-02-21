@@ -24,17 +24,6 @@ var copyPlists = function(callback){
 
 };
 
-// var copyGifsicle = function(callback){
-// 	gulp.src([
-// 			// './node_modules/**/*',
-// 			// './bin/**/*.*',
-// 		], {base: './'})
-// 		.pipe(gulp.dest('dist/GifGoat-mas-x64/GifGoat.app/Contents/Resources/app.asar.unpacked/'))
-// 		.on('end', ()=>{
-// 			callback();
-// 		});
-// };
-
 // https://www.npmjs.com/package/electron-packager
 gulp.task('build-mac', [], callback => {
 
@@ -71,9 +60,7 @@ gulp.task('build-mac', [], callback => {
 		'app-category-type': 'public.app-category.utilities',
 
 		asar: true,
-		// 'asar-unpack-dir': 'node_modules/',
 		'asar-unpack-dir': 'bin/',
-		// 'asar-unpack': './node_modules/**/*',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
 		'sign-entitlements': './build/mac-extras/parent.plist',
@@ -82,7 +69,6 @@ gulp.task('build-mac', [], callback => {
 		prune: true,
 
 		ignore: [
-			// '/node_modules($|/)',
 			'/bin/ffmpeg/linux($|/)',
 			'/bin/ffmpeg/win32($|/)',
 			'/dist($|/)',
