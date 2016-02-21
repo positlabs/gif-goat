@@ -1,7 +1,7 @@
 {
   "name": "GIFGOAT",
-  "version": "0.1.1",
-  "pro": true,
+  "version": "0.1.2",
+  "pro": false,
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -13,7 +13,6 @@
     "css-easing": "^1.0.1",
     "fluent-ffmpeg": "^2.0.1",
     "font-awesome": "^4.5.0",
-    "gifsicle": "^3.0.3",
     "glob": "^6.0.4",
     "gsap": "^1.18.2",
     "gulp": "^3.9.0",

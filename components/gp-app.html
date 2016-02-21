@@ -332,6 +332,10 @@
 			ready(){
 				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
 				PS.initialize(this.$.queue);
+
+				if(!package.pro && Math.random() > .65){
+					this._showUpgradeMsg();
+				}
 			},
 
 			_onStateChanged(){
@@ -429,11 +433,11 @@
 
 			_showUpgradeMsg(){
 				swal({
-					title: 'Upgrade to GifGoat Pro!',
-					text: `Batch processing is only available in GifGoat Pro.`,
+					title: 'Upgrade!',
+					text: `Unlock the awesome power of batch processing with GifGoat Pro.`,
 					showConfirmButton: true,
 					showCancelButton: true,
-					confirmButtonText: 'upgrade!',
+					confirmButtonText: 'do it!',
 					cancelButtonText: 'nah.'
 				}, isConfirmed => {
 					if(isConfirmed){
@@ -471,9 +475,8 @@
 			_start(){
 				// console.log('gp-app._start');
 
-				//TODO: make sure output directory exists!!!
 				var settings = this.$.settings.get();
-				mkdirp(settings.output, ()=>{
+				mkdirp(settings.output, ()=>{ //mkdirp to make sure output directory exists!!!
 
 					this._setState(states.processing);
 
@@ -483,11 +486,6 @@
 						return item.run(settings);
 					});
 				});
-
-				// Promise.all(promises).then(() => {
-				// 	console.log('encoding promises resolved!');
-				// 	this._setState(states.done);
-				// });
 			},
 
 			_onClickLogo(){

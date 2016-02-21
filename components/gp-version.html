@@ -14,12 +14,17 @@
 		a {
 			color: var(--light-green);
 			pointer-events: all;
+			cursor: pointer;
+		}
+		#upgrade {
+			color: lime;
 		}
 	</style>
 	
 	<template>
+		<a id='upgrade' on-click="_onClickUpgrade" hidden>Upgrade to Pro!</a>
+		<a id='update' on-click="_onClickUpdate" hidden>Update available! v{{remoteVersion}}</a>
 		<div id='version'>GIFGOAT [[type]] v[[localVersion]]</div>
-		<a id='upgrade' on-click="_onClickUpgrade" hidden>Upgrade available! v{{remoteVersion}}</a>
 	</template>
 
 	<script>(function(){
@@ -50,21 +55,26 @@
 			},
 
 			ready(){
-				if(this.type === 'free'){					
+				if(this.type === 'free'){
+					this.$.upgrade.removeAttribute('hidden');
 					request('http://gifgoat.positlabs.com/package.json', (error, response, body) => {
 						var remotePackage = JSON.parse(body);
 						this._setRemoteVersion(remotePackage.version);
 						// console.log(remotePackage.version, localPackage.version, semver.gt(remotePackage.version, localPackage.version))
 						if(semver.gt(remotePackage.version, localPackage.version)){
-							// show upgrade message
-							this.$.upgrade.removeAttribute('hidden');
+							// show update message
+							this.$.update.removeAttribute('hidden');
 						}
 					});
 				}
 			},
 			
 			_onClickUpgrade(){
-				shell.openExternal('http://gifgoat.positlabs.com/download');
+				shell.openExternal('https://itunes.apple.com/us/app/gifgoat/id1082478920?ls=1&mt=8');
+			},
+
+			_onClickUpdate(){
+				shell.openExternal('https://www.dropbox.com/s/wdbq8dwcghe58tn/GifGoat.app.zip?dl=1');
 			}
 		});
 
