@@ -26,6 +26,9 @@ a {
 	color: $tomato;
 	font-weight: bold;
 }
+img {
+	border-radius: 4px;
+}
 
 * { box-sizing: border-box; }
 
@@ -57,6 +60,12 @@ header {
 	line-height: 40px;
 	color: white;
 	text-decoration: none;
+}
+
+.comparison {
+	.card {
+		margin-bottom: 20px;
+	}
 }
 
 h1.what {
