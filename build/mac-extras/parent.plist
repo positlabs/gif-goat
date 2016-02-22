@@ -15,7 +15,9 @@
     <key>com.apple.security.files.downloads.read-write</key>
     <true/>
     <key>com.apple.security.temporary-exception.files.absolute-path.read-write</key>
-    <true/>
+    <array>
+        <string>/</string>
+    </array>
     <key>com.apple.security.network.client</key>
     <true/>
   </dict>
