@@ -4,7 +4,7 @@ const gulp = require('gulp');
 // TODO: use version in node_modules when they upversion to support MAS builds
 // const packager = require('electron-packager');
 const packager = require('../electron-packager/'); 
-
+const pkg = require('./package.json');
 
 // TODO task for running app in dev mode
 // - should open browser window with node-inspector
@@ -43,7 +43,7 @@ gulp.task('build-mac', [], callback => {
 
 		// Allowed values: linux, win32, darwin, all
 		// platform: 'darwin',
-		platform: 'mas',
+		platform: pkg.pro ? 'mas' : 'darwin',
 
 		// Allowed values: ia32, x64, all
 		// Not required if all is used. The non-all values correspond to the architecture names used by Electron releases.
@@ -53,8 +53,8 @@ gulp.task('build-mac', [], callback => {
 		// match dev runtime and build runtime
 		version: require('./node_modules/electron-prebuilt/package.json').version,
 
-		'app-version': require('./package.json').version,
-		'build-version': require('./package.json').version,
+		'app-version': pkg.version,
+		'build-version': pkg.version,
 		
 		asar: true,
 		'asar-unpack-dir': 'bin/',
@@ -62,9 +62,9 @@ gulp.task('build-mac', [], callback => {
 		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		'sign-entitlements': './build/mac-extras/parent.plist',
-		'entitlements-inherit': './build/mac-extras/child.plist',
+		sign: pkg.pro ? '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)' : undefined,
+		'sign-entitlements': pkg.pro ? './build/mac-extras/parent.plist' : undefined,
+		'entitlements-inherit': pkg.pro ? './build/mac-extras/child.plist' : undefined,
 
 		prune: true,
 
