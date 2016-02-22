@@ -56,11 +56,11 @@ gulp.task('build-mac', [], callback => {
 		'app-version': require('./package.json').version,
 		'build-version': require('./package.json').version,
 		
-		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
-		'app-category-type': 'public.app-category.utilities',
-
 		asar: true,
 		'asar-unpack-dir': 'bin/',
+
+		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
+		'app-category-type': 'public.app-category.utilities',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
 		'sign-entitlements': './build/mac-extras/parent.plist',
