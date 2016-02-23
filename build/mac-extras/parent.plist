@@ -14,11 +14,12 @@
     <!-- <true/> -->
     <!-- <key>com.apple.security.files.downloads.read-write</key> -->
     <!-- <true/> -->
+    <!-- file bookmarks seem to be not working by default, so request an exception -->
     <key>com.apple.security.temporary-exception.files.absolute-path.read-write</key>
     <array>
         <string>/</string>
     </array>
-    <!-- <key>com.apple.security.network.client</key> -->
-    <!-- <true/> -->
+    <key>com.apple.security.network.client</key>
+    <true/>
   </dict>
 </plist>
