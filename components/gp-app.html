@@ -303,6 +303,8 @@
 		const mkdirp = require('mkdirp');
 		const package = require('./package.json');
 		const swal = require('sweetalert');
+		const Ffmpeg = require('fluent-ffmpeg');
+		const path = require('path');
 
 
 		const states = {
@@ -326,7 +328,8 @@
 			},
 
 			created(){
-
+				// it's a promise, but i think we can assume it will resolve before the user can add a file...
+				this._pAvailableFormats();
 			},
 
 			ready(){
@@ -409,9 +412,26 @@
 					}
 				}
 
+				var _files = [];
 				files.forEach(file => {
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
+
+					/*
+						TODO: need to check capabilities of ffmpeg to know for sure
+						what file types are supported
+					*/ 
+					// check for valid file type
+					console.log(file.path)
+					var fileExt = path.parse(file.path).ext.replace('.', '');
+					if(this._formats.indexOf(fileExt) === -1){
+						swal({
+							title: 'Unsupported file type!',
+							text: `Goat still likes you, but ${fileExt} files aren't supported.`
+						});
+						return;
+					}
+
 					var itemEl = document.createElement('gp-item');
 					itemEl.file = file;
 					itemEl.addEventListener('detached', this._onItemRemoved.bind(this));
@@ -426,9 +446,25 @@
 				});
 
 				// ready for processing!
-				if(files.length > 0 && this.state !== states.processing){
+				var filepaths = this._getFilePathsInQueue();
+				if(filepaths.length > 0 && this.state !== states.processing){
 					this._setState(states.ready);
 				}
+			},
+
+			_pAvailableFormats(){
+				return new Promise((resolve, reject)=>{
+					Ffmpeg.getAvailableFormats((err, formats)=>{
+						console.log('Available formats:', formats);
+						if(err) {
+							reject(err.message)
+						}else {
+							formats = Object.keys(formats);
+							resolve(formats);
+							this._formats = formats;
+						}
+					});
+				});
 			},
 
 			_showUpgradeMsg(){

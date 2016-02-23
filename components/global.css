@@ -24,6 +24,7 @@ h1, h2 {
 	font-size: 1.2em;
 	font-weight: 300;
 }
+input, textarea, keygen, select, button { font-family: 'ubuntu', sans-serif; }
 
 .btn, .btn * {
 	cursor: pointer !important;
