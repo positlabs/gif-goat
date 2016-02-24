@@ -1,7 +1,7 @@
 {
   "name": "GIFGOAT",
-  "version": "0.1.3",
-  "pro": false,
+  "version": "0.1.5",
+  "pro": true,
   "description": "",
   "main": "main.js",
   "scripts": {

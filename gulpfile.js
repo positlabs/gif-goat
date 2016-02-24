@@ -11,22 +11,6 @@ const pkg = require('./package.json');
 // https://www.npmjs.com/package/gulp-node-inspector
 // ./node_modules/.bin/electron main.js --debug
 
-var copyPlists = function(callback){
-
-	// var dest = pkg.pro ? 'dist/GifGoat-mas-x64/GifGoat.app/Contents/Frameworks/' : 'dist/GifGoat-darwin-x64/GifGoat.app/Contents/Frameworks/'
-	var dest = 'dist/GifGoat-mas-x64/GifGoat.app/Contents/Frameworks/';
-
-	gulp.src([
-			'./build/mac-extras/child.plist',
-			'./build/mac-extras/parent.plist',
-		])
-		.pipe(gulp.dest(dest))
-		.on('end', ()=>{
-			callback();
-		});
-
-};
-
 // https://www.npmjs.com/package/electron-packager
 gulp.task('build-mac', [], callback => {
 
@@ -41,8 +25,7 @@ gulp.task('build-mac', [], callback => {
 
 		// The application name.
 		name: 'GifGoat',
-		'app-bundle-id': 'GIFGOAT-HELPER',
-		icon: './assets/icons/gifgoat-icon.icns',
+		icon: './build/mac-extras/icons/icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
 		// platform: 'darwin',
@@ -57,13 +40,15 @@ gulp.task('build-mac', [], callback => {
 		// match dev runtime and build runtime
 		version: require('./node_modules/electron-prebuilt/package.json').version,
 
+		'app-copyright': 'Posit Labs 2016',
+
 		'app-version': pkg.version,
 		'build-version': pkg.version,
 		
 		asar: true,
 		'asar-unpack-dir': 'bin/',
 
-		'app-bundle-id': 'DLG2VT3336.com.positlabs.gifgoat',
+		'app-bundle-id': 'com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
@@ -91,10 +76,9 @@ gulp.task('build-mac', [], callback => {
 	packager(opts, (err, appPath) => {
 		if(err){
 			console.log(err.message)
-		}
-		copyPlists(()=>{
+		}else{
 			callback();
-		});
+		}
 	});
 
 });
