@@ -52,11 +52,8 @@ gulp.task('build-mac', [], callback => {
 		'app-category-type': 'public.app-category.utilities',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		// sign: pkg.pro ? '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)' : undefined,
 		'sign-entitlements': './build/mac-extras/parent.plist',
-		// 'sign-entitlements': pkg.pro ? './build/mac-extras/parent.plist' : undefined,
 		'entitlements-inherit': './build/mac-extras/child.plist',
-		// 'entitlements-inherit': pkg.pro ? './build/mac-extras/child.plist' : undefined,
 
 		prune: true,
 
@@ -75,8 +72,9 @@ gulp.task('build-mac', [], callback => {
 
 	packager(opts, (err, appPath) => {
 		if(err){
-			console.log(err.message)
+			console.log('error!!', err);
 		}else{
+			console.log('appPath', appPath);
 			callback();
 		}
 	});
