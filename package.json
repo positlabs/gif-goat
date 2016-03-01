@@ -1,7 +1,7 @@
 {
   "name": "GIFGOAT",
-  "version": "0.1.6",
-  "pro": true,
+  "version": "0.1.8",
+  "pro": false,
   "description": "",
   "main": "main.js",
   "scripts": {
@@ -25,8 +25,7 @@
     "yargs": "^3.31.0"
   },
   "devDependencies": {
-    "electron-osx-sign": "^0.2.0",
-    "electron-packager": "^5.2.0",
+    "electron-packager": "file:///Volumes/space/workspace/electron-packager",
     "electron-prebuilt": "0.35.6",
     "node-inspector": "^0.12.5"
   }

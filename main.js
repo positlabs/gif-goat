@@ -29,10 +29,11 @@ app.on('ready', function() {
 		useContentSize: true //The width and height would be used as web page's size, which means the actual window's size will include window frame's size and be slightly larger.
 	});
 
+	// mainWindow.loadURL('https://github.com');
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	// mainWindow.webContents.openDevTools();
+	mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', function() {
 		// Dereference the window object, usually you would store windows

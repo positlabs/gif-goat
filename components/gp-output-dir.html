@@ -39,10 +39,12 @@
 	<script>(function(){
 		'use strict';
 
-		var path = require('path');
-		var shell = require('electron').shell;
-		var paths = require('./modules/paths');
-		var remote = require('electron').remote;
+		const path = require('path');
+		const shell = require('electron').shell;
+		const paths = require('./modules/paths');
+		const remote = require('electron').remote;
+		const pkg = require('./package.json');
+
 
 		Polymer({
 			is: 'gp-output-dir',
@@ -51,7 +53,7 @@
 				path: {
 					type: String,
 					// value: paths.downloads,
-					value: localStorage.getItem('output-dir') || paths.desktop,
+					value: localStorage.getItem('output-dir') || paths.downloads,
 					observer: '_onPathChanged'
 				}
 			},
@@ -68,6 +70,9 @@
 					chars = '...' + chars;
 				}
 				this.$['path-display'].innerHTML = chars;
+				if(pkg.pro === false){
+					localStorage.setItem('output-dir', this.path);
+				}
 			},
 
 			_onClickOpenOutputBtn(){
@@ -79,16 +84,17 @@
 				let options = {
 					title: 'Select output folder',
 					properties: ['openDirectory', 'createDirectory'],
+					defaultPath: this.path
 				};
-				var defaultPath = localStorage.getItem('output-dir');
-				if(defaultPath) options.defaultPath = defaultPath;
+
+				if(pkg.pro === false) {
+					options.defaultPath = localStorage.getItem('output-dir') || this.path;
+				}
 
 				remote.dialog.showOpenDialog(remote.getCurrentWindow(), options, folders => {
 					// console.log('request-output-dir', folders);
 					if(folders){
-						// event.sender.send('request-output-dir', folders[0]);
 						this.path = folders[0];
-						localStorage.setItem('output-dir', this.path);
 					}
 				});
 			},

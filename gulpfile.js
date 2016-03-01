@@ -1,10 +1,12 @@
 'use strict';
 
 const gulp = require('gulp');
-// TODO: use version in node_modules when they upversion to support MAS builds
-// const packager = require('electron-packager');
-const packager = require('../electron-packager/'); 
+const spawn = require('child_process').spawn;
+const packager = require('electron-packager');
 const pkg = require('./package.json');
+
+
+const pro = pkg.pro === true;
 
 // TODO task for running app in dev mode
 // - should open browser window with node-inspector
@@ -28,9 +30,7 @@ gulp.task('build-mac', [], callback => {
 		icon: './build/mac-extras/icons/icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
-		// platform: 'darwin',
-		platform: 'mas',
-		// platform: pkg.pro ? 'mas' : 'darwin',
+		platform: pro ? 'mas' : 'darwin',
 
 		// Allowed values: ia32, x64, all
 		// Not required if all is used. The non-all values correspond to the architecture names used by Electron releases.
@@ -38,12 +38,12 @@ gulp.task('build-mac', [], callback => {
 
 		// Electron version (without the 'v') - for example, 0.33.9. See Electron releases for valid versions.
 		// match dev runtime and build runtime
-		version: require('./node_modules/electron-prebuilt/package.json').version,
+		// version: require('./node_modules/electron-prebuilt/package.json').version,
 
 		'app-copyright': 'Posit Labs 2016',
 
 		'app-version': pkg.version,
-		'build-version': pkg.version,
+		'build-version': Date.now(),
 		
 		asar: true,
 		'asar-unpack-dir': 'bin/',
@@ -52,8 +52,8 @@ gulp.task('build-mac', [], callback => {
 		'app-category-type': 'public.app-category.utilities',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		'sign-entitlements': './build/mac-extras/parent.plist',
-		'entitlements-inherit': './build/mac-extras/child.plist',
+		'sign-entitlements': pro ? './build/mac-extras/parent.plist' : undefined,
+		'entitlements-inherit': pro ? './build/mac-extras/child.plist' : undefined,
 
 		prune: true,
 
@@ -75,10 +75,50 @@ gulp.task('build-mac', [], callback => {
 			console.log('error!!', err);
 		}else{
 			console.log('appPath', appPath);
-			callback();
+			createPkg(callback);
 		}
 	});
 
 });
+
+function createPkg(callback){
+
+	let free = pro ? '' : '-free';
+
+	// sign and package it
+	spawnProcess(`./build/mac/package-mac-app${free}.sh`, [])
+		.then(()=>{ 
+			// install it
+			return spawnProcess('installer', ['-store', '-pkg', `./dist/GifGoat${free}.pkg`, '-target', '/']);
+		})
+		.then(()=>{
+			// open it
+			return spawnProcess('open', ['/Applications/GifGoat.app/']);
+		})
+		.then(callback)
+		.catch(err => {
+			console.log(err.message);
+			callback();
+		});
+
+}
+
+function spawnProcess(cmd, args){
+	console.log('spawnProcess', cmd, args);
+	return new Promise((resolve, reject) => {
+
+		let proc = spawn(cmd, args);
+		proc.stdout.on('data', data => {
+			console.log(`${data}`);
+		});
+		proc.stderr.on('data', data => {
+			console.log(`${data}`);
+		});
+		proc.on('close', code => {
+			// console.log(`child process exited with code ${code}`);
+			resolve();
+		});
+	});
+}
 
 gulp.task('default', [], function(){});
