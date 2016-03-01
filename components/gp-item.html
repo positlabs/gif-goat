@@ -90,6 +90,7 @@
 		const shell = require('electron').shell;
 		const remote = require('electron').remote;
 		const argv = require('yargs').argv;
+		const utils = require('./modules/utils');
 		const ffmpeg = require('fluent-ffmpeg');
 		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg.replace('app.asar', 'app.asar.unpacked');
 		const ffprobePath = require('./modules/ffmpeg-static').ffprobe.replace('app.asar', 'app.asar.unpacked');
@@ -165,7 +166,7 @@
 
 						// show gif name
 						this._getGIFPath(this.file.path).then(gifPath => {
-							this.$.filename.innerHTML = path.parse(gifPath).name + '.gif';
+							this.$.filename.innerHTML = utils.ellipsesPrefix(path.parse(gifPath).name + '.gif', 35);
 						});
 
 						this.fire('done');
@@ -177,7 +178,10 @@
 
 			_onFileChanged(){
 				console.log(this.localName, '_onFileChanged');
-				this.$.filename.innerHTML = path.basename(this.file.path);
+
+				var pathString = path.basename(this.file.path);
+				this.$.filename.title = pathString;
+				this.$.filename.innerHTML = utils.ellipsesPrefix(pathString, 40);
 				this.$.thumb.video = this.file.path;
 				this._getVideoInfo();
 			},
@@ -373,8 +377,11 @@
 						.then(this._optimizeGIF.bind(this))
 						.then(resolve)
 						.catch(msg => {
-							// display error message
+
+							// user killed process intentionally
 							if(msg.match('SIGKILL')) return;
+							
+							// display error message
 							swal({
 								title: 'Error! Baaaaa!', 
 								text: msg,

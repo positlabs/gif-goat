@@ -44,6 +44,7 @@
 		const paths = require('./modules/paths');
 		const remote = require('electron').remote;
 		const pkg = require('./package.json');
+		const utils = require('./modules/utils');
 
 
 		Polymer({
@@ -52,8 +53,7 @@
 			properties: {
 				path: {
 					type: String,
-					// value: paths.downloads,
-					value: localStorage.getItem('output-dir') || paths.downloads,
+					value: pkg.pro ? paths.downloads : localStorage.getItem('output-dir') || paths.downloads,
 					observer: '_onPathChanged'
 				}
 			},
@@ -63,12 +63,7 @@
 			},
 
 			_onPathChanged(){
-				var maxChars = 30;
-				var chars = this.path;
-				if(chars.length > maxChars){
-					chars = chars.slice(chars.length - maxChars, chars.length);
-					chars = '...' + chars;
-				}
+				var chars = utils.ellipsesPrefix(this.path, 30);
 				this.$['path-display'].innerHTML = chars;
 				if(pkg.pro === false){
 					localStorage.setItem('output-dir', this.path);
