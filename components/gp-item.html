@@ -194,6 +194,7 @@
 			},
 
 			_generatePalette(){
+				if(this.removed) return;
 				var settings = this._settings;
 				var scaleFilter = this._getScaleFilter();
 				var videoFilter = `-lavfi ${scaleFilter}palettegen=max_colors=${settings.colors}`;
@@ -294,6 +295,8 @@
 			},
 
 			_encodeGIF(){
+				if(this.removed) return;
+				
 				var settings = this._settings;
 
 				return new Promise( (resolve, reject) => {
@@ -400,6 +403,7 @@
 			},
 
 			_remove(){
+				this.removed = true;
 
 				if(this.paletteCommand){
 					this.paletteCommand.kill([signal='SIGKILL']);

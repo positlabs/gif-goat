@@ -184,13 +184,19 @@
 			padding: 20px 0;
 			pointer-events: none;
 			background-color: var(--light-green);
+			background: linear-gradient(to top, #B73C00, #FF6920);
 			color: var(--dark-purple);
 			font-weight: bold;
 			text-transform: uppercase;
 			box-shadow: 0 0 10px black;
-			
+
 			opacity: 0;
 			transition: all .3s .7s var(--easeOutQuart);
+		}
+		#make-gifs * { transition: all .3s 0s; }
+		#make-gifs:hover * {
+			color: white !important;
+			text-shadow: 0 0 3px white;
 		}
 		:host[state='ready'] #make-gifs {
 			opacity: 1;
