@@ -14,7 +14,7 @@ const pro = pkg.pro === true;
 // ./node_modules/.bin/electron main.js --debug
 
 // https://www.npmjs.com/package/electron-packager
-gulp.task('build-mac', [], callback => {
+gulp.task('build-mac:app', [], callback => {
 
 	/*
 
@@ -27,7 +27,7 @@ gulp.task('build-mac', [], callback => {
 
 		// The application name.
 		name: 'GifGoat',
-		icon: './build/mac-extras/icons/icon.icns',
+		icon: './build/mac/icons/icon.icns',
 
 		// Allowed values: linux, win32, darwin, all
 		platform: pro ? 'mas' : 'darwin',
@@ -52,8 +52,8 @@ gulp.task('build-mac', [], callback => {
 		'app-category-type': 'public.app-category.utilities',
 
 		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		'sign-entitlements': pro ? './build/mac-extras/parent.plist' : undefined,
-		'entitlements-inherit': pro ? './build/mac-extras/child.plist' : undefined,
+		'sign-entitlements': pro ? './build/mac/parent.plist' : undefined,
+		'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
 
 		prune: true,
 
@@ -75,33 +75,38 @@ gulp.task('build-mac', [], callback => {
 			console.log('error!!', err);
 		}else{
 			console.log('appPath', appPath);
-			createPkg(callback);
+			callback();
 		}
 	});
 
 });
 
-function createPkg(callback){
+gulp.task('build-mac:package', ['build-mac:app'], callback => {
+	let free = pro ? '' : '-free';
+	spawnProcess(`./build/mac/package-mac-app${free}.sh`, [])
+		.catch(err => {
+			console.log(err.message);
+			callback();
+		})
+		.then(callback);
+});
 
+gulp.task('build-mac:install', ['build-mac:package'], callback => {
 	let free = pro ? '' : '-free';
 
 	// sign and package it
-	spawnProcess(`./build/mac/package-mac-app${free}.sh`, [])
-		.then(()=>{ 
-			// install it
-			return spawnProcess('installer', ['-store', '-pkg', `./dist/GifGoat${free}.pkg`, '-target', '/']);
-		})
+	spawnProcess('installer', ['-store', '-pkg', `./dist/GifGoat${free}.pkg`, '-target', '/'])
 		.then(()=>{
 			// open it
 			return spawnProcess('open', ['/Applications/GifGoat.app/']);
 		})
-		.then(callback)
 		.catch(err => {
 			console.log(err.message);
 			callback();
-		});
+		})
+		.then(callback);
+});
 
-}
 
 function spawnProcess(cmd, args){
 	console.log('spawnProcess', cmd, args);
