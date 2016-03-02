@@ -70,6 +70,8 @@ gulp.task('build-mac:app', [], callback => {
 
 	};
 
+	console.log(opts)
+
 	packager(opts, (err, appPath) => {
 		if(err){
 			console.log('error!!', err);

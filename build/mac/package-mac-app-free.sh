@@ -17,4 +17,15 @@ ASAR_UNPACKED_PATH="$APP_PATH/Contents/Resources/app.asar.unpacked"
 codesign --deep -fs "$APP_KEY" "$ASAR_UNPACKED_PATH/bin/ffmpeg/darwin/x64/ffmpeg"
 codesign --deep -fs "$APP_KEY" "$ASAR_UNPACKED_PATH/bin/ffmpeg/darwin/x64/ffprobe"
 codesign --deep -fs "$APP_KEY" "$ASAR_UNPACKED_PATH/bin/gifsicle/gifsicle"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/Electron Framework.framework/Versions/A"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/$APP Helper.app/"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/$APP Helper EH.app/"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/$APP Helper NP.app/"
+
+# Signing a non-MAS build.
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/Mantle.framework/Versions/A"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/ReactiveCocoa.framework/Versions/A"
+codesign --deep -fs "$APP_KEY" "$FRAMEWORKS_PATH/Squirrel.framework/Versions/A"
+
+codesign -fs "$APP_KEY" "$APP_PATH"
 productbuild --component "$APP_PATH" /Applications --sign "$INSTALLER_KEY" "$RESULT_PATH"
