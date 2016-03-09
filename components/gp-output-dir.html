@@ -53,7 +53,7 @@
 			properties: {
 				path: {
 					type: String,
-					value: pkg.pro ? paths.downloads : localStorage.getItem('output-dir') || paths.downloads,
+					value: pkg.pro ? 'not set' : localStorage.getItem('output-dir') || paths.downloads,
 					observer: '_onPathChanged'
 				}
 			},

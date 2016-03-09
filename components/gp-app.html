@@ -518,6 +518,13 @@
 				// console.log('gp-app._start');
 
 				var settings = this.$.settings.get();
+				if(settings.output === 'not set'){
+					swal({
+						title: 'Missing output folder',
+						text: 'Select an output folder!'
+					});
+					return;
+				}
 				mkdirp(settings.output, ()=>{ //mkdirp to make sure output directory exists!!!
 
 					this._setState(states.processing);
