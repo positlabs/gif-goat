@@ -2,6 +2,8 @@
 
 const gulp = require('gulp');
 const spawn = require('child_process').spawn;
+const osxSign = require('electron-osx-sign');
+// const packager = require('../electron-packager');
 const packager = require('electron-packager');
 const pkg = require('./package.json');
 
@@ -15,6 +17,10 @@ const pro = pkg.pro === true;
 
 // https://www.npmjs.com/package/electron-packager
 gulp.task('build-mac:app', [], callback => {
+
+	let masOrDarwin = pro ? 'mas' : 'darwin';
+	let appPath = `./dist/GifGoat-${masOrDarwin}-x64/GifGoat.app`;
+	let asarUnpackedDir = `${appPath}/Contents/Resources/app.asar.unpacked`;
 
 	/*
 
@@ -51,9 +57,22 @@ gulp.task('build-mac:app', [], callback => {
 		'app-bundle-id': 'com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
+		sign: true,
+		// sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
 		'sign-entitlements': pro ? './build/mac/parent.plist' : undefined,
 		'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
+
+		// 'osx-sign': {
+		// 	identity: true,
+		// 	// identity: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
+		// 	'entitlements': pro ? './build/mac/parent.plist' : undefined,
+		// 	'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
+		// 	binaries: [
+		// 		`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
+		// 		`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
+		// 		`${asarUnpackedDir}/bin/gifsicle/gifsicle`
+		// 	]
+		// },
 
 		prune: true,
 
@@ -83,14 +102,38 @@ gulp.task('build-mac:app', [], callback => {
 
 });
 
-gulp.task('build-mac:package', ['build-mac:app'], callback => {
+gulp.task('build-mac:package', ['build-mac:app'], 
+	callback => {
 	let free = pro ? '' : '-free';
-	spawnProcess(`./build/mac/package-mac-app${free}.sh`, [])
-		.catch(err => {
-			console.log(err.message);
+	let masOrDarwin = pro ? 'mas' : 'darwin';
+	let appPath = `./dist/GifGoat-${masOrDarwin}-x64/GifGoat.app`;
+	let asarUnpackedDir = `${appPath}/Contents/Resources/app.asar.unpacked`;
+	osxSign.flat({
+		app: appPath,
+		// identity: true,
+		identity: '3rd Party Mac Developer Installer: Joshua Beckwith (DLG2VT3336)',
+		'entitlements': pro ? './build/mac/parent.plist' : undefined,
+		'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
+		binaries: [
+			`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
+			`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
+			`${asarUnpackedDir}/bin/gifsicle/gifsicle`
+		],
+		pkg: `./dist/GifGoat${free}.pkg`,
+	}, err => {
+		if(err){
+			console.log(err);
+		}else {
 			callback();
-		})
-		.then(callback);
+		}
+	});
+	// let free = pro ? '' : '-free';
+	// spawnProcess(`./build/mac/package-mac-app${free}.sh`, [])
+	// 	.catch(err => {
+	// 		console.log(err.message);
+	// 		callback();
+	// 	})
+	// 	.then(callback);
 });
 
 gulp.task('build-mac:install', ['build-mac:package'], callback => {

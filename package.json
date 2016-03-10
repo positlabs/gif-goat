@@ -25,6 +25,7 @@
     "yargs": "^3.31.0"
   },
   "devDependencies": {
+    "electron-osx-sign": "^0.3.0",
     "electron-packager": "file:///Volumes/space/workspace/electron-packager",
     "electron-prebuilt": "0.35.6",
     "node-inspector": "^0.12.5"
