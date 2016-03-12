@@ -318,7 +318,7 @@
 							this.__setProgress(progress.percent);
 						})
 						.on('error', (err, stdout, stderr) => {
-							console.log('Cannot process video: ' + err.message);
+							console.log('Cannot process video: ', err);
 							reject(err.message);
 						})
 						.on('end', () => {

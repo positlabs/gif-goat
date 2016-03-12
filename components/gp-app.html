@@ -423,10 +423,6 @@
 					// don't add files that are already in the queue
 					if(currentFilePaths.indexOf(file.path) !== -1) return;
 
-					/*
-						TODO: need to check capabilities of ffmpeg to know for sure
-						what file types are supported
-					*/ 
 					// check for valid file type
 					console.log(file.path)
 					var fileExt = path.parse(file.path).ext.replace('.', '');
@@ -463,6 +459,7 @@
 					Ffmpeg.getAvailableFormats((err, formats)=>{
 						console.log('Available formats:', formats);
 						if(err) {
+							console.log(err);
 							reject(err.message)
 						}else {
 							formats = Object.keys(formats);

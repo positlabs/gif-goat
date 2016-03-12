@@ -57,22 +57,22 @@ gulp.task('build-mac:app', [], callback => {
 		'app-bundle-id': 'com.positlabs.gifgoat',
 		'app-category-type': 'public.app-category.utilities',
 
-		sign: true,
-		// sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		'sign-entitlements': pro ? './build/mac/parent.plist' : undefined,
-		'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
+		// sign: true,
+		// // sign: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
+		// 'sign-entitlements': pro ? './build/mac/parent.plist' : undefined,
+		// 'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
 
-		// 'osx-sign': {
-		// 	identity: true,
-		// 	// identity: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
-		// 	'entitlements': pro ? './build/mac/parent.plist' : undefined,
-		// 	'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
-		// 	binaries: [
-		// 		`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
-		// 		`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
-		// 		`${asarUnpackedDir}/bin/gifsicle/gifsicle`
-		// 	]
-		// },
+		'osx-sign': {
+			// identity: true,
+			identity: '3rd Party Mac Developer Application: Joshua Beckwith (DLG2VT3336)',
+			'entitlements': pro ? './build/mac/parent.plist' : undefined,
+			'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
+			binaries: [
+				`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
+				`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
+				`${asarUnpackedDir}/bin/gifsicle/gifsicle`
+			]
+		},
 
 		prune: true,
 
@@ -114,11 +114,11 @@ gulp.task('build-mac:package', ['build-mac:app'],
 		identity: '3rd Party Mac Developer Installer: Joshua Beckwith (DLG2VT3336)',
 		'entitlements': pro ? './build/mac/parent.plist' : undefined,
 		'entitlements-inherit': pro ? './build/mac/child.plist' : undefined,
-		binaries: [
-			`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
-			`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
-			`${asarUnpackedDir}/bin/gifsicle/gifsicle`
-		],
+		// binaries: [
+		// 	`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffmpeg`,
+		// 	`${asarUnpackedDir}/bin/ffmpeg/darwin/x64/ffprobe`,
+		// 	`${asarUnpackedDir}/bin/gifsicle/gifsicle`
+		// ],
 		pkg: `./dist/GifGoat${free}.pkg`,
 	}, err => {
 		if(err){
