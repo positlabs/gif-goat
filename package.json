@@ -11,18 +11,18 @@
   "license": "ISC",
   "dependencies": {
     "css-easing": "^1.0.1",
-    "fluent-ffmpeg": "^2.0.1",
-    "font-awesome": "^4.5.0",
+    "fluent-ffmpeg": "^2.1.2",
+    "font-awesome": "^4.7.0",
     "glob": "^6.0.4",
-    "gsap": "^1.18.2",
+    "gsap": "^1.20.2",
     "gulp": "^3.9.0",
     "mkdirp": "^0.5.1",
-    "perfect-scrollbar": "^0.6.8",
-    "request": "^2.69.0",
-    "semver": "^5.1.0",
+    "perfect-scrollbar": "^0.6.16",
+    "request": "^2.81.0",
+    "semver": "^5.3.0",
     "sweetalert": "^1.1.3",
     "underscore": "^1.8.3",
-    "yargs": "^3.31.0"
+    "yargs": "^3.32.0"
   },
   "devDependencies": {
     "electron-osx-sign": "^0.3.0",
