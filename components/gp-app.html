@@ -309,8 +309,12 @@
 		const mkdirp = require('mkdirp');
 		const package = require('./package.json');
 		const swal = require('sweetalert');
-		const Ffmpeg = require('fluent-ffmpeg');
 		const path = require('path');
+		const Ffmpeg = require('fluent-ffmpeg');
+		const ffprobePath = require('@ffprobe-installer/ffprobe').path;
+		const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
+		Ffmpeg.setFfmpegPath(ffmpegPath);
+		Ffmpeg.setFfprobePath(ffprobePath);
 
 
 		const states = {
@@ -459,7 +463,7 @@
 					Ffmpeg.getAvailableFormats((err, formats)=>{
 						console.log('Available formats:', formats);
 						if(err) {
-							console.log(err);
+							console.error(err);
 							reject(err.message)
 						}else {
 							formats = Object.keys(formats);

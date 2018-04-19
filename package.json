@@ -8,11 +8,14 @@
     "start": "./node_modules/.bin/electron main.js --debug"
   },
   "author": "positlabs",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "^1.0.13",
+    "@ffprobe-installer/ffprobe": "^1.0.8",
     "css-easing": "^1.0.1",
     "fluent-ffmpeg": "^2.1.2",
     "font-awesome": "^4.7.0",
+    "gifsicle": "^3.0.4",
     "glob": "^6.0.4",
     "gsap": "^1.20.2",
     "gulp": "^3.9.0",
@@ -26,7 +29,7 @@
   },
   "devDependencies": {
     "electron-osx-sign": "^0.3.0",
-    "electron-packager": "file:///Volumes/space/workspace/electron-packager",
+    "electron-packager": "^12.0.1",
     "electron-prebuilt": "0.35.6",
     "node-inspector": "^0.12.5"
   }
