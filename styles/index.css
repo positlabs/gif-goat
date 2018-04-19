@@ -1,0 +1,137 @@
+@import url(https://fonts.googleapis.com/css?family=Ubuntu:300,400,700);
+@import url(https://fonts.googleapis.com/css?family=Roboto:700);
+html, body {
+  padding: 0;
+  margin: 0;
+  min-width: 100%;
+  min-height: 100%;
+  background-color: #333;
+  font-family: "ubuntu", "Helvetica", sans-serif;
+  font-weight: 300;
+  color: white;
+  line-height: 1.5;
+  text-align: center;
+}
+
+body {
+  box-shadow: inset 0 0 15px black;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "Roboto", sans-serif;
+  font-weight: 700;
+  margin: 0;
+}
+
+a {
+  color: #d74802;
+  font-weight: bold;
+}
+
+img {
+  border-radius: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+header {
+  text-align: center;
+}
+header h1 {
+  font-size: 4em;
+  line-height: 1;
+}
+header .logo {
+  width: 150px;
+  height: 180px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  background-image: url("../assets/imgs/gifgoat-icon.png");
+  margin: 0 auto;
+  margin-bottom: 30px;
+}
+
+.btn {
+  display: inline-block;
+  padding: 0 10px;
+  margin: 0 10px;
+  height: 40px;
+  background: black;
+  border: 0.5px solid white;
+  border-radius: 4px;
+  line-height: 40px;
+  color: white;
+  text-decoration: none;
+}
+
+.comparison .card {
+  margin-bottom: 20px;
+}
+.comparison .card h2 {
+  margin-bottom: 10px;
+}
+
+h1.what {
+  display: block;
+  margin-bottom: 40px;
+  margin-top: 80px;
+  font-size: 3em;
+}
+
+.get-gifgoat {
+  padding: 40px 0;
+  margin-bottom: 60px;
+  text-align: center;
+}
+.get-gifgoat h2 {
+  margin-bottom: 20px;
+}
+.get-gifgoat a {
+  display: inline-block;
+  overflow: hidden;
+  transition: all 0.2s;
+  border-radius: 4px;
+}
+.get-gifgoat a:hover {
+  box-shadow: 0 0 10px white;
+}
+
+.features .feature {
+  margin-bottom: 80px;
+  overflow: hidden;
+}
+.features .feature .cards {
+  padding-top: 20px;
+}
+.features .feature .cards .card {
+  display: inline-block;
+  overflow: hidden;
+}
+.features .feature .cards img {
+  border-radius: 4px;
+  margin: 10px;
+  max-width: 100%;
+}
+.features .feature .credit {
+  font-size: 0.8em;
+}
+
+.content {
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+.content .wrapper {
+  width: 500px;
+  max-width: 90%;
+  margin: 0 auto;
+  padding-top: 50px;
+  padding-bottom: 120px;
+}
