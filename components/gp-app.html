@@ -307,7 +307,6 @@
 		const PS = require('perfect-scrollbar');
 		const shell = require('electron').shell;
 		const mkdirp = require('mkdirp');
-		const package = require('./package.json');
 		const swal = require('sweetalert');
 		const path = require('path');
 		const Ffmpeg = require('fluent-ffmpeg');
@@ -345,10 +344,6 @@
 			ready(){
 				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
 				PS.initialize(this.$.queue);
-
-				if(!package.pro && Math.random() > .65){
-					this._showUpgradeMsg();
-				}
 			},
 
 			_onStateChanged(){
@@ -408,18 +403,9 @@
 
 				var currentFilePaths = this._getFilePathsInQueue();
 
-				// check if it's pro
-				// if multiple files, show message to purchase pro
-
-				if(package.pro === false){
-
-					if(currentFilePaths.length >= 1){
-						this._showUpgradeMsg();
-						return;
-					}else if(files.length > 1){
-						files = [files[0]];
-						this._showUpgradeMsg();
-					}
+				// ????
+				if(files.length > 1){
+					files = [files[0]];
 				}
 
 				var _files = [];
@@ -471,21 +457,6 @@
 							this._formats = formats;
 						}
 					});
-				});
-			},
-
-			_showUpgradeMsg(){
-				swal({
-					title: 'Upgrade!',
-					text: `Unlock the awesome power of batch processing with GifGoat Pro.`,
-					showConfirmButton: true,
-					showCancelButton: true,
-					confirmButtonText: 'do it!',
-					cancelButtonText: 'nah.'
-				}, isConfirmed => {
-					if(isConfirmed){
-						shell.openExternal('https://itunes.apple.com/us/app/gifgoat/id1082478920?ls=1&mt=8');
-					}
 				});
 			},
 

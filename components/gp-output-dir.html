@@ -53,7 +53,7 @@
 			properties: {
 				path: {
 					type: String,
-					value: pkg.pro ? 'not set' : localStorage.getItem('output-dir') || paths.downloads,
+					value: localStorage.getItem('output-dir') || paths.downloads,
 					observer: '_onPathChanged'
 				}
 			},
@@ -65,9 +65,7 @@
 			_onPathChanged(){
 				var chars = utils.ellipsesPrefix(this.path, 30);
 				this.$['path-display'].innerHTML = chars;
-				if(pkg.pro === false){
-					localStorage.setItem('output-dir', this.path);
-				}
+				localStorage.setItem('output-dir', this.path);
 			},
 
 			_onClickOpenOutputBtn(){
@@ -82,9 +80,7 @@
 					defaultPath: this.path
 				};
 
-				if(pkg.pro === false) {
-					options.defaultPath = localStorage.getItem('output-dir') || this.path;
-				}
+				options.defaultPath = localStorage.getItem('output-dir') || this.path;
 
 				remote.dialog.showOpenDialog(remote.getCurrentWindow(), options, folders => {
 					// console.log('request-output-dir', folders);
