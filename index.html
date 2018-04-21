@@ -14,7 +14,7 @@
 	<meta name="twitter:description" content="Convert videos into gifs that don't suck!">
 	<meta name="twitter:image" content="http://gifgoat.positlabs.com/assets/imgs/og-card.png">
 
-	<meta property="keywords" content="gif,converter,transcoder,mp4,webm,ogg,video,utility,OSX,Mac,Apple">
+	<meta property="keywords" content="gif,converter,transcoder,mp4,webm,ogg,video,utility,OSX,Mac,Apple,Windows">
 		
 	<link rel="stylesheet" href="styles/index.css">
 </head>
@@ -51,7 +51,7 @@
 
 				<div class="feature">
 					<h2>Batch Processing</h2>
-					<p>Convert multiple videos simultaneously! (available in Pro version)</p>
+					<p>Convert multiple videos simultaneously!</p>
 					<div class="cards">
 						<img src="assets/imgs/batch-processing.png" alt="" width="400">
 					</div>
@@ -140,26 +140,23 @@
 			<div id="support" class="support">Need help? Email <a href="mailto:josh@positlabs.com">josh@positlabs.com</a></div>
 		</div>
 	</div>
+	<a href="https://github.com/positlabs/gif-goat" target="_blank"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_white_ffffff.png" alt="Fork me on GitHub"></a>
 	<script>
-	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-	ga('create', 'UA-24253469-2', 'auto');
-	ga('send', 'pageview');
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-24253469-2', 'auto');
+		ga('send', 'pageview');
 	</script>
 
 	<script>
-
 		function trackClickEventByID(e){
 			console.log(e.currentTarget.id);
 			ga('send', 'event', 'button', 'click', e.currentTarget.id);
 		}
-		
 		document.getElementById('download-btn').addEventListener('click', trackClickEventByID);
-		document.getElementById('app-store-btn').addEventListener('click', trackClickEventByID)
 		document.getElementById('support').addEventListener('click', trackClickEventByID);
-
 	</script>
 	
 </body>
