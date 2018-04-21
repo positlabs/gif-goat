@@ -1,18 +1,26 @@
 {
   "name": "gif-goat",
-  "version": "0.2.0",
-  "pro": true,
-  "description": "",
-  "main": "main.js",
-  "scripts": {
-    "start": "./node_modules/.bin/electron main.js --debug"
-  },
+  "version": "0.3.0",
   "author": "positlabs",
   "license": "MIT",
+  "description": "Electron app for batch encoding videos into gifs.",
+  "main": "src/main.js",
+  "scripts": {
+    "start": "electron-forge start",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "make:mac": "electron-forge make --platform=darwin",
+    "make:win": "electron-forge make --platform=win32",
+    "publish:mac": "electron-forge publish --target=github --platform=darwin",
+    "publish:win": "electron-forge publish --target=github --platform=win32",
+    "publish:all": "npm run publish:mac && npm run publish:win"
+  },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
     "@ffprobe-installer/ffprobe": "^1.0.8",
     "css-easing": "^1.0.1",
+    "electron-compile": "^6.4.2",
+    "electron-squirrel-startup": "^1.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "font-awesome": "^4.7.0",
     "gifsicle": "^3.0.4",
@@ -28,9 +36,41 @@
     "yargs": "^3.32.0"
   },
   "devDependencies": {
-    "electron-osx-sign": "^0.3.0",
-    "electron-packager": "^12.0.1",
-    "electron-prebuilt": "0.35.6",
+    "babel-plugin-transform-async-to-generator": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "electron-forge": "^5.2.0",
+    "electron-prebuilt-compile": "1.8.4",
     "node-inspector": "^0.12.5"
+  },
+  "config": {
+    "forge": {
+      "make_targets": {
+        "win32": [
+          "squirrel"
+        ],
+        "darwin": [
+          "dmg"
+        ],
+        "linux": []
+      },
+      "electronPackagerConfig": {
+        "packageManager": "npm",
+        "icon": "./src/assets/imgs/icon-1024.png"
+      },
+      "electronWinstallerConfig": {
+        "name": "gif_goat"
+      },
+      "electronInstallerDebian": {},
+      "electronInstallerRedhat": {},
+      "github_repository": {
+        "owner": "positlabs",
+        "name": "gif-goat"
+      },
+      "windowsStoreConfig": {
+        "packageName": "",
+        "name": "gifgoat"
+      }
+    }
   }
 }

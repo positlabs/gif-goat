@@ -74,8 +74,8 @@
 
 	<script>(function(){
 
-		var nw = require('nw.gui');
-		var win = nw.Window.get();
+		var nw = require('nw.gui')
+		var win = nw.Window.get()
 		
 		Polymer({
 
@@ -83,38 +83,37 @@
 
 			ready: function() {
 
-				this.addEventListener('dblclick', this._onMaximize);
+				this.addEventListener('dblclick', this._onMaximize)
 
 				win.on('maximize', function(e) {
-					win.isMaximized = true;
+					win.isMaximized = true
 				});
 				win.on('unmaximize', function(e) {
-					win.isMaximized = false;
+					win.isMaximized = false
 				});
 			},
 
 			_onClickClose: function(){
-				win.close();
+				win.close()
 			},
 
 			_onClickMin: function(){
-				win.minimize();
+				win.minimize()
 			},
 
 			_onClickMax: function(){
-				this._onMaximize();
+				this._onMaximize()
 			},
 
 			_onMaximize: function(){
 				if(win.isMaximized){
-					win.unmaximize();
+					win.unmaximize()
 				}else{
-					win.maximize();
+					win.maximize()
 				}
 			},
+		})
 
-		});
-
-	})();</script>
+	})()</script>
 
 </dom-module>

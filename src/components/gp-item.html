@@ -78,31 +78,30 @@
 			<div id='remove-btn' class='btn fa fa-close' on-click='_remove' title='remove'></div>
 		</div>
 
-
 	</template>
 
 	<script>(function(){
 
-		const fs = require('fs');
-		const path = require('path');
-		const paths = require('./modules/paths');
-		// const glob = require('glob');
-		const shell = require('electron').shell;
-		const remote = require('electron').remote;
-		const argv = require('yargs').argv;
-		const utils = require('./modules/utils');
-		const ffmpeg = require('fluent-ffmpeg');
-		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg.replace('app.asar', 'app.asar.unpacked');
-		const ffprobePath = require('./modules/ffmpeg-static').ffprobe.replace('app.asar', 'app.asar.unpacked');
-		ffmpeg.setFfmpegPath(ffmpegPath);
-		ffmpeg.setFfprobePath(ffprobePath);
-		console.log(ffmpegPath);
+		const fs = require('fs')
+		const path = require('path')
+		const paths = require('./modules/paths')
+		// const glob = require('glob')
+		const shell = require('electron').shell
+		const remote = require('electron').remote
+		const argv = require('yargs').argv
+		const utils = require('./modules/utils')
+		const ffmpeg = require('fluent-ffmpeg')
+		const ffmpegPath = require('./modules/ffmpeg-static').ffmpeg.replace('app.asar', 'app.asar.unpacked')
+		const ffprobePath = require('./modules/ffmpeg-static').ffprobe.replace('app.asar', 'app.asar.unpacked')
+		ffmpeg.setFfmpegPath(ffmpegPath)
+		ffmpeg.setFfprobePath(ffprobePath)
+		console.log(ffmpegPath)
 
-		const execFile = require('child_process').execFile;
-		const gifsicle = require('gifsicle');
-		// const gifsicle = __dirname.replace('app.asar', 'app.asar.unpacked') + '/bin/gifsicle/gifsicle';
+		const execFile = require('child_process').execFile
+		const gifsicle = require('gifsicle')
+		// const gifsicle = __dirname.replace('app.asar', 'app.asar.unpacked') + '/bin/gifsicle/gifsicle'
 
-		const swal = require('sweetalert');
+		const swal = require('sweetalert')
 
 		const states = {
 			ready: 'ready',
@@ -133,177 +132,173 @@
 			},
 
 			created(){
-				this._getGIFPath = this._getGIFPath.bind(this);
-				// this._getGIFPath = _.memoize(this._getGIFPath).bind(this);
+				this._getGIFPath = this._getGIFPath.bind(this)
+				// this._getGIFPath = _.memoize(this._getGIFPath).bind(this)
 			},
 
 			_onStateChanged(){
 				switch(this.state){
 
 					case states.ready:
-						this.$.progressBar.show();
-
+						this.$.progressBar.show()
 						break;
 
 					case states.processing:
 						// show progress bar
-						this.$.thumb.processing();
-
-						break;
+						this.$.thumb.processing()
+						break
 
 					case states.done:
-						this.$.thumb.done();
-						this.$.progressBar.hide();
+						this.$.thumb.done()
+						this.$.progressBar.hide()
 
 						// hide close button
-						this.$['remove-btn'].style.display = 'none';
+						this.$['remove-btn'].style.display = 'none'
 
 						// show folder button
-						this.$['open-btn'].style.display = 'block';
-						this.$['preview-btn'].style.display = 'block';
+						this.$['open-btn'].style.display = 'block'
+						this.$['preview-btn'].style.display = 'block'
 
 						// show preview button
 
 						// show gif name
 						this._getGIFPath(this.file.path).then(gifPath => {
-							this.$.filename.innerHTML = utils.ellipsesPrefix(path.parse(gifPath).name + '.gif', 35);
-						});
+							this.$.filename.innerHTML = utils.ellipsesPrefix(path.parse(gifPath).name + '.gif', 35)
+						})
 
-						this.fire('done');
-
-						break;
-
+						this.fire('done')
+						break
 				}
 			},
 
 			_onFileChanged(){
-				console.log(this.localName, '_onFileChanged');
+				console.log(this.localName, '_onFileChanged')
 
-				var pathString = path.basename(this.file.path);
-				this.$.filename.title = pathString;
-				this.$.filename.innerHTML = utils.ellipsesPrefix(pathString, 40);
-				this.$.thumb.video = this.file.path;
-				this._getVideoInfo();
+				var pathString = path.basename(this.file.path)
+				this.$.filename.title = pathString
+				this.$.filename.innerHTML = utils.ellipsesPrefix(pathString, 40)
+				this.$.thumb.video = this.file.path
+				this._getVideoInfo()
 			},
 
 			__setProgress(percent){
-				console.log('__setProgress', percent);
-				this._setProgress(percent);
-				this.$.progress.innerHTML = Math.round(percent) + '%';
-				this.$.progressBar.progress = percent;
+				console.log('__setProgress', percent)
+				this._setProgress(percent)
+				this.$.progress.innerHTML = Math.round(percent) + '%'
+				this.$.progressBar.progress = percent
 			},
 
 			_generatePalette(){
-				if(this.removed) return;
-				var settings = this._settings;
-				var scaleFilter = this._getScaleFilter();
-				var videoFilter = `-lavfi ${scaleFilter}palettegen=max_colors=${settings.colors}`;
-				console.log(videoFilter);
+				if(this.removed) return
+				var settings = this._settings
+				var scaleFilter = this._getScaleFilter()
+				var videoFilter = `-lavfi ${scaleFilter}palettegen=max_colors=${settings.colors}`
+				console.log(videoFilter)
 				
 				return new Promise( (resolve, reject) => {
 					this.paletteCommand = ffmpeg(this.file.path)
 						.on('start', commandLine => {
-							// console.log('Spawned Ffmpeg with command: ' + commandLine);
+							// console.log('Spawned Ffmpeg with command: ' + commandLine)
 						})
 						.outputOptions([
 							videoFilter
 						])
 						.on('error', e => {
-							console.log(e);
-							reject(e);
+							console.log(e)
+							reject(e)
 						})
 						.on('progress', progress => {
 							// faiils...
-							// console.log(`palette progress:`, progress);
-							// this.__setProgress(progress.percent/2);
+							// console.log(`palette progress:`, progress)
+							// this.__setProgress(progress.percent/2)
 						})
 						.on('end', () => {
-							resolve();
-						});
+							resolve()
+						})
 
 					if(settings.fps){
-						this.paletteCommand.fps(settings.fps);
+						this.paletteCommand.fps(settings.fps)
 					}
 
-					this.paletteCommand.save( this._getPalettePath(this.file.path) );
+					this.paletteCommand.save( this._getPalettePath(this.file.path) )
 
-				}).catch( err => { console.log(err); } );
+				}).catch( err => { console.log(err) } )
 			},
 
 			_getPalettePath(filepath){
 				// return path.join(paths.temp, 'default-palette.png');
-				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png');
+				return path.join(paths.temp, 'palette_' + path.parse(filepath).name + '.png')
 			},
 			_getGIFPath: function(filepath){
-				console.log('_getGIFPath', filepath);
+				console.log('_getGIFPath', filepath)
 				return new Promise((resolve, reject) => {
-					var s = this._settings;
-					var gifName = path.parse(filepath).name;
+					var s = this._settings
+					var gifName = path.parse(filepath).name
 					// NOTE: not sure if the first stream will always be video...
-					var videoStream = this._videoInfo.streams[0];
-					var outWidth = s.width;
-					var outHeight = s.height;
+					var videoStream = this._videoInfo.streams[0]
+					var outWidth = s.width
+					var outHeight = s.height
 
 					// user didn't define any dimensions
 					if(outWidth.length + outHeight.length === 0){
-						outWidth = videoStream.coded_width;
-						outHeight = videoStream.coded_height;
+						outWidth = videoStream.coded_width
+						outHeight = videoStream.coded_height
 					}else if(outWidth.length === 0 && outHeight.length > 0){
 						// determine scaled width
-						outWidth = outHeight / videoStream.coded_height * videoStream.coded_width;
-						outWidth = Math.floor(outWidth);
+						outWidth = outHeight / videoStream.coded_height * videoStream.coded_width
+						outWidth = Math.floor(outWidth)
 					}else if(outHeight.length === 0 && outWidth.length > 0){
 						// determine scaled height
-						outHeight = outWidth / videoStream.coded_width * videoStream.coded_height;
-						outHeight = Math.floor(outHeight);
+						outHeight = outWidth / videoStream.coded_width * videoStream.coded_height
+						outHeight = Math.floor(outHeight)
 					}
 
-					var fps = s.fps;
+					var fps = s.fps
 					if(s.fps.length === 0) { 
-						fps = eval(videoStream.avg_frame_rate).toFixed(0);
+						fps = eval(videoStream.avg_frame_rate).toFixed(0)
 					}
 
-					gifName += `_${outWidth}x${outHeight}_${fps}fps_${s.colors}colors.gif`;
-					gifName = path.join(s.output, gifName);
-					console.log(gifName);
-					resolve(gifName);
-				});
+					gifName += `_${outWidth}x${outHeight}_${fps}fps_${s.colors}colors.gif`
+					gifName = path.join(s.output, gifName)
+					console.log(gifName)
+					resolve(gifName)
+				})
 			},
 
 			_getVideoInfo(){
-				return new Promise((resolve, reject)=>{
-					ffmpeg.ffprobe(this.file.path, (err, metadata)=>{
+				return new Promise((resolve, reject) => {
+					ffmpeg.ffprobe(this.file.path, (err, metadata) => {
 						if(err) {
-							console.log(err);
-							reject(err.message);
+							console.log(err)
+							reject(err.message)
 						}else{
-							console.log(metadata);
-							this._videoInfo = metadata;
-							resolve(metadata);
+							console.log(metadata)
+							this._videoInfo = metadata
+							resolve(metadata)
 						}
-					});
+					})
 				})
 			},
 
 			_getScaleFilter(){
-				var settings = this._settings;
+				var settings = this._settings
 				var w = (settings.width.length && settings.width > 0) ? settings.width : '-1',
-					h = (settings.height.length && settings.height > 0) ? settings.height : '-1';
-				var scaleFilter = 'scale=' + [w, h, 'flags=lanczos'].join(':') + ',';
-				if(w+h === '-1-1') scaleFilter = '';
-				return scaleFilter;
+					h = (settings.height.length && settings.height > 0) ? settings.height : '-1'
+				var scaleFilter = 'scale=' + [w, h, 'flags=lanczos'].join(':') + ','
+				if(w+h === '-1-1') scaleFilter = ''
+				return scaleFilter
 			},
 
 			_encodeGIF(){
-				if(this.removed) return;
+				if(this.removed) return
 				
-				var settings = this._settings;
+				var settings = this._settings
 
 				return new Promise( (resolve, reject) => {
 
-					var scaleFilter = this._getScaleFilter();
+					var scaleFilter = this._getScaleFilter()
 					var filterOptions = '-lavfi ' + scaleFilter + 'paletteuse=dither=floyd_steinberg'
-					console.log(filterOptions);
+					console.log(filterOptions)
 
 					this.ffmpegCommand = ffmpeg()
 						.input(this.file.path)
@@ -314,33 +309,33 @@
 							// console.log('Spawned Ffmpeg with command: ' + commandLine);
 						})
 						.on('progress', progress => {
-							console.log('progress', progress);
-							this.__setProgress(progress.percent);
+							console.log('progress', progress)
+							this.__setProgress(progress.percent)
 						})
 						.on('error', (err, stdout, stderr) => {
-							console.log('Cannot process video: ', err);
-							reject(err.message);
+							console.log('Cannot process video: ', err)
+							reject(err.message)
 						})
 						.on('end', () => {
-							// console.log('Transcoding succeeded!');
-							this._setProgress(100);
-							this.$.progress.innerHTML = '100%';
-							this.$.progressBar.progress = 100;
-							this._setState('done');
-							resolve();
+							// console.log('Transcoding succeeded!')
+							this._setProgress(100)
+							this.$.progress.innerHTML = '100%'
+							this.$.progressBar.progress = 100
+							this._setState('done')
+							resolve()
 						})
 
 						if(settings.fps){
-							this.ffmpegCommand.fps(settings.fps);
+							this.ffmpegCommand.fps(settings.fps)
 						}
 						this._getGIFPath(this.file.path).then(gifPath => {
-							this.ffmpegCommand.save(gifPath);
-						});
-				});
+							this.ffmpegCommand.save(gifPath)
+						})
+				})
 			},
 
 			_optimizeGIF(){
-				var settings = this._settings;
+				var settings = this._settings
 
 				return new Promise((resolve, reject) => {
 
@@ -353,25 +348,24 @@
 							'-O3' // slow optimization for lower file sizes.
 						], err => {
 							if(err){
-								console.log(err.message);
-								reject(err.message);
-								return;
+								console.log(err.message)
+								reject(err.message)
+								return
 							} 
-							console.log('Image minified!');
-							resolve();
-						});
-					});
-				});
+							console.log('Image minified!')
+							resolve()
+						})
+					})
+				})
 			},
 
 			run(settings){
 
 				// only run the encoding process once
-				if(this.runPromise !== undefined) return this.runPromise;
+				if(this.runPromise !== undefined) return this.runPromise
 				
-				this._settings = settings;
-
-				this._setState('processing');
+				this._settings = settings
+				this._setState('processing')
 
 				this.runPromise = new Promise((resolve, reject) => {
 					this._getVideoInfo()
@@ -382,67 +376,67 @@
 						.catch(msg => {
 
 							// user killed process intentionally
-							if(msg.match('SIGKILL')) return;
+							if(msg.match('SIGKILL')) return
 							
 							// display error message
 							swal({
 								title: 'Error! Baaaaa!', 
 								text: msg,
 								confirmButtonColor: '#d74802'
-							});
-						});
-				});
+							})
+						})
+				})
 
-				return this.runPromise;
+				return this.runPromise
 			},
 
 			_open(){
 				// console.log('_open', this);
 				this._getGIFPath(this.file.path)
-					.then(shell.showItemInFolder);
+					.then(shell.showItemInFolder)
 			},
 
 			_remove(){
 				this.removed = true;
 
 				if(this.paletteCommand){
-					this.paletteCommand.kill([signal='SIGKILL']);
+					this.paletteCommand.kill([signal='SIGKILL'])
 				}
 				if(this.ffmpegCommand){
-					this.ffmpegCommand.kill([signal='SIGKILL']);
+					this.ffmpegCommand.kill([signal='SIGKILL'])
 				}
 
-				TweenMax.to(this, .3, {height: 0, ease: Power3.easeOut, onComplete: ()=>{
-					this.remove();
-				}});
+				TweenMax.to(this, .3, {height: 0, ease: Power3.easeOut, onComplete: () => {
+					this.remove()
+				}})
 			},
 
 			_preview(){
 
-				var img = document.createElement('img');
+				var img = document.createElement('img')
 
-				var gifPath;
+				var gifPath
 				this._getGIFPath(this.file.path).then(_gifPath => {
-					gifPath = _gifPath;
-					img.src = 'file://' + _gifPath;
-				});
+					gifPath = _gifPath
+					img.src = 'file://' + _gifPath
+				})
 
 				img.addEventListener('load', e => {
-					console.log('opening preview', gifPath);
+					console.log('opening preview', gifPath)
 					ipc.send('open-preview', {
 						width: img.width, 
 						height: img.height,
 						gif: gifPath
-					});
-				});
+					})
+				})
 			},
 
 			detached(){
-				this.fire('detached');
+				this.fire('detached')
 			}
 
-		});
+		})
 
-	})();</script>
+	})()</script>
 
 </dom-module>

@@ -39,13 +39,12 @@
 	<script>(function(){
 		'use strict';
 
-		const path = require('path');
-		const shell = require('electron').shell;
-		const paths = require('./modules/paths');
-		const remote = require('electron').remote;
-		const pkg = require('./package.json');
-		const utils = require('./modules/utils');
-
+		const path = require('path')
+		const shell = require('electron').shell
+		const paths = require('./modules/paths')
+		const remote = require('electron').remote
+		const pkg = require('../package.json')
+		const utils = require('./modules/utils')
 
 		Polymer({
 			is: 'gp-output-dir',
@@ -53,7 +52,7 @@
 			properties: {
 				path: {
 					type: String,
-					value: pkg.pro ? 'not set' : localStorage.getItem('output-dir') || paths.downloads,
+					value: localStorage.getItem('output-dir') || paths.downloads,
 					observer: '_onPathChanged'
 				}
 			},
@@ -63,15 +62,13 @@
 			},
 
 			_onPathChanged(){
-				var chars = utils.ellipsesPrefix(this.path, 30);
-				this.$['path-display'].innerHTML = chars;
-				if(pkg.pro === false){
-					localStorage.setItem('output-dir', this.path);
-				}
+				var chars = utils.ellipsesPrefix(this.path, 30)
+				this.$['path-display'].innerHTML = chars
+				localStorage.setItem('output-dir', this.path)
 			},
 
 			_onClickOpenOutputBtn(){
-				shell.openExternal('file://'+this.path);
+				shell.openExternal('file://'+this.path)
 			},
 
 			_onClickOutputBtn(){
@@ -82,20 +79,18 @@
 					defaultPath: this.path
 				};
 
-				if(pkg.pro === false) {
-					options.defaultPath = localStorage.getItem('output-dir') || this.path;
-				}
+				options.defaultPath = localStorage.getItem('output-dir') || this.path
 
 				remote.dialog.showOpenDialog(remote.getCurrentWindow(), options, folders => {
 					// console.log('request-output-dir', folders);
 					if(folders){
-						this.path = folders[0];
+						this.path = folders[0]
 					}
-				});
+				})
 			},
 
-		});
+		})
 
-	})();</script>
+	})()</script>
 
 </dom-module>

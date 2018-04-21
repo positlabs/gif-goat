@@ -56,9 +56,9 @@
 
 	<script>(function(){
 
-		var path = require('path');
-		var paths = require('./modules/paths');
-		var ffmpeg = require('fluent-ffmpeg');
+		var path = require('path')
+		var paths = require('./modules/paths')
+		var ffmpeg = require('fluent-ffmpeg')
 
 		Polymer({
 			is: 'gp-thumbnail',
@@ -72,28 +72,28 @@
 			},
 
 			_onVideoChanged(){
-				console.log('_onVideoChanged');
+				console.log('_onVideoChanged')
 
-				this.$.video.src = 'file://' + this.video;
-				// this.$.thumbnail.style.opacity = 1;
+				this.$.video.src = 'file://' + this.video
+				// this.$.thumbnail.style.opacity = 1
 
-				var thumbPath = path.join(paths.temp, 'thumbnail_' + path.basename(this.video).split('.')[0] + '.png');
+				var thumbPath = path.join(paths.temp, 'thumbnail_' + path.basename(this.video).split('.')[0] + '.png')
 				TweenMax.fromTo(this.$.thumbnail, .7, 
 					{opacity: 0, scale: .7}, 
 					{opacity: 1, scale: 1, ease: Power4.easeOut
-				});
+				})
 			},
 
 			processing(){
-				this.$.thumbnail.setAttribute('state', 'processing');
+				this.$.thumbnail.setAttribute('state', 'processing')
 			},
 
 			done(){
-				this.$.thumbnail.setAttribute('state', 'done');
+				this.$.thumbnail.setAttribute('state', 'done')
 			},
 
-		});
+		})
 
-	})();</script>
+	})()</script>
 
 </dom-module>
