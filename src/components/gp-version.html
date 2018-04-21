@@ -24,7 +24,7 @@
 	</style>
 	
 	<template>
-		<a id='update' on-click="_onClickUpdate" hidden>Update available! v{{remoteVersion}}</a>
+		<a id='update' on-click="_onClickUpdate" hidden>Update available! {{remoteVersion}}</a>
 		<div id='version'>GIFGOAT v[[localVersion]]</div>
 	</template>
 
@@ -32,6 +32,7 @@
 
 		const semver = require('semver')
 		const request = require('request')
+		const os = require('os')
 		const fs = require('fs')
 		const path = require('path')
 		const localPackage = require('../package.json')
@@ -55,11 +56,17 @@
 			},
 
 			ready(){
-				request('http://gifgoat.positlabs.com/package.json', (error, response, body) => {
-					var remotePackage = JSON.parse(body)
-					this._setRemoteVersion(remotePackage.version)
-					// console.log(remotePackage.version, localPackage.version, semver.gt(remotePackage.version, localPackage.version))
-					if(semver.gt(remotePackage.version, localPackage.version)){
+				request('https://api.github.com/repos/positlabs/gif-goat/releases/latest', {
+					headers: {
+						'User-Agent': 'gif-goat'
+					}
+				}, (error, response, body) => {
+					this._latest = JSON.parse(body)
+					// this._latest = releases[0]
+					console.log(this._latest)
+					this._setRemoteVersion(this._latest.tag_name)
+					if(semver.gt(this._latest.tag_name, '0.1.0')){
+					// if(semver.gt(this._latest.tag_name, localPackage.version)){
 						// show update message
 						this.$.update.removeAttribute('hidden')
 					}
@@ -67,30 +74,41 @@
 			},
 			
 			_onClickUpdate(){
-			// 	if(this.updating) return
-			// 	this.updating = true
-			// 	this.$.update.innerHTML = 'updating...'
-			// 	var url = 'https://www.dropbox.com/s/eu6vvwnjb1joa0d/GifGoat.pkg?dl=1'
-			// 	var dest = path.join(paths.temp, 'GifGoat.pkg')
-			// 	var fileWriteStream = fs.createWriteStream(dest)
+				if(this.updating) return
+				this.updating = true
+				this.$.update.innerHTML = 'downloading update...'
 
-			// 	var req = request(url)
-			// 		.pipe(fileWriteStream)
-			// 		.on('error', function(err) {
-			// 			console.log(err)
-			// 			swal({
-			// 				title: 'Error!',
-			// 				text: 'There was a problem downloading the update file.'
-			// 			})
-			// 		})
+				// determine platform and select appropriate installer extension
+				var installerExt = {
+					Darwin: '.dmg',
+					Windows_NT: '.msi'
+				}[os.type()]
 
-			// 		fileWriteStream.on('finish', () => {
-			// 			console.log('opening pkg...')
-			// 			shell.openItem(dest)
-			// 			this.$.update.setAttribute('hidden', '')
-			// 		})
+				// find asset by extension
+				var platformAsset = this._latest.assets.find(a => a.name.indexOf(installerExt))
+				console.log(platformAsset)
 
-			//	// shell.openExternal(url)
+				var url = platformAsset.browser_download_url
+				var dest = path.join(paths.temp, platformAsset.name)
+				var fileWriteStream = fs.createWriteStream(dest)
+
+				var req = request(url)
+					.pipe(fileWriteStream)
+					.on('error', (err) => {
+						console.error(err)
+						swal({
+							title: 'Error!',
+							text: 'There was a problem downloading the update file.'
+						})
+					})
+
+					fileWriteStream.on('finish', () => {
+						console.log('opening installer...')
+						shell.openItem(dest)
+						this.$.update.setAttribute('hidden', '')
+					})
+
+				// shell.openExternal(url)
 			}
 		})
 
