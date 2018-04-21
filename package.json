@@ -1,15 +1,20 @@
 {
   "name": "gif-goat",
-  "version": "0.2.0",
-  "description": "",
-  "main": "main.js",
+  "version": "0.3.0",
+  "author": "positlabs",
+  "license": "MIT",
+  "description": "Electron app for batch encoding videos into gifs.",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron-forge start",
     "package": "electron-forge package",
-    "make": "electron-forge make"
+    "make": "electron-forge make",
+    "make:mac": "electron-forge make --platform=darwin",
+    "make:win": "electron-forge make --platform=win32",
+    "publish:mac": "electron-forge publish --target=github --platform=darwin",
+    "publish:win": "electron-forge publish --target=github --platform=win32",
+    "publish:all": "npm run publish:mac && npm run publish:win"
   },
-  "author": "positlabs",
-  "license": "MIT",
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
     "@ffprobe-installer/ffprobe": "^1.0.8",
@@ -45,16 +50,13 @@
           "squirrel"
         ],
         "darwin": [
-          "zip",
           "dmg"
         ],
-        "linux": [
-          "deb",
-          "rpm"
-        ]
+        "linux": []
       },
       "electronPackagerConfig": {
-        "packageManager": "npm"
+        "packageManager": "npm",
+        "icon": "./src/assets/imgs/icon-1024.png"
       },
       "electronWinstallerConfig": {
         "name": "gif_goat"
@@ -62,8 +64,8 @@
       "electronInstallerDebian": {},
       "electronInstallerRedhat": {},
       "github_repository": {
-        "owner": "",
-        "name": ""
+        "owner": "positlabs",
+        "name": "gif-goat"
       },
       "windowsStoreConfig": {
         "packageName": "",

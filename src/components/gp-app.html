@@ -8,7 +8,6 @@
 <link rel='stylesheet' href='global.css'>
 <link rel='stylesheet' href='../styles/perfect-scrollbar.min.css' />
 
-
 <!-- 
 
 
@@ -304,24 +303,23 @@
 	<script>(function(){
 
 		// https://github.com/noraesae/perfect-scrollbar
-		const PS = require('perfect-scrollbar');
-		const shell = require('electron').shell;
-		const mkdirp = require('mkdirp');
-		const swal = require('sweetalert');
-		const path = require('path');
-		const Ffmpeg = require('fluent-ffmpeg');
-		const ffprobePath = require('@ffprobe-installer/ffprobe').path;
-		const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path;
-		Ffmpeg.setFfmpegPath(ffmpegPath);
-		Ffmpeg.setFfprobePath(ffprobePath);
-
+		const PS = require('perfect-scrollbar')
+		const shell = require('electron').shell
+		const mkdirp = require('mkdirp')
+		const swal = require('sweetalert')
+		const path = require('path')
+		const Ffmpeg = require('fluent-ffmpeg')
+		const ffprobePath = require('@ffprobe-installer/ffprobe').path
+		const ffmpegPath = require('@ffmpeg-installer/ffmpeg').path
+		Ffmpeg.setFfmpegPath(ffmpegPath)
+		Ffmpeg.setFfprobePath(ffprobePath)
 
 		const states = {
 			noFiles: 'noFiles',
 			ready: 'ready',
 			processing: 'processing',
 			done: 'done',
-		};
+		}
 		
 		Polymer({
 			is: "gp-app",
@@ -338,190 +336,188 @@
 
 			created(){
 				// it's a promise, but i think we can assume it will resolve before the user can add a file...
-				this._pAvailableFormats();
+				this._pAvailableFormats()
 			},
 
 			ready(){
-				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this));
-				PS.initialize(this.$.queue);
+				this.$.fileSelector.addEventListener('change', this._onFileSelectorChanged.bind(this))
+				PS.initialize(this.$.queue)
 			},
 
 			_onStateChanged(){
-				console.log(this.localName, '_onStateChanged', this.state);
+				console.log(this.localName, '_onStateChanged', this.state)
 				switch(this.state){
 					
 					case states.noFiles:
-						document.title = 'GIFGOAT | add videos';
-						break;
+						document.title = 'GIFGOAT | add videos'
+						break
 
 					case states.ready:
-						document.title = 'GIFGOAT | add videos';
-						break;
+						document.title = 'GIFGOAT | add videos'
+						break
 					
 					case states.processing:
-						document.title = 'GIFGOAT | processing...';
-						var info = this.$.settings.getInfo();
-						var html = info.split(' | ').map(block=>{
-							return `<div>${block}</div>`;
-						}).join('');
-						this.$['encode-info'].innerHTML = html;
-						break;
+						document.title = 'GIFGOAT | processing...'
+						var info = this.$.settings.getInfo()
+						var html = info.split(' | ').map(block => {
+							return `<div>${block}</div>`
+						}).join('')
+						this.$['encode-info'].innerHTML = html
+						break
 					
 					case states.done:
-						document.title = 'GIFGOAT | done!';
-						this.$.bleat.play();
-						break;
+						document.title = 'GIFGOAT | done!'
+						this.$.bleat.play()
+						break
 				}
 			},
 
 			_onClickSelectVideos(e){
-				this.$.fileSelector.click();
+				this.$.fileSelector.click()
 			},
 
 			_onFileSelectorChanged(e){
 				// console.log(e);
-				var files = Array.prototype.slice.apply(e.target.files);
-				this._handleNewFiles(files);
+				var files = Array.prototype.slice.apply(e.target.files)
+				this._handleNewFiles(files)
 				// clear the input in case user wants to select the same file/s next time
-				this.$.fileSelector.value = '';
+				this.$.fileSelector.value = ''
 			},
 
 			_onFilesDropped(e){
-				console.log(this.localName, '_onFilesDropped', this.state);
+				console.log(this.localName, '_onFilesDropped', this.state)
 				
 				// go to ready state
 				if(this.state === states.done){
-					this._onClickRestart();
-					this._setState(states.ready);
+					this._onClickRestart()
+					this._setState(states.ready)
 				}
 
-				var files = Array.prototype.slice.apply(e.detail.value);
-				this._handleNewFiles(files);
+				var files = Array.prototype.slice.apply(e.detail.value)
+				this._handleNewFiles(files)
 			},
 
 			_handleNewFiles(files){
 
-				var currentFilePaths = this._getFilePathsInQueue();
+				var currentFilePaths = this._getFilePathsInQueue()
 
 				// ????
 				if(files.length > 1){
-					files = [files[0]];
+					files = [files[0]]
 				}
 
-				var _files = [];
+				var _files = []
 				files.forEach(file => {
 					// don't add files that are already in the queue
-					if(currentFilePaths.indexOf(file.path) !== -1) return;
+					if(currentFilePaths.indexOf(file.path) !== -1) return
 
 					// check for valid file type
 					console.log(file.path)
-					var fileExt = path.parse(file.path).ext.replace('.', '');
+					var fileExt = path.parse(file.path).ext.replace('.', '')
 					if(this._formats.indexOf(fileExt) === -1){
 						swal({
 							title: 'Unsupported file type!',
 							text: `Goat still likes you, but ${fileExt} files aren't supported.`
-						});
-						return;
+						})
+						return
 					}
 
-					var itemEl = document.createElement('gp-item');
-					itemEl.file = file;
-					itemEl.addEventListener('detached', this._onItemRemoved.bind(this));
-					itemEl.addEventListener('done', this._onItemDone.bind(this));
-					this.$.queue.appendChild(itemEl);
+					var itemEl = document.createElement('gp-item')
+					itemEl.file = file
+					itemEl.addEventListener('detached', this._onItemRemoved.bind(this))
+					itemEl.addEventListener('done', this._onItemDone.bind(this))
+					this.$.queue.appendChild(itemEl)
 
 					if(this.state === states.processing){
-						var settings = this.$.settings.get();
-						var promise = itemEl.run(settings);
-						// this._addedItemPromises.push(promise);
+						var settings = this.$.settings.get()
+						var promise = itemEl.run(settings)
+						// this._addedItemPromises.push(promise)
 					}
-				});
+				})
 
 				// ready for processing!
-				var filepaths = this._getFilePathsInQueue();
+				var filepaths = this._getFilePathsInQueue()
 				if(filepaths.length > 0 && this.state !== states.processing){
-					this._setState(states.ready);
+					this._setState(states.ready)
 				}
 			},
 
 			_pAvailableFormats(){
-				return new Promise((resolve, reject)=>{
-					Ffmpeg.getAvailableFormats((err, formats)=>{
-						console.log('Available formats:', formats);
+				return new Promise((resolve, reject) => {
+					Ffmpeg.getAvailableFormats((err, formats) => {
+						console.log('Available formats:', formats)
 						if(err) {
-							console.error(err);
+							console.error(err)
 							reject(err.message)
 						}else {
-							formats = Object.keys(formats);
-							resolve(formats);
-							this._formats = formats;
+							formats = Object.keys(formats)
+							resolve(formats)
+							this._formats = formats
 						}
 					});
 				});
 			},
 
 			_onItemDone(){
-				console.log(this.localName, '_onItemDone');
+				console.log(this.localName, '_onItemDone')
 				
-				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
-				var isProcessing = _.some( items.map(item => {return item.state === 'processing'}) );
+				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'))
+				var isProcessing = _.some( items.map(item => {return item.state === 'processing'}) )
 				if(!isProcessing){
-					this._setState(states.done);
+					this._setState(states.done)
 				}
 			},
 
 			_onItemRemoved(){
 				// console.log(this.localName, '_onItemRemoved');
-				var currentFilePaths = this._getFilePathsInQueue();
+				var currentFilePaths = this._getFilePathsInQueue()
 				if(currentFilePaths.length === 0) {
-					this._setState(states.noFiles);
+					this._setState(states.noFiles)
 				}else{
 					// check if all others are done
-					this._onItemDone();
+					this._onItemDone()
 				}
 			},
 
 			_getFilePathsInQueue(){
-				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
-				return items.map(item => { return item.file.path; });
+				var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'))
+				return items.map(item => item.file.path)
 			},
 
 			_start(){
-				// console.log('gp-app._start');
+				// console.log('gp-app._start')
 
-				var settings = this.$.settings.get();
+				var settings = this.$.settings.get()
 				if(settings.output === 'not set'){
 					swal({
 						title: 'Missing output folder',
 						text: 'Select an output folder!'
-					});
-					return;
+					})
+					return
 				}
-				mkdirp(settings.output, ()=>{ //mkdirp to make sure output directory exists!!!
+				mkdirp(settings.output, () => { // mkdirp to make sure output directory exists!!!
 
-					this._setState(states.processing);
+					this._setState(states.processing)
 
 					// collect promises so we can set state
-					var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
-					var promises = items.map(item => {
-						return item.run(settings);
-					});
+					var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'))
+					var promises = items.map(item => item.run(settings))
 				});
 			},
 
 			_onClickLogo(){
-				shell.openExternal('http://gifgoat.positlabs.com');
+				shell.openExternal('http://positlabs.github.io/gifgoat')
 			},
 
 			_onClickRestart(){
-				// var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'));
-				// items.forEach(item=>{ item.remove(); });
-				this.$.queue.innerHTML = '';
-				this._setState(states.noFiles);
+				// var items = Array.prototype.slice.apply(this.$.queue.querySelectorAll('gp-item'))
+				// items.forEach(item => item.remove())
+				this.$.queue.innerHTML = ''
+				this._setState(states.noFiles)
 			}
 
-		});
+		})
 
-	})();</script>
+	})()</script>
 
 </dom-module>

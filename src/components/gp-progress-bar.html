@@ -53,20 +53,18 @@
 			},
 
 			_onProgressChanged(){
-				this.$.progress.style.transform = 'scaleX(' + this.progress/100 + ')';
+				this.$.progress.style.transform = 'scaleX(' + this.progress/100 + ')'
 			},
 
 			show(){
-				TweenMax.fromTo(this.$['progress-bar'], .8, {scaleX: 0}, {scaleX: 1, ease: Power4.easeOut});
+				TweenMax.fromTo(this.$['progress-bar'], .8, {scaleX: 0}, {scaleX: 1, ease: Power4.easeOut})
 			},
 
 			hide(){
-				this.style.transformOrigin = 'right';
-				TweenMax.to(this, .5, {autoAlpha: 0, scaleX: 0, delay: .1, ease: Power3.easeIn});
+				this.style.transformOrigin = 'right'
+				TweenMax.to(this, .5, {autoAlpha: 0, scaleX: 0, delay: .1, ease: Power3.easeIn})
 			}
-
-		});
+		})
 
 	</script>
-
 </dom-module>

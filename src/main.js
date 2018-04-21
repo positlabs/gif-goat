@@ -7,7 +7,6 @@ const ipc = electron.ipcMain;
 const dialog = require('electron').dialog;
 const argv = require('yargs').argv;
 
-
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow;
@@ -33,7 +32,7 @@ app.on('ready', function() {
 	mainWindow.loadURL('file://' + __dirname + '/index.html');
 
 	// Open the DevTools.
-	mainWindow.webContents.openDevTools();
+	// mainWindow.webContents.openDevTools();
 
 	mainWindow.on('closed', function() {
 		// Dereference the window object, usually you would store windows

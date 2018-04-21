@@ -1,0 +1,99 @@
+<!-- 
+
+
+-->
+
+<dom-module id='gp-version'>
+
+	<style>
+		:host {
+			font-size: .8em;
+			text-align: right;
+			line-height: 1.5;
+		}
+		a {
+			color: var(--light-green);
+			pointer-events: all;
+			cursor: pointer;
+			display: block;
+		}
+		a[hidden] {
+			display: none;
+		}
+
+	</style>
+	
+	<template>
+		<a id='update' on-click="_onClickUpdate" hidden>Update available! v{{remoteVersion}}</a>
+		<div id='version'>GIFGOAT v[[localVersion]]</div>
+	</template>
+
+	<script>(function(){
+
+		const semver = require('semver')
+		const request = require('request')
+		const fs = require('fs')
+		const path = require('path')
+		const localPackage = require('../package.json')
+		const shell = require('electron').shell
+		const paths = require('./modules/paths')
+		const swal = require('sweetalert')
+
+		Polymer({
+			is: 'gp-version',
+
+			properties: {
+				localVersion: {
+					type: String,
+					readOnly: true,
+					value: localPackage.version
+				},
+				remoteVersion: {
+					type: String,
+					readOnly: true,
+				}
+			},
+
+			ready(){
+				request('http://gifgoat.positlabs.com/package.json', (error, response, body) => {
+					var remotePackage = JSON.parse(body)
+					this._setRemoteVersion(remotePackage.version)
+					// console.log(remotePackage.version, localPackage.version, semver.gt(remotePackage.version, localPackage.version))
+					if(semver.gt(remotePackage.version, localPackage.version)){
+						// show update message
+						this.$.update.removeAttribute('hidden')
+					}
+				})
+			},
+			
+			_onClickUpdate(){
+			// 	if(this.updating) return
+			// 	this.updating = true
+			// 	this.$.update.innerHTML = 'updating...'
+			// 	var url = 'https://www.dropbox.com/s/eu6vvwnjb1joa0d/GifGoat.pkg?dl=1'
+			// 	var dest = path.join(paths.temp, 'GifGoat.pkg')
+			// 	var fileWriteStream = fs.createWriteStream(dest)
+
+			// 	var req = request(url)
+			// 		.pipe(fileWriteStream)
+			// 		.on('error', function(err) {
+			// 			console.log(err)
+			// 			swal({
+			// 				title: 'Error!',
+			// 				text: 'There was a problem downloading the update file.'
+			// 			})
+			// 		})
+
+			// 		fileWriteStream.on('finish', () => {
+			// 			console.log('opening pkg...')
+			// 			shell.openItem(dest)
+			// 			this.$.update.setAttribute('hidden', '')
+			// 		})
+
+			//	// shell.openExternal(url)
+			}
+		})
+
+	})()</script>
+
+</dom-module>

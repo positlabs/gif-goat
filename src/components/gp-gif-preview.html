@@ -31,7 +31,6 @@
 			color: var(--light-green);
 		}
 
-
 	</style>
 	
 	<template>
@@ -41,8 +40,8 @@
 
 	<script>(function(){
 
-		const electron = require('electron');
-		const shell = electron.shell;
+		const electron = require('electron')
+		const shell = electron.shell
 
 		Polymer({
 			is: 'gp-gif-preview',
@@ -58,11 +57,11 @@
 			},
 
 			_onClickShowInFolder(){
-				shell.showItemInFolder(this.data.gif);
+				shell.showItemInFolder(this.data.gif)
 			}
 
-		});
+		})
 
-	})();</script>
+	})()</script>
 
 </dom-module>
