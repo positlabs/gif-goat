@@ -65,8 +65,8 @@
 					// this._latest = releases[0]
 					console.log(this._latest)
 					this._setRemoteVersion(this._latest.tag_name)
-					if(semver.gt(this._latest.tag_name, '0.1.0')){
-					// if(semver.gt(this._latest.tag_name, localPackage.version)){
+					// if(semver.gt(this._latest.tag_name, '0.1.0')){
+					if(semver.gt(this._latest.tag_name, localPackage.version)){
 						// show update message
 						this.$.update.removeAttribute('hidden')
 					}

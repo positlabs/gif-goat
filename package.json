@@ -1,6 +1,6 @@
 {
   "name": "gif-goat",
-  "version": "0.3.0",
+  "version": "1.0.0",
   "author": "positlabs",
   "license": "MIT",
   "description": "Electron app for batch encoding videos into gifs.",
@@ -14,6 +14,9 @@
     "publish:mac": "electron-forge publish --target=github --platform=darwin",
     "publish:win": "electron-forge publish --target=github --platform=win32",
     "publish:all": "npm run publish:mac && npm run publish:win"
+  },
+  "engines": {
+    "node": "~6.14.1"
   },
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
@@ -46,30 +49,17 @@
   "config": {
     "forge": {
       "make_targets": {
-        "win32": [
-          "squirrel"
-        ],
         "darwin": [
           "dmg"
-        ],
-        "linux": []
+        ]
       },
       "electronPackagerConfig": {
         "packageManager": "npm",
         "icon": "./src/assets/imgs/icon-1024.png"
       },
-      "electronWinstallerConfig": {
-        "name": "gif_goat"
-      },
-      "electronInstallerDebian": {},
-      "electronInstallerRedhat": {},
       "github_repository": {
         "owner": "positlabs",
         "name": "gif-goat"
-      },
-      "windowsStoreConfig": {
-        "packageName": "",
-        "name": "gifgoat"
       }
     }
   }
