@@ -1,6 +1,6 @@
 {
   "name": "gif-goat",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "positlabs",
   "license": "MIT",
   "description": "Electron app for batch encoding videos into gifs.",
